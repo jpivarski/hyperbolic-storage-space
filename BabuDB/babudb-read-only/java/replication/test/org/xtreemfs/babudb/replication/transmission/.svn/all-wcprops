@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/transmission
+END
+DirectFileIOTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/439/trunk/java/replication/test/org/xtreemfs/babudb/replication/transmission/DirectFileIOTest.java
+END
+RequestHandlerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/transmission/RequestHandlerTest.java
+END
+PBRPCTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/transmission/PBRPCTest.java
+END

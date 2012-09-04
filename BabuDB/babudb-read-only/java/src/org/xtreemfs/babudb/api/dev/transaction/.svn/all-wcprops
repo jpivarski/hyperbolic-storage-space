@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/615/trunk/java/src/org/xtreemfs/babudb/api/dev/transaction
+END
+TransactionInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/615/trunk/java/src/org/xtreemfs/babudb/api/dev/transaction/TransactionInternal.java
+END
+InMemoryProcessing.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/512/trunk/java/src/org/xtreemfs/babudb/api/dev/transaction/InMemoryProcessing.java
+END
+TransactionManagerInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/558/trunk/java/src/org/xtreemfs/babudb/api/dev/transaction/TransactionManagerInternal.java
+END
+OperationInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/484/trunk/java/src/org/xtreemfs/babudb/api/dev/transaction/OperationInternal.java
+END

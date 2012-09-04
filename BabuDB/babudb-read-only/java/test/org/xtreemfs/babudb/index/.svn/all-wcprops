@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/407/trunk/java/test/org/xtreemfs/babudb/index
+END
+DiskIndexTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/407/trunk/java/test/org/xtreemfs/babudb/index/DiskIndexTest.java
+END
+LSMTreeTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/402/trunk/java/test/org/xtreemfs/babudb/index/LSMTreeTest.java
+END
+MultiOverlayTreeTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/388/trunk/java/test/org/xtreemfs/babudb/index/MultiOverlayTreeTest.java
+END

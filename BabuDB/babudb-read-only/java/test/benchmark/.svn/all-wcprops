@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/614/trunk/java/test/benchmark
+END
+datafile.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/115/trunk/java/test/benchmark/datafile.py
+END
+db_size.gnu
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/158/trunk/java/test/benchmark/db_size.gnu
+END
+diskindex.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/614/trunk/java/test/benchmark/diskindex.py
+END
+lookup_throughput.gnu
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/158/trunk/java/test/benchmark/lookup_throughput.gnu
+END
+executils.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/158/trunk/java/test/benchmark/executils.py
+END
+scatter.gnu
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/120/trunk/java/test/benchmark/scatter.gnu
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/118/trunk/java/test/benchmark/README
+END
+blocksize.gnu
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/115/trunk/java/test/benchmark/blocksize.gnu
+END

@@ -1,0 +1,72 @@
+2009-12-08: release 0.3.0
+  * first stable release with snapshot support
+	
+2010-01-13: release 0.3.1
+  * added support for automatic recovery from incomplete log files on startup
+	
+2010-02-05: release 0.3.2
+  * fixed a bug that prevented future checkpoints from being created if a
+    crash occurred during a checkpoint
+  * further improved robustness when recovering from a broken log file
+  
+2010-03-02: release 0.3.3
+  * enabled support for huge databases on 32-bit systems
+  * improved robustness when errors occur while a checkpoint is created
+
+2010-05-11: release 0.4.0
+  * added backup functionality for databases
+  * fixed checkpointing issues on Windows machines
+  * changed modularization: Foundation.jar, Flease.jar and yidl.jar now need to be added to the classpath in order to run BabuDB
+  
+2010-06-08: release 0.4.1
+  * improved crash resilience if the database system is forcefully shut down during a checkpoint
+  * fixed a bug that could cause memory shortage on 32bit machines if the system is restarted with a large database
+  
+2010-08-31: release 0.4.2
+  * added configuration builder to simplify the configuration of BabuDB
+  * fixed issues #6, #7, #10
+  
+2010-09-20: release 0.4.3
+  * substantially reduced the memory footprint of checkpoint operations
+  * added configuration options to disable and control memory-mapping of database files
+  * improved robustness when shutting down databases while checkpoints are being created
+  
+2010-09-27: release 0.4.4
+  * fixed a bug that could cause data loss during checkpoints if memory mapping was disabled
+  * added support for range queries
+  * fixed synchronization issues at index level
+  * added tool that creates an XML dump of all databases
+  
+2010-10-21: release 0.4.5
+  * fixed issue #12, which caused a failure when trying to initialize a database with an LSN > 2^31
+  
+2011-04-21: release 0.5.0
+  * moved all interfaces that may be accessed by user applications into the separate package org.xtreemfs.babudb.api
+  * added plugin mechanism that separates BabuDB core functionality from additional features such as replication
+  * moved all replication-specific code into a separate plugin, which can be found in the replication subdirectory
+  * iterators formerly returned upon prefix and range lookups have been replaced with result sets, which should be explicitly freed to minimize memory footprint
+
+2011-05-19: release 0.5.1
+  * fixed bug that caused problems with the log replay in the event of asynchronous log appends
+  * BabuDB shutdowns are now performed gracefully by default, which means that pending log appends will be written to disk before terminating the database
+  * Added support for light-weight transactions. A light-weight transaction atomically executes a list of arbitrary modifications, including database creations and deletions, insertions and deletions of records, as well as snapshots. 
+
+2011-06-06: release 0.5.2  
+  * removed potential deadlocks that could occur when accessing indices from within a DatabaseRequestListener
+  * fixed race condition that could cause a TransactionListener to be notified before applying changes to the in-memory state
+  
+2011-07-15: release 0.5.3
+  * fixed bug that could cause a NullPointerException to be thrown when freeing a result set
+  * fixed bug that caused startup problems after having deleted a database
+
+2011-08-26: release 0.5.4
+  * various minor bugfixes
+  * added monitoring interface that presents runtime information about the system (e.g. for debugging purposes)
+  
+2011-10-12: release 0.5.5
+  * fixed bug in log replay procedure that could cause start-up problems under certain circumstances
+  * fixed 'uninitialized TimeSync' problem that could occur on start-up
+  
+2011-12-01: release 0.5.6
+  * fixed bug that caused an infinite blocking of external threads on full insertion queues
+  * fixed bug that could cause an IllegalMonitorStateException to be raised when creating a checkpoint while manually shutting down a database

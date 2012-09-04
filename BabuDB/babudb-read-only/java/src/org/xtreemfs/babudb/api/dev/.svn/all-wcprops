@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/615/trunk/java/src/org/xtreemfs/babudb/api/dev
+END
+DatabaseInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/432/trunk/java/src/org/xtreemfs/babudb/api/dev/DatabaseInternal.java
+END
+ResponseManagerInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/514/trunk/java/src/org/xtreemfs/babudb/api/dev/ResponseManagerInternal.java
+END
+SnapshotManagerInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/412/trunk/java/src/org/xtreemfs/babudb/api/dev/SnapshotManagerInternal.java
+END
+CheckpointerInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/557/trunk/java/src/org/xtreemfs/babudb/api/dev/CheckpointerInternal.java
+END
+BabuDBInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/514/trunk/java/src/org/xtreemfs/babudb/api/dev/BabuDBInternal.java
+END
+DatabaseManagerInternal.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/557/trunk/java/src/org/xtreemfs/babudb/api/dev/DatabaseManagerInternal.java
+END

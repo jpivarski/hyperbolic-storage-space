@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/591/trunk/java/src/org/xtreemfs/babudb/lsmdb
+END
+CheckpointerImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/591/trunk/java/src/org/xtreemfs/babudb/lsmdb/CheckpointerImpl.java
+END
+LSMDatabase.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/498/trunk/java/src/org/xtreemfs/babudb/lsmdb/LSMDatabase.java
+END
+InsertRecordGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/482/trunk/java/src/org/xtreemfs/babudb/lsmdb/InsertRecordGroup.java
+END
+BabuDBInsertGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/378/trunk/java/src/org/xtreemfs/babudb/lsmdb/BabuDBInsertGroup.java
+END
+DatabaseManagerImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/557/trunk/java/src/org/xtreemfs/babudb/lsmdb/DatabaseManagerImpl.java
+END
+BabuDBTransaction.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/512/trunk/java/src/org/xtreemfs/babudb/lsmdb/BabuDBTransaction.java
+END
+LSMLookupInterface.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/368/trunk/java/src/org/xtreemfs/babudb/lsmdb/LSMLookupInterface.java
+END
+DatabaseImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/516/trunk/java/src/org/xtreemfs/babudb/lsmdb/DatabaseImpl.java
+END
+LSMDBRequest.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/503/trunk/java/src/org/xtreemfs/babudb/lsmdb/LSMDBRequest.java
+END
+LSMDBWorker.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/591/trunk/java/src/org/xtreemfs/babudb/lsmdb/LSMDBWorker.java
+END
+DBConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/525/trunk/java/src/org/xtreemfs/babudb/lsmdb/DBConfig.java
+END
+LSN.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/371/trunk/java/src/org/xtreemfs/babudb/lsmdb/LSN.java
+END

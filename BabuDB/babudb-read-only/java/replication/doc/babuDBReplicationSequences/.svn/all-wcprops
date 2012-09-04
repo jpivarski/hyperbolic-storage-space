@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/368/trunk/java/replication/doc/babuDBReplicationSequences
+END
+1PlainReplication.sqd
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/368/trunk/java/replication/doc/babuDBReplicationSequences/1PlainReplication.sqd
+END
+2LogEntryRequest.sqd
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/368/trunk/java/replication/doc/babuDBReplicationSequences/2LogEntryRequest.sqd
+END
+3Load.sqd
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/368/trunk/java/replication/doc/babuDBReplicationSequences/3Load.sqd
+END

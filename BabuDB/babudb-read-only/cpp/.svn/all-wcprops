@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 27
+/svn/!svn/ver/608/trunk/cpp
+END
+babudb-config.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/364/trunk/cpp/babudb-config.cmake
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/6/trunk/cpp/LICENSE
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/6/trunk/cpp/AUTHORS
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/359/trunk/cpp/TODO
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/524/trunk/cpp/CMakeLists.txt
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/323/trunk/cpp/README
+END

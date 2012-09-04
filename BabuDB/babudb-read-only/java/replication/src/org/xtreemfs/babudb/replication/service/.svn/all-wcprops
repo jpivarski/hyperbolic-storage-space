@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/613/trunk/java/replication/src/org/xtreemfs/babudb/replication/service
+END
+ReplicationRequestHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/549/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/ReplicationRequestHandler.java
+END
+SlaveView.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/382/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/SlaveView.java
+END
+RequestManagement.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/549/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/RequestManagement.java
+END
+ServiceToControlInterface.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/414/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/ServiceToControlInterface.java
+END
+HeartbeatThread.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/613/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/HeartbeatThread.java
+END
+Pacemaker.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/549/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/Pacemaker.java
+END
+StageRequest.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/549/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/StageRequest.java
+END
+ServiceLayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/610/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/ServiceLayer.java
+END
+ReplicationStage.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/574/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/ReplicationStage.java
+END

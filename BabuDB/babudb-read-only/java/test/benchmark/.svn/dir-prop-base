@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 31
+babudb.jar
+
+*.pyc
+
+experiments
+
+END

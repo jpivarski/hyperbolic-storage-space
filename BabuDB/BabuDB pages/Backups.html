@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html style="cursor: auto ! important;"><head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="http://www.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <link rel="canonical" href="http://code.google.com/p/babudb/wiki/Backups">
+ 
+ <script async="" src="Backups_files/cbgapi.js"></script><script gapi_processed="true" src="Backups_files/plusone.js" async="" type="text/javascript"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "5kqAbL4yFh0XyVVGFEEMVUvyYMc:1346573159504";
+ 
+ 
+ var CS_env = {"profileUrl":["/u/115036434905974694138/"],"token":"5kqAbL4yFh0XyVVGFEEMVUvyYMc:1346573159504","assetHostPath":"http://www.gstatic.com/codesite/ph","domainName":null,"assetVersionPath":"http://www.gstatic.com/codesite/ph/5121560014714628542","projectHomeUrl":"/p/babudb","relativeBaseUrl":"","projectName":"babudb","loggedInUserEmail":"jpivarski@gmail.com"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ _gaq.push(
+ ['projectTracker._setAccount', 'UA-4530467-2'],
+ ['projectTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script src="Backups_files/ga.js" async="" type="text/javascript"></script>
+ 
+ 
+ <title>Backups - 
+ babudb -
+ 
+ Backup of a BabuDB instance - 
+ An embedded non-relational database for Java and C++ - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="Backups_files/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="Backups_files/ph_detail.css">
+ 
+ 
+ 
+ <link type="application/atom+xml" rel="alternate" href="http://code.google.com/feeds/p/babudb/svnchanges/basic?path=/wiki/Backups.wiki">
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/5121560014714628542/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ #maincol {
+ padding-top: 0;
+ padding-bottom: 0;
+ }
+
+ 
+ </style>
+</head>
+<body class="t6">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="#" id="multilogin-dropdown" onclick="return false;"><u><b>jpivarski@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="http://code.google.com/u/115036434905974694138/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="http://code.google.com/u/115036434905974694138/" onclick="_CS_click('/gb/ph/profile');" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FBackups" onclick="_CS_click('/gb/ph/signout');"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" itemscope="" itemtype="http://schema.org/CreativeWork" cellpadding="0" cellspacing="0">
+ <tbody><tr style="height: 58px;">
+ 
+ <td id="plogo">
+ <link itemprop="url" href="http://code.google.com/p/babudb">
+ <a href="http://code.google.com/p/babudb/">
+ 
+ 
+ <img src="Backups_files/logo.png" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="http://code.google.com/p/babudb/"><span itemprop="name">babudb</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="http://code.google.com/p/babudb/"><span itemprop="description">An embedded non-relational database for Java and C++</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="/hosting/search">
+ <input size="30" name="q" type="text">
+ 
+ <input name="projectsearch" value="Search projects" type="submit">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="http://code.google.com/p/babudb/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/downloads/list" class="tab ">Downloads</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/w/list" class="tab active">Wiki</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/issues/list" class="tab ">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/source/checkout" class="tab ">Source</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table class="st" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tbody><tr>
+ 
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ <span class="inIssueList"> 
+ <span>Search</span>
+ <form action="/p/babudb/w/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ <option disabled="disabled">Search within:</option>
+ 
+ <option value="1">&nbsp;All wiki pages</option>
+ <option value="3">&nbsp;Featured pages</option>
+ <option value="2" selected="selected">&nbsp;Current pages</option>
+ 
+ 
+ <option value="5">&nbsp;My starred pages</option>
+ 
+ <option value="4">&nbsp;Deprecated pages</option>
+ 
+ </select>
+ <span>for</span>
+ <span id="qq"><input size="38" id="searchq" name="q" autocomplete="off" type="text"></span>
+ 
+ 
+ 
+ <input value="Search" type="submit">
+ </form>
+ </span>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+</div>
+</div>
+
+ </td>
+ 
+ 
+ 
+ 
+ 
+ 
+ <td class="bevel-right" align="right" valign="top"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+<!-- IE -->
+
+
+
+
+
+
+
+ <style type="text/css">
+ .delcom { background: #e8e8e8 }
+ .commentcontent {
+ margin: 2em;
+ padding: 0px 10px;
+ width: 66em;
+ }
+ .artifactcomment {
+ border-top: 3px solid #c3d9ff;
+ }
+ #commentform {
+ border-top: 3px solid #c3d9ff;
+ }
+ </style>
+
+<div id="wikipage">
+<table>
+ <tbody><tr>
+ 
+ 
+ <td style="vertical-align:top; padding-left:5px">
+ 
+ <div id="wikiheader">
+ 
+ <img id="star_img" src="Backups_files/star_off.gif" style="cursor:pointer" onclick="_CS_toggleStar(this,
+ {'scope': 'wiki',
+ 'user': '_CURRENT_USER',
+ 'item': 'babudb:Backups'
+ });" height="15" width="15">
+ 
+ <span style="font-size:120%;font-weight:bold">Backups</span>
+ &nbsp;
+ <div> 
+ 
+ <i>Backup of a BabuDB instance</i>
+ 
+ 
+ 
+ <div id="wikiauthor" style="float:right">
+ Updated <span title="Thu Apr 22 07:50:17 2010">
+ Apr 22, 2010</span>
+ 
+ by 
+
+ <a class="userlink" href="http://code.google.com/u/hoegqvist@gmail.com/">hoegqvist@gmail.com</a>
+ 
+ </div>
+ </div>
+ </div>
+ 
+ <div id="wikicontent">
+ <div class="vt" id="wikimaincol">
+ <h2><a name="Backups_with_BabuDB"></a>Backups with BabuDB<a href="#Backups_with_BabuDB" class="section_anchor"></a></h2><p>Performing
+ a backup in BabuDB is a two step procedure. First, a snapshot is 
+created for each database including all indices. Second, this snapshot 
+is written out to disk at a given location. The consistency of the 
+backup is therefore reflected by the state of the database at the time 
+of the snapshot. Backups are done using the dumpAllDatabases(String 
+destinationPath)-method within the DatabaseManager. </p><p>Note that the
+ snapshots are only per-database. This means that if BabuDB has many 
+databases a backup is not exactly at the same point in time for all 
+databases. </p><h2><a name="Example_code"></a>Example code<a href="#Example_code" class="section_anchor"></a></h2><pre class="prettyprint"><span class="typ">String</span><span class="pln"> dbDir </span><span class="pun">=</span><span class="pln"> </span><span class="str">"/tmp/babudb/"</span><span class="pun">;</span><span class="pln"><br></span><span class="typ">String</span><span class="pln"> backupDir </span><span class="pun">=</span><span class="pln"> </span><span class="str">"/tmp/babudb-backup/"</span><span class="pun">;</span><span class="pln"><br><br></span><span class="typ">BabuDB</span><span class="pln"> database </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">BabuDB</span><span class="pun">)</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBConfig</span><span class="pun">(</span><span class="pln">dbDir</span><span class="pun">,</span><span class="pln"> dbDir</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">SYNC_WRITE</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">,</span><span class="pln"> </span><span class="lit">128</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pun">*</span><span class="lit">1024</span><span class="pun">*</span><span class="lit">512</span><span class="pun">),</span><span class="kwd">null</span><span class="pun">);</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; <br></span><span class="typ">Database</span><span class="pln"> db </span><span class="pun">=</span><span class="pln"> database</span><span class="pun">.</span><span class="pln">getDatabaseManager</span><span class="pun">().</span><span class="pln">createDatabase</span><span class="pun">(</span><span class="str">"test"</span><span class="pun">,</span><span class="pln"> numIndices</span><span class="pun">);</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; <br></span><span class="typ">System</span><span class="pun">.</span><span class="kwd">out</span><span class="pun">.</span><span class="pln">println</span><span class="pun">(</span><span class="str">"Creating backup database..."</span><span class="pun">);</span><span class="pln"><br>database</span><span class="pun">.</span><span class="pln">getDatabaseManager</span><span class="pun">().</span><span class="pln">dumpAllDatabases</span><span class="pun">(</span><span class="pln">backupDir</span><span class="pun">);</span></pre><p>A
+ backup can be recovered by opening the backup directory. A backup 
+doesn't contain any log-files since there where no changes after the 
+snapshot. If BabuDB is using a separate log-file directory, this must be
+ configured via BabuDBConfig. It is recommended to have an empty 
+directory for the log-files when recovering a backed up BabuDB. Example 
+of recovering the backed-up database: </p><pre class="prettyprint"><span class="typ">BabuDB</span><span class="pln"> database </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">BabuDB</span><span class="pun">)</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBConfig</span><span class="pun">(</span><span class="pln">backupDir</span><span class="pun">,</span><span class="pln"> backupDir</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">SYNC_WRITE</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">,</span><span class="pln"> </span><span class="lit">128</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pun">*</span><span class="lit">1024</span><span class="pun">*</span><span class="lit">512</span><span class="pun">),</span><span class="kwd">null</span><span class="pun">);</span></pre>
+ </div>
+ </div>
+ </td></tr><tr>
+</tr></tbody></table>
+ </div>
+
+
+ 
+ 
+ 
+ 
+ 
+ <div id="commentform">
+ <form action="../w/detail.do" method="post">
+ <table>
+ <tbody><tr><td class="vt">
+ <input name="pagename" value="Backups" type="hidden">
+ <input name="token" value="5kqAbL4yFh0XyVVGFEEMVUvyYMc:1346573159504" type="hidden">
+ <div class="graytext" style="float: right;">
+ Hint: You can use <a href="http://code.google.com/p/support/wiki/WikiSyntax">Wiki Syntax.</a>
+ </div>
+ <div>Enter a comment:</div>
+ <textarea name="content" rows="6" cols="100"></textarea><br><br>
+ <input name="submit" value="Submit" type="submit">
+ </td>
+ </tr></tbody></table>
+ </form>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ <form name="delcom" action="../w/delComment.do" method="POST">
+ <input name="sequence_num" value="" type="hidden">
+ <input name="create_time" value="" type="hidden">
+ <input name="mode" value="" type="hidden">
+ <input name="pagename" value="Backups" type="hidden">
+ <input name="token" value="5kqAbL4yFh0XyVVGFEEMVUvyYMc:1346573159504" type="hidden">
+ </form>
+
+
+ <script src="Backups_files/prettify.js"></script>
+ <script type="text/javascript">
+ prettyPrint();
+ </script>
+
+<script type="text/javascript" src="Backups_files/dit_scripts.js"></script>
+
+
+
+  
+ 
+ 
+ <script type="text/javascript" src="Backups_files/ph_core.js"></script>
+ 
+ <script type="text/javascript" src="Backups_files/ph_dwiki.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="http://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="http://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+
+<div style="position: absolute; top: 18px; left: 908px; display: none;" id="menuDiv-projects-dropdown" class="menuDiv instance0"><div style="display: none;" class="menuCategory default"></div><b style="display: block;" class="categoryTitle projects">Projects</b><div class="menuCategory projects first"><a href="http://code.google.com/p/cassius/" style="display: block;" class="menuItem">cassius</a><a href="http://code.google.com/p/plothon/" style="display: block;" class="menuItem">plothon</a><a href="http://code.google.com/p/pyminuit/" style="display: block;" class="menuItem">pyminuit</a><a href="http://code.google.com/p/pyminuit2/" style="display: block;" class="menuItem">pyminuit2</a><a href="http://code.google.com/p/svgfig/" style="display: block;" class="menuItem">svgfig</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://code.google.com/hosting/" style="display: block;" class="menuItem">Find open source projects...</a><a href="http://code.google.com/hosting/createProject" style="display: block;" class="menuItem">Create a project...</a></div></div><div style="position: absolute; top: 18px; left: 753px; display: none;" id="menuDiv-multilogin-dropdown" class="menuDiv instance1"><div class="menuCategory default first"><span style="display: block;" class="menuText"><b>jpivarski@gmail.com</b></span><a href="http://code.google.com/p/babudb/wiki/Backups?authuser=1" style="display: block;" class="menuItem">jim.pivarski@opendatagroup.com</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://www.google.com/accounts/AddSession?service=code&amp;continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FBackups" style="display: block;" class="menuItem"><nobr>Sign in with another account...</nobr></a></div></div></body></html>

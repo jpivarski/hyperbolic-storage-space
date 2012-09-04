@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/523/trunk/java/src/org/xtreemfs/babudb/index/reader
+END
+VarLenMiniPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/368/trunk/java/src/org/xtreemfs/babudb/index/reader/VarLenMiniPage.java
+END
+DiskIndex.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/389/trunk/java/src/org/xtreemfs/babudb/index/reader/DiskIndex.java
+END
+CompressedBlockReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/407/trunk/java/src/org/xtreemfs/babudb/index/reader/CompressedBlockReader.java
+END
+DefaultBlockReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/407/trunk/java/src/org/xtreemfs/babudb/index/reader/DefaultBlockReader.java
+END
+SearchUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/407/trunk/java/src/org/xtreemfs/babudb/index/reader/SearchUtil.java
+END
+InternalBufferUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/307/trunk/java/src/org/xtreemfs/babudb/index/reader/InternalBufferUtil.java
+END
+InternalMergeIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/370/trunk/java/src/org/xtreemfs/babudb/index/reader/InternalMergeIterator.java
+END
+DiskIndexIteratorBase.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/523/trunk/java/src/org/xtreemfs/babudb/index/reader/DiskIndexIteratorBase.java
+END
+FixedLenMiniPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/368/trunk/java/src/org/xtreemfs/babudb/index/reader/FixedLenMiniPage.java
+END
+MiniPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/407/trunk/java/src/org/xtreemfs/babudb/index/reader/MiniPage.java
+END
+InternalDiskIndexIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/370/trunk/java/src/org/xtreemfs/babudb/index/reader/InternalDiskIndexIterator.java
+END
+DiskIndexIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/369/trunk/java/src/org/xtreemfs/babudb/index/reader/DiskIndexIterator.java
+END
+BlockReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/389/trunk/java/src/org/xtreemfs/babudb/index/reader/BlockReader.java
+END

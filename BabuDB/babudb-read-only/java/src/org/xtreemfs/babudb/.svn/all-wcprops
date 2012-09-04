@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/615/trunk/java/src/org/xtreemfs/babudb
+END
+BabuDBImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/588/trunk/java/src/org/xtreemfs/babudb/BabuDBImpl.java
+END
+TransactionManagerImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/529/trunk/java/src/org/xtreemfs/babudb/TransactionManagerImpl.java
+END
+BabuDBFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/593/trunk/java/src/org/xtreemfs/babudb/BabuDBFactory.java
+END
+BabuDBRequestResultImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/549/trunk/java/src/org/xtreemfs/babudb/BabuDBRequestResultImpl.java
+END
+ResponseManagerImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/549/trunk/java/src/org/xtreemfs/babudb/ResponseManagerImpl.java
+END

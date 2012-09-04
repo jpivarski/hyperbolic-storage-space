@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 19
+build.jardesc
+dist
+
+K 13
+svn:mergeinfo
+V 31
+/branches/replicationV2:338-367
+END

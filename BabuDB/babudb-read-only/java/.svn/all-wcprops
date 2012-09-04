@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/615/trunk/java
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/419/trunk/java/.classpath
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/459/trunk/java/LICENSE
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/419/trunk/java/.project
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/60/trunk/java/AUTHORS
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/594/trunk/java/ChangeLog
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/518/trunk/java/build.xml
+END

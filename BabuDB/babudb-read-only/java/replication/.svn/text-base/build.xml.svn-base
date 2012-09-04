@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse.ant.import?>
+<project basedir="." default="build" name="BabuDB-replication">
+
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+
+	<property name="distparentdir" value="../dist" />
+	<property name="distdir" value="${distparentdir}/replication" />
+	<property name="releasetarget" value="${distparentdir}/replication.zip" />
+
+	<path id="BabuDB-replication.classpath">
+		<pathelement location="${distparentdir}/repl-bin" />
+		<pathelement location="../dist/BabuDB/BabuDB.jar" />
+		<pathelement location="../lib/Foundation.jar" />
+		<pathelement location="lib/Flease.jar" />
+		<pathelement location="extlib/protobuf-java-2.3.0.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${distparentdir}/repl-bin" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${distparentdir}/repl-bin" />
+	</target>
+
+	<target name="distclean" depends="clean">
+		<delete dir="${distdir}" />
+		<delete file="${releasetarget}" />
+	</target>
+
+	<target depends="build-project" name="build" />
+
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${distparentdir}/repl-bin" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="BabuDB-replication.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="build">
+		<mkdir dir="${distdir}" />
+		<copy todir="${distparentdir}/repl-bin">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+		<jar destfile="${distdir}/replication.jar" basedir="${distparentdir}/repl-bin" excludes="org/xtreemfs/babudb/sandbox/**" />
+	</target>
+
+	<target name="release" depends="jar">
+
+		<mkdir dir="${distdir}/lib" />
+		<copy todir="${distdir}/lib">
+			<fileset dir="lib" />
+		</copy>
+		<copy todir="${distdir}/lib">
+			<fileset dir="extlib" />
+		</copy>
+
+		<mkdir dir="${distdir}/config" />
+		<copy file="config/replication.properties" todir="${distdir}/config" />
+
+		<copy todir="${distdir}" file="LICENSE" />
+		<copy todir="${distdir}" file="README" />
+
+		<zip destfile="${releasetarget}" basedir="${distparentdir}" includes="replication/**" />
+
+	</target>
+
+</project>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html style="cursor: auto ! important;"><head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="http://www.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <link rel="canonical" href="http://code.google.com/p/babudb/wiki/UsageExampleJava">
+ 
+ <script async="" src="UsageExampleJava_files/cbgapi.js"></script><script gapi_processed="true" src="UsageExampleJava_files/plusone.js" async="" type="text/javascript"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "Uxfp39iomeLgoXuBaKwkppc41Rw:1346573112834";
+ 
+ 
+ var CS_env = {"profileUrl":["/u/115036434905974694138/"],"token":"Uxfp39iomeLgoXuBaKwkppc41Rw:1346573112834","assetHostPath":"http://www.gstatic.com/codesite/ph","domainName":null,"assetVersionPath":"http://www.gstatic.com/codesite/ph/5121560014714628542","projectHomeUrl":"/p/babudb","relativeBaseUrl":"","projectName":"babudb","loggedInUserEmail":"jpivarski@gmail.com"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ _gaq.push(
+ ['projectTracker._setAccount', 'UA-4530467-2'],
+ ['projectTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script src="UsageExampleJava_files/ga.js" async="" type="text/javascript"></script>
+ 
+ 
+ <title>UsageExampleJava - 
+ babudb -
+ 
+ BabuDB usage in Java - 
+ An embedded non-relational database for Java and C++ - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="UsageExampleJava_files/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="UsageExampleJava_files/ph_detail.css">
+ 
+ 
+ 
+ <link type="application/atom+xml" rel="alternate" href="http://code.google.com/feeds/p/babudb/svnchanges/basic?path=/wiki/UsageExampleJava.wiki">
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/5121560014714628542/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ #maincol {
+ padding-top: 0;
+ padding-bottom: 0;
+ }
+
+ 
+ </style>
+</head>
+<body class="t6">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="#" id="multilogin-dropdown" onclick="return false;"><u><b>jpivarski@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="http://code.google.com/u/115036434905974694138/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="http://code.google.com/u/115036434905974694138/" onclick="_CS_click('/gb/ph/profile');" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FUsageExampleJava" onclick="_CS_click('/gb/ph/signout');"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" itemscope="" itemtype="http://schema.org/CreativeWork" cellpadding="0" cellspacing="0">
+ <tbody><tr style="height: 58px;">
+ 
+ <td id="plogo">
+ <link itemprop="url" href="http://code.google.com/p/babudb">
+ <a href="http://code.google.com/p/babudb/">
+ 
+ 
+ <img src="UsageExampleJava_files/logo.png" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="http://code.google.com/p/babudb/"><span itemprop="name">babudb</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="http://code.google.com/p/babudb/"><span itemprop="description">An embedded non-relational database for Java and C++</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="/hosting/search">
+ <input size="30" name="q" type="text">
+ 
+ <input name="projectsearch" value="Search projects" type="submit">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="http://code.google.com/p/babudb/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/downloads/list" class="tab ">Downloads</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/w/list" class="tab active">Wiki</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/issues/list" class="tab ">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/source/checkout" class="tab ">Source</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table class="st" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tbody><tr>
+ 
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ <span class="inIssueList"> 
+ <span>Search</span>
+ <form action="/p/babudb/w/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ <option disabled="disabled">Search within:</option>
+ 
+ <option value="1">&nbsp;All wiki pages</option>
+ <option value="3">&nbsp;Featured pages</option>
+ <option value="2" selected="selected">&nbsp;Current pages</option>
+ 
+ 
+ <option value="5">&nbsp;My starred pages</option>
+ 
+ <option value="4">&nbsp;Deprecated pages</option>
+ 
+ </select>
+ <span>for</span>
+ <span id="qq"><input size="38" id="searchq" name="q" autocomplete="off" type="text"></span>
+ 
+ 
+ 
+ <input value="Search" type="submit">
+ </form>
+ </span>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+</div>
+</div>
+
+ </td>
+ 
+ 
+ 
+ 
+ 
+ 
+ <td class="bevel-right" align="right" valign="top"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+<!-- IE -->
+
+
+
+
+
+
+
+ <style type="text/css">
+ .delcom { background: #e8e8e8 }
+ .commentcontent {
+ margin: 2em;
+ padding: 0px 10px;
+ width: 66em;
+ }
+ .artifactcomment {
+ border-top: 3px solid #c3d9ff;
+ }
+ #commentform {
+ border-top: 3px solid #c3d9ff;
+ }
+ </style>
+
+<div id="wikipage">
+<table>
+ <tbody><tr>
+ 
+ 
+ <td style="vertical-align:top; padding-left:5px">
+ 
+ <div id="wikiheader">
+ 
+ <img id="star_img" src="UsageExampleJava_files/star_off.gif" style="cursor:pointer" onclick="_CS_toggleStar(this,
+ {'scope': 'wiki',
+ 'user': '_CURRENT_USER',
+ 'item': 'babudb:UsageExampleJava'
+ });" height="15" width="15">
+ 
+ <span style="font-size:120%;font-weight:bold">UsageExampleJava</span>
+ &nbsp;
+ <div> 
+ 
+ <i>BabuDB usage in Java</i>
+ 
+ 
+ 
+ <div id="wikiauthor" style="float:right">
+ Updated <span title="Sat Jul 21 00:24:53 2012">
+ Jul 21, 2012</span>
+ 
+ by 
+
+ <a class="userlink" href="http://code.google.com/u/hoegqvist@gmail.com/">hoegqvist@gmail.com</a>
+ 
+ </div>
+ </div>
+ </div>
+ 
+ <div id="wikicontent">
+ <div class="vt" id="wikimaincol">
+ <h1><a name="How_to_use_BabuDB_for_Java"></a>How to use BabuDB for Java<a href="#How_to_use_BabuDB_for_Java" class="section_anchor"></a></h1><h1><a name="Startup"></a>Startup<a href="#Startup" class="section_anchor"></a></h1><p>On startup <strong>BabuDB</strong> will load the databases from disk, the operations log will be replayed and the worker threads are started. </p><pre class="prettyprint"><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDB</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDBFactory</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDBRequestResult</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDBRequestListener</span><span class="pun">;</span><span class="pln"><br><br></span><span class="pun">...</span><span class="pln"><br><br></span><span class="typ">BabuDB</span><span class="pln"> databaseSystem </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBConfig</span><span class="pun">(</span><span class="str">"babudb/databases/"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"babudb/dblog/"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">4</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pun">*</span><span class="lit">1024</span><span class="pun">*</span><span class="lit">16</span><span class="pun">,</span><span class="pln"> </span><span class="lit">5</span><span class="pun">*</span><span class="lit">60</span><span class="pun">,</span><span class="pln"> </span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">FSYNC</span><span class="pun">,</span><span class="pln"> </span><span class="lit">50</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">,</span><span class="pln"> </span><span class="lit">16</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pun">*</span><span class="lit">1024</span><span class="pun">*</span><span class="lit">512</span><span class="pun">));</span></pre><p>This will start <strong>BabuDB</strong> with the database indices stored in <tt>babudb/databases/</tt>. The operations logs will be written into <tt>babudb/dblog/</tt>.
+ In this example, we start 4 worker threads. We set that a checkpoint 
+should be created when the operations log exceeds 16MB. The checkpointer
+ will check the log file size every five minutes. The syncMode is set to
+ FSYNC, that means before acknowledging the operation an fsync is 
+executed on the logfile. If the next value is greater zero requests are 
+immediateley aknowledged and synced to disk every given interval (here 
+50 ms). We require that the queue for each worker is unlimited, if this 
+value is greater than 0 all workers are limited to the given value.  And
+ finally disable the index-compression, by setting its flag to false. 
+Further explanations on these parameters can be found <a href="http://code.google.com/p/babudb/wiki/OptionsForJava" rel="nofollow">here</a>. </p><p>Hint: To simplify the configuration, it is also possible to use the configuration builder, e.g. </p><pre class="prettyprint"><span class="typ">BabuDB</span><span class="pln"> databaseSystem </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ConfigBuilder</span><span class="pun">().</span><span class="pln">setDataPath</span><span class="pun">(</span><span class="str">"/tmp/babudb"</span><span class="pun">).</span><span class="pln">build</span><span class="pun">());</span></pre><p>This
+ will set up BabuDB with a configuration that stores all data in 
+/tmp/babudb and uses default parameters for all other settings. </p><h2><a name="Creating_a_new_Database"></a>Creating a new Database<a href="#Creating_a_new_Database" class="section_anchor"></a></h2><pre class="prettyprint"><span class="typ">DatabaseManager</span><span class="pln"> dbm </span><span class="pun">=</span><span class="pln"> databaseSystem</span><span class="pun">.</span><span class="pln">getDatabaseManager</span><span class="pun">();</span><span class="pln"><br></span><span class="typ">Database</span><span class="pln"> db </span><span class="pun">=</span><span class="pln"> dbm</span><span class="pun">.</span><span class="pln">createDatabase</span><span class="pun">(</span><span class="str">"myDB"</span><span class="pun">,</span><span class="lit">5</span><span class="pun">);</span></pre><p>Creates
+ a new database called "myDB" with five indices. Indices are identified 
+by automatically assigned numbers, from zero to four. So far, it is not 
+possible to add/remove indices afterwards! </p><h1><a name="Database_operations"></a>Database operations<a href="#Database_operations" class="section_anchor"></a></h1><p>Every operation performed on a database will return a future-object hereafter called <tt>result</tt>. This object implements the generic BabuDBRequestResult-interface which provides the operation <tt>get()</tt> to wait synchronously for a DB request to finish and <tt>registerListener(BabuDBRequestListener&lt;?&gt; listener)</tt> to install an asynchronous generic result listener for the call. </p><p>The last argument for every database operation is an arbitrary object <tt>context</tt>, which hereafter will be set to <tt>null</tt>.
+ This object can be used by the programmer to give asynchronous requests
+ an individual signature. It will by returned to the 
+BabuDBRequestListener on the end of the request, if one was installed.  </p><pre class="prettyprint"><span class="typ">Object</span><span class="pln"> context </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">;</span></pre><h2><a name="Inserting_and_Deleting_Key-Value_Pairs"></a>Inserting and Deleting Key-Value Pairs<a href="#Inserting_and_Deleting_Key-Value_Pairs" class="section_anchor"></a></h2><p>A single key-value pair can be inserted atomic in an index as follows: </p><pre class="prettyprint"><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">singleInsert</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"value"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span></pre><p>An atomic insertion of multiple key-value pairs can be performed as follows: </p><pre class="prettyprint"><span class="typ">BabuDBInsertGroup</span><span class="pln"> ig </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">createInsertGroup</span><span class="pun">();</span><span class="pln"><br>ig</span><span class="pun">.</span><span class="pln">addInsert</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"value"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">());</span><span class="pln"><br>ig</span><span class="pun">.</span><span class="pln">addInsert</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key2"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"value2"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">());</span><span class="pln"><br></span><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">insert</span><span class="pun">(</span><span class="pln">ig</span><span class="pun">,</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span></pre><p>Key-value pairs can be deleted from an index by setting the value to <tt>null</tt>: </p><pre class="prettyprint"><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">singleInsert</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span></pre><p>or </p><pre class="prettyprint"><span class="pln">ig</span><span class="pun">.</span><span class="pln">addInsert</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key2"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln"><br></span><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">insert</span><span class="pun">(</span><span class="pln">ig</span><span class="pun">,</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span></pre><h2><a name="Performing_Lookups"></a>Performing Lookups<a href="#Performing_Lookups" class="section_anchor"></a></h2><p>A value can be looked up for a key with the following code: </p><pre class="prettyprint"><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[]&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">lookup</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"key"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br></span><span class="kwd">byte</span><span class="pun">[]</span><span class="pln"> value </span><span class="pun">=</span><span class="pln"> result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span></pre><p>It is also possible to perform prefix lookups: </p><pre class="prettyprint"><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Iterator</span><span class="pun">&lt;</span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;&gt;&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> database</span><span class="pun">.</span><span class="pln">prefixLookup</span><span class="pun">(</span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"k"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br></span><span class="typ">Iterator</span><span class="pun">&lt;</span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;&gt;</span><span class="pln"> iterator </span><span class="pun">=</span><span class="pln"> result</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">();</span><span class="pln"><br></span><span class="kwd">while</span><span class="pun">(</span><span class="pln">iterator</span><span class="pun">.</span><span class="pln">hasNext</span><span class="pun">())</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;</span><span class="pln"> keyValuePair </span><span class="pun">=</span><span class="pln"> iterator</span><span class="pun">.</span><span class="kwd">next</span><span class="pun">();</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br></span><span class="pun">}</span></pre><p>A prefix lookup generates an iterator that returns all entries starting with the given prefix in ascending order. </p><h2><a name="Asynchronous_Requests"></a>Asynchronous Requests<a href="#Asynchronous_Requests" class="section_anchor"></a></h2><p>In
+ addition to operate asynchron on BabuDB's databases you can register 
+BabuDBRequestListener&lt;?&gt; on the future-object returned by the 
+operation. </p><p>This listener is generic and has to provide the following operations to match the interface: </p><pre class="prettyprint"><span class="typ">BabuDBRequestListener</span><span class="pun">&lt;?&gt;</span><span class="pln"> listener </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBRequestListener</span><span class="pun">&lt;?&gt;()</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> failed</span><span class="pun">(</span><span class="typ">BabuDBException</span><span class="pln"> error</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> finished</span><span class="pun">(?</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br></span><span class="pun">});</span></pre><p>Asynchronous requests can then be executed as follows: </p><pre class="prettyprint"><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> database</span><span class="pun">.</span><span class="pln">insert</span><span class="pun">(</span><span class="pln">ig</span><span class="pun">,</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="pln">registerListener</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBRequestListner</span><span class="pun">&lt;</span><span class="typ">Object</span><span class="pun">&gt;({</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> failed</span><span class="pun">(</span><span class="typ">BabuDBException</span><span class="pln"> error</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> finished</span><span class="pun">(</span><span class="typ">Object</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br></span><span class="pun">}));</span><span class="pln"><br><br></span><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[]&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> database</span><span class="pun">.</span><span class="pln">lookup</span><span class="pun">(</span><span class="str">"myDB"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">,</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="pln">registerListener</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBRequestListener</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[]&gt;({</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> failed</span><span class="pun">(</span><span class="typ">BabuDBException</span><span class="pln"> error</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> finished</span><span class="pun">(</span><span class="kwd">byte</span><span class="pun">[]</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br></span><span class="pun">}));</span><span class="pln"><br><br></span><span class="typ">BabuDBRequestResult</span><span class="pun">&lt;</span><span class="typ">Iterator</span><span class="pun">&lt;</span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;&gt;&gt;</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> database</span><span class="pun">.</span><span class="pln">prefixLookup</span><span class="pun">(</span><span class="str">"myDB"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="str">"k"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> context</span><span class="pun">);</span><span class="pln"><br>result</span><span class="pun">.</span><span class="pln">registerListener</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBRequestListener</span><span class="pun">&lt;</span><span class="typ">Iterator</span><span class="pun">&lt;</span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;&gt;&gt;({</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> failed</span><span class="pun">(</span><span class="typ">BabuDBException</span><span class="pln"> error</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> finished</span><span class="pun">(</span><span class="typ">Iterator</span><span class="pun">&lt;</span><span class="typ">Entry</span><span class="pun">&lt;</span><span class="kwd">byte</span><span class="pun">[],</span><span class="pln"> </span><span class="kwd">byte</span><span class="pun">[]&gt;&gt;</span><span class="pln"> value</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Object</span><span class="pln"> context</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">...</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br></span><span class="pun">}));</span></pre><h2><a name="Sample_Application"></a>Sample Application<a href="#Sample_Application" class="section_anchor"></a></h2><pre class="prettyprint"><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDB</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDBException</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="typ">BabuDBFactory</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="pln">log</span><span class="pun">.</span><span class="typ">DiskLogger</span><span class="pun">.</span><span class="typ">SyncMode</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="pln">lsmdb</span><span class="pun">.</span><span class="typ">BabuDBInsertGroup</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="pln">lsmdb</span><span class="pun">.</span><span class="typ">Database</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">babudb</span><span class="pun">.</span><span class="pln">lsmdb</span><span class="pun">.</span><span class="typ">DatabaseManager</span><span class="pun">;</span><span class="pln"><br></span><span class="kwd">import</span><span class="pln"> org</span><span class="pun">.</span><span class="pln">xtreemfs</span><span class="pun">.</span><span class="pln">include</span><span class="pun">.</span><span class="pln">common</span><span class="pun">.</span><span class="pln">config</span><span class="pun">.</span><span class="typ">BabuDBConfig</span><span class="pun">;</span><span class="pln"><br><br></span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">SimpleDemo</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br><br>&nbsp; &nbsp; </span><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">void</span><span class="pln"> main</span><span class="pun">(</span><span class="typ">String</span><span class="pun">[]</span><span class="pln"> args</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">throws</span><span class="pln"> </span><span class="typ">InterruptedException</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">try</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//start the database</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="typ">BabuDB</span><span class="pln"> databaseSystem </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="kwd">new</span><span class="pln"> </span><span class="typ">BabuDBConfig</span><span class="pun">(</span><span class="str">"myDatabase/"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"myDatabase/"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">1024</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">16</span><span class="pun">,</span><span class="pln"> </span><span class="lit">5</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">60</span><span class="pun">,</span><span class="pln"> </span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">SYNC_WRITE</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">false</span><span class="pun">,</span><span class="pln"> </span><span class="lit">16</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1024</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">1024</span><span class="pln"> </span><span class="pun">*</span><span class="pln"> </span><span class="lit">512</span><span class="pun">));</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="typ">DatabaseManager</span><span class="pln"> dbm </span><span class="pun">=</span><span class="pln"> databaseSystem</span><span class="pun">.</span><span class="pln">getDatabaseManager</span><span class="pun">();</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//create a new database called myDB</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dbm</span><span class="pun">.</span><span class="pln">createDatabase</span><span class="pun">(</span><span class="str">"myDB"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">2</span><span class="pun">);</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="typ">Database</span><span class="pln"> db </span><span class="pun">=</span><span class="pln"> dbm</span><span class="pun">.</span><span class="pln">getDatabase</span><span class="pun">(</span><span class="str">"myDB"</span><span class="pun">);</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//create an insert group for atomic inserts</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="typ">BabuDBInsertGroup</span><span class="pln"> </span><span class="kwd">group</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">createInsertGroup</span><span class="pun">();</span><span class="pln"><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//insert one key in each index</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">group</span><span class="pun">.</span><span class="pln">addInsert</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Key1"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"Value1"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">());</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">group</span><span class="pun">.</span><span class="pln">addInsert</span><span class="pun">(</span><span class="lit">1</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Key2"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="pln"> </span><span class="str">"Value2"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">());</span><span class="pln"><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//and execute group insert</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; db</span><span class="pun">.</span><span class="pln">insert</span><span class="pun">(</span><span class="kwd">group</span><span class="pun">,</span><span class="kwd">null</span><span class="pun">).</span><span class="kwd">get</span><span class="pun">();</span><span class="pln"><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//now do a lookup</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="kwd">byte</span><span class="pun">[]</span><span class="pln"> result </span><span class="pun">=</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">lookup</span><span class="pun">(</span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Key1"</span><span class="pun">.</span><span class="pln">getBytes</span><span class="pun">(),</span><span class="kwd">null</span><span class="pun">).</span><span class="kwd">get</span><span class="pun">();</span><span class="pln"><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//create a checkpoint for faster start-ups</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; databaseSystem</span><span class="pun">.</span><span class="pln">getCheckpointer</span><span class="pun">().</span><span class="pln">checkpoint</span><span class="pun">();</span><span class="pln"><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="com">//shutdown database</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; databaseSystem</span><span class="pun">.</span><span class="pln">shutdown</span><span class="pun">();</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">catch</span><span class="pln"> </span><span class="pun">(</span><span class="typ">BabuDBException</span><span class="pln"> ex</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ex</span><span class="pun">.</span><span class="pln">printStackTrace</span><span class="pun">();</span><span class="pln"><br>&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"><br>&nbsp; &nbsp; </span><span class="pun">}</span><span class="pln"> &nbsp;<br></span><span class="pun">}</span></pre><h2><a name="Replication_-_currently_under_development"></a>Replication - <strong>currently under development</strong><a href="#Replication_-_currently_under_development" class="section_anchor"></a></h2><p>If you want to have a higher availability of your service and better protection against data loss the <strong>TBA 0.5.0 release</strong>
+ will provide a plugin for replicating databases among multiple 
+instances that of course should run on different servers. Your 
+application may access any of these instances in a way described on this
+ page and the plugin will redirect or replicate your requests in 
+background. If you want to learn more about how to configure such a 
+multi-instance BabuDB system click <a href="http://code.google.com/p/babudb/wiki/UsageReplicationForJava" rel="nofollow">here</a>. </p>
+ </div>
+ </div>
+ </td></tr><tr>
+</tr></tbody></table>
+ </div>
+
+
+ 
+ <div id="wikicommentcol">
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+<div class="collapse">
+
+
+ 
+
+
+<div id="commentlist">
+
+ 
+ <div class="artifactcomment">
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">Comment
+ 
+ by 
+ 
+ 
+
+ <a class="userlink" href="http://code.google.com/u/108167014686631326310/">grampzi...@gmail.com</a>,
+ 
+ </span>
+ <span class="date" title="Fri Feb 27 18:20:42 2009">Feb 27, 2009</span>
+ <div>
+<div class="commentcontent">
+<p>Hello, I might be interested in using this software, would that be appropriate at this stage of development? </p>
+</div>
+ 
+ 
+ </div>
+ </div>
+ 
+
+ 
+ <div class="artifactcomment">
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">Comment
+ 
+ by 
+ 
+ 
+
+ <a class="userlink" href="http://code.google.com/u/nickdos@gmail.com/">nickdos@gmail.com</a>,
+ 
+ </span>
+ <span class="date" title="Sat Nov 14 01:00:56 2009">Nov 14, 2009</span>
+ <div>
+<div class="commentcontent">
+<p>It would be nice if you could put a jar file in the downloads section
+ for the current release. Even better would be a maven repo somewhere. </p>
+</div>
+ 
+ 
+ </div>
+ </div>
+ 
+
+ 
+ <div class="artifactcomment">
+ 
+ 
+ 
+ 
+ 
+ 
+ <span class="author">Comment
+ 
+ by  project member 
+ 
+ 
+
+ <a class="userlink" href="http://code.google.com/u/hoegqvist@gmail.com/">hoegqvist@gmail.com</a>,
+ 
+ </span>
+ <span class="date" title="Fri Nov 20 02:31:11 2009">Nov 20, 2009</span>
+ <div>
+<div class="commentcontent">
+<p>Hi Nickdos, </p><p>a jar-file will be made available as part of a release in the upcoming weeks. </p><p>Mikael </p>
+</div>
+ 
+ 
+ </div>
+ </div>
+ 
+
+</div>
+</div>
+
+ 
+
+
+ <script type="text/javascript">
+ function delComment(sequence_num, create_time, delete_mode) {
+ var f = document.forms["delcom"];
+ f.sequence_num.value = sequence_num;
+ f.create_time.value = create_time;
+ f.mode.value = delete_mode;
+ f.submit();
+ return false;
+ }
+ </script>
+
+
+ </div>
+ 
+ 
+ 
+ 
+ 
+ <div id="commentform">
+ <form action="../w/detail.do" method="post">
+ <table>
+ <tbody><tr><td class="vt">
+ <input name="pagename" value="UsageExampleJava" type="hidden">
+ <input name="token" value="Uxfp39iomeLgoXuBaKwkppc41Rw:1346573112834" type="hidden">
+ <div class="graytext" style="float: right;">
+ Hint: You can use <a href="http://code.google.com/p/support/wiki/WikiSyntax">Wiki Syntax.</a>
+ </div>
+ <div>Enter a comment:</div>
+ <textarea name="content" rows="6" cols="100"></textarea><br><br>
+ <input name="submit" value="Submit" type="submit">
+ </td>
+ </tr></tbody></table>
+ </form>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ <form name="delcom" action="../w/delComment.do" method="POST">
+ <input name="sequence_num" value="" type="hidden">
+ <input name="create_time" value="" type="hidden">
+ <input name="mode" value="" type="hidden">
+ <input name="pagename" value="UsageExampleJava" type="hidden">
+ <input name="token" value="Uxfp39iomeLgoXuBaKwkppc41Rw:1346573112834" type="hidden">
+ </form>
+
+
+ <script src="UsageExampleJava_files/prettify.js"></script>
+ <script type="text/javascript">
+ prettyPrint();
+ </script>
+
+<script type="text/javascript" src="UsageExampleJava_files/dit_scripts.js"></script>
+
+
+
+  
+ 
+ 
+ <script type="text/javascript" src="UsageExampleJava_files/ph_core.js"></script>
+ 
+ <script type="text/javascript" src="UsageExampleJava_files/ph_dwiki.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="http://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="http://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+
+<div style="position: absolute; display: none; top: 18px; left: 908px;" id="menuDiv-projects-dropdown" class="menuDiv instance0"><div style="display: none;" class="menuCategory default"></div><b style="display: block;" class="categoryTitle projects">Projects</b><div class="menuCategory projects first"><a href="http://code.google.com/p/cassius/" style="display: block;" class="menuItem">cassius</a><a href="http://code.google.com/p/plothon/" style="display: block;" class="menuItem">plothon</a><a href="http://code.google.com/p/pyminuit/" style="display: block;" class="menuItem">pyminuit</a><a href="http://code.google.com/p/pyminuit2/" style="display: block;" class="menuItem">pyminuit2</a><a href="http://code.google.com/p/svgfig/" style="display: block;" class="menuItem">svgfig</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://code.google.com/hosting/" style="display: block;" class="menuItem">Find open source projects...</a><a href="http://code.google.com/hosting/createProject" style="display: block;" class="menuItem">Create a project...</a></div></div><div style="position: absolute; display: none; top: 18px; left: 753px;" id="menuDiv-multilogin-dropdown" class="menuDiv instance1"><div class="menuCategory default first"><span style="display: block;" class="menuText"><b>jpivarski@gmail.com</b></span><a href="http://code.google.com/p/babudb/wiki/UsageExampleJava?authuser=1" style="display: block;" class="menuItem">jim.pivarski@opendatagroup.com</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://www.google.com/accounts/AddSession?service=code&amp;continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FUsageExampleJava" style="display: block;" class="menuItem"><nobr>Sign in with another account...</nobr></a></div></div></body></html>

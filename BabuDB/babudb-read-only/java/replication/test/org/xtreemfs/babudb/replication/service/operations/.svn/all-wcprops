@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/service/operations
+END
+SlaveReplicationOperationsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/service/operations/SlaveReplicationOperationsTest.java
+END
+MasterReplicationOperationsTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/!svn/ver/609/trunk/java/replication/test/org/xtreemfs/babudb/replication/service/operations/MasterReplicationOperationsTest.java
+END

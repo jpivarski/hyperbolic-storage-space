@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform
+END
+file_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/file_test.cpp
+END
+file.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/595/trunk/cpp/src/yield_platform/file.cpp
+END
+platform_exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/platform_exception.cpp
+END
+directory_walker_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/directory_walker_test.cpp
+END
+directory_walker.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/directory_walker.cpp
+END
+stat_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/stat_test.cpp
+END
+path_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/path_test.cpp
+END
+stat.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/524/trunk/cpp/src/yield_platform/stat.cpp
+END
+memory_mapped_file_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/memory_mapped_file_test.cpp
+END
+disk_operations_test.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/disk_operations_test.cpp
+END
+path.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/path.cpp
+END
+disk_operations.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/disk_operations.cpp
+END
+memory_mapped_file.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/603/trunk/cpp/src/yield_platform/memory_mapped_file.cpp
+END

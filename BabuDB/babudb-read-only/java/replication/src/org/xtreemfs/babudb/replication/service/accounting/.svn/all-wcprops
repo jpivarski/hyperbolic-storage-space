@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting
+END
+LatestLSNUpdateListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/!svn/ver/421/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting/LatestLSNUpdateListener.java
+END
+StatesManipulation.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/449/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting/StatesManipulation.java
+END
+ParticipantsStates.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting/ParticipantsStates.java
+END
+ReplicateResponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/513/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting/ReplicateResponse.java
+END
+ParticipantsOverview.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/547/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/accounting/ParticipantsOverview.java
+END

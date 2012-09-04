@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/561/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations
+END
+MakePersistentOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/MakePersistentOperation.java
+END
+GetDatabaseByNameOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/561/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/GetDatabaseByNameOperation.java
+END
+RangeLookupReverseOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/RangeLookupReverseOperation.java
+END
+PrefixLookupReverseOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/!svn/ver/561/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/PrefixLookupReverseOperation.java
+END
+RangeLookupOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/561/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/RangeLookupOperation.java
+END
+PrefixLookupOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/561/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/PrefixLookupOperation.java
+END
+GetDatabasesOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/GetDatabasesOperation.java
+END
+LookupOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/558/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/LookupOperation.java
+END
+GetDatabaseByIdOperation.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/!svn/ver/550/trunk/java/replication/src/org/xtreemfs/babudb/replication/proxy/operations/GetDatabaseByIdOperation.java
+END

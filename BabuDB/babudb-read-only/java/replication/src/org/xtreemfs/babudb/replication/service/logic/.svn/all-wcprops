@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/574/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic
+END
+BasicLogic.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/559/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic/BasicLogic.java
+END
+RequestLogic.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/567/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic/RequestLogic.java
+END
+LogicID.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/549/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic/LogicID.java
+END
+Logic.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/574/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic/Logic.java
+END
+LoadLogic.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/567/trunk/java/replication/src/org/xtreemfs/babudb/replication/service/logic/LoadLogic.java
+END

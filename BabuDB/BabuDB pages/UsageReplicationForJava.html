@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html style="cursor: auto ! important;"><head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ 
+ <meta name="ROBOTS" content="NOARCHIVE">
+ 
+ <link rel="icon" type="image/vnd.microsoft.icon" href="http://www.gstatic.com/codesite/ph/images/phosting.ico">
+ 
+ 
+ <link rel="canonical" href="http://code.google.com/p/babudb/wiki/UsageReplicationForJava">
+ 
+ <script async="" src="UsageReplicationForJava_files/cbgapi.js"></script><script gapi_processed="true" src="UsageReplicationForJava_files/plusone.js" async="" type="text/javascript"></script><script type="text/javascript">
+ 
+ 
+ 
+ 
+ var codesite_token = "M1vi8FKW9QG4ikOqYPu9DObIhCc:1346573136574";
+ 
+ 
+ var CS_env = {"profileUrl":["/u/115036434905974694138/"],"token":"M1vi8FKW9QG4ikOqYPu9DObIhCc:1346573136574","assetHostPath":"http://www.gstatic.com/codesite/ph","domainName":null,"assetVersionPath":"http://www.gstatic.com/codesite/ph/5121560014714628542","projectHomeUrl":"/p/babudb","relativeBaseUrl":"","projectName":"babudb","loggedInUserEmail":"jpivarski@gmail.com"};
+ var _gaq = _gaq || [];
+ _gaq.push(
+ ['siteTracker._setAccount', 'UA-18071-1'],
+ ['siteTracker._trackPageview']);
+ 
+ _gaq.push(
+ ['projectTracker._setAccount', 'UA-4530467-2'],
+ ['projectTracker._trackPageview']);
+ 
+ (function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+ 
+ </script><script src="UsageReplicationForJava_files/ga.js" async="" type="text/javascript"></script>
+ 
+ 
+ <title>UsageReplicationForJava - 
+ babudb -
+ 
+ How to use the replication plugin for BabuDB for Java. - 
+ An embedded non-relational database for Java and C++ - Google Project Hosting
+ </title>
+ <link type="text/css" rel="stylesheet" href="UsageReplicationForJava_files/core.css">
+ 
+ <link type="text/css" rel="stylesheet" href="UsageReplicationForJava_files/ph_detail.css">
+ 
+ 
+ 
+ <link type="application/atom+xml" rel="alternate" href="http://code.google.com/feeds/p/babudb/svnchanges/basic?path=/wiki/UsageReplicationForJava.wiki">
+ 
+ 
+<!--[if IE]>
+ <link type="text/css" rel="stylesheet" href="http://www.gstatic.com/codesite/ph/5121560014714628542/css/d_ie.css" >
+<![endif]-->
+ <style type="text/css">
+ .menuIcon.off { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -42px }
+ .menuIcon.on { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 -28px }
+ .menuIcon.down { background: no-repeat url(http://www.gstatic.com/codesite/ph/images/dropdown_sprite.gif) 0 0; }
+ 
+ 
+ #maincol {
+ padding-top: 0;
+ padding-bottom: 0;
+ }
+
+ 
+ </style>
+</head>
+<body class="t6">
+<script type="text/javascript">
+ window.___gcfg = {lang: 'en'};
+ (function() 
+ {var po = document.createElement("script");
+ po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+ var s = document.getElementsByTagName("script")[0];
+ s.parentNode.insertBefore(po, s);
+ })();
+</script>
+<div class="headbg">
+
+ <div id="gaia">
+ 
+
+ <span>
+ 
+ 
+ 
+ <a href="#" id="multilogin-dropdown" onclick="return false;"><u><b>jpivarski@gmail.com</b></u> <small>▼</small></a>
+ 
+ 
+ | <a href="http://code.google.com/u/115036434905974694138/" id="projects-dropdown" onclick="return false;"><u>My favorites</u> <small>▼</small></a>
+ | <a href="http://code.google.com/u/115036434905974694138/" onclick="_CS_click('/gb/ph/profile');" title="Profile, Updates, and Settings"><u>Profile</u></a>
+ | <a href="https://www.google.com/accounts/Logout?continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FUsageReplicationForJava" onclick="_CS_click('/gb/ph/signout');"><u>Sign out</u></a>
+ 
+ </span>
+
+ </div>
+
+ <div class="gbh" style="left: 0pt;"></div>
+ <div class="gbh" style="right: 0pt;"></div>
+ 
+ 
+ <div style="height: 1px"></div>
+<!--[if lte IE 7]>
+<div style="text-align:center;">
+Your version of Internet Explorer is not supported. Try a browser that
+contributes to open source, such as <a href="http://www.firefox.com">Firefox</a>,
+<a href="http://www.google.com/chrome">Google Chrome</a>, or
+<a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a>.
+</div>
+<![endif]-->
+
+
+
+ <table style="padding:0px; margin: 0px 0px 10px 0px; width:100%" itemscope="" itemtype="http://schema.org/CreativeWork" cellpadding="0" cellspacing="0">
+ <tbody><tr style="height: 58px;">
+ 
+ <td id="plogo">
+ <link itemprop="url" href="http://code.google.com/p/babudb">
+ <a href="http://code.google.com/p/babudb/">
+ 
+ 
+ <img src="UsageReplicationForJava_files/logo.png" alt="Logo" itemprop="image">
+ 
+ </a>
+ </td>
+ 
+ <td style="padding-left: 0.5em">
+ 
+ <div id="pname">
+ <a href="http://code.google.com/p/babudb/"><span itemprop="name">babudb</span></a>
+ </div>
+ 
+ <div id="psum">
+ <a id="project_summary_link" href="http://code.google.com/p/babudb/"><span itemprop="description">An embedded non-relational database for Java and C++</span></a>
+ 
+ </div>
+ 
+ 
+ </td>
+ <td style="white-space:nowrap;text-align:right; vertical-align:bottom;">
+ 
+ <form action="/hosting/search">
+ <input size="30" name="q" type="text">
+ 
+ <input name="projectsearch" value="Search projects" type="submit">
+ </form>
+ 
+ </td></tr>
+ </tbody></table>
+
+</div>
+
+ 
+<div id="mt" class="gtb"> 
+ <a href="http://code.google.com/p/babudb/" class="tab ">Project&nbsp;Home</a>
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/downloads/list" class="tab ">Downloads</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/w/list" class="tab active">Wiki</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/issues/list" class="tab ">Issues</a>
+ 
+ 
+ 
+ 
+ 
+ <a href="http://code.google.com/p/babudb/source/checkout" class="tab ">Source</a>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="gtbc"></div>
+</div>
+<table class="st" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tbody><tr>
+ 
+ 
+ 
+ 
+ <td class="subt">
+ <div class="issueDetail">
+<div class="isf">
+ 
+ <span class="inIssueList"> 
+ <span>Search</span>
+ <form action="/p/babudb/w/list" method="GET" style="display:inline">
+ <select id="can" name="can">
+ <option disabled="disabled">Search within:</option>
+ 
+ <option value="1">&nbsp;All wiki pages</option>
+ <option value="3">&nbsp;Featured pages</option>
+ <option value="2" selected="selected">&nbsp;Current pages</option>
+ 
+ 
+ <option value="5">&nbsp;My starred pages</option>
+ 
+ <option value="4">&nbsp;Deprecated pages</option>
+ 
+ </select>
+ <span>for</span>
+ <span id="qq"><input size="38" id="searchq" name="q" autocomplete="off" type="text"></span>
+ 
+ 
+ 
+ <input value="Search" type="submit">
+ </form>
+ </span>
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+</div>
+</div>
+
+ </td>
+ 
+ 
+ 
+ 
+ 
+ 
+ <td class="bevel-right" align="right" valign="top"></td>
+ </tr>
+</tbody></table>
+
+
+<script type="text/javascript">
+ var cancelBubble = false;
+ function _go(url) { document.location = url; }
+</script>
+<div id="maincol">
+
+ 
+<!-- IE -->
+
+
+
+
+
+
+
+ <style type="text/css">
+ .delcom { background: #e8e8e8 }
+ .commentcontent {
+ margin: 2em;
+ padding: 0px 10px;
+ width: 66em;
+ }
+ .artifactcomment {
+ border-top: 3px solid #c3d9ff;
+ }
+ #commentform {
+ border-top: 3px solid #c3d9ff;
+ }
+ </style>
+
+<div id="wikipage">
+<table>
+ <tbody><tr>
+ 
+ 
+ <td style="vertical-align:top; padding-left:5px">
+ 
+ <div id="wikiheader">
+ 
+ <img id="star_img" src="UsageReplicationForJava_files/star_off.gif" style="cursor:pointer" onclick="_CS_toggleStar(this,
+ {'scope': 'wiki',
+ 'user': '_CURRENT_USER',
+ 'item': 'babudb:UsageReplicationForJava'
+ });" height="15" width="15">
+ 
+ <span style="font-size:120%;font-weight:bold">UsageReplicationForJava</span>
+ &nbsp;
+ <div> 
+ 
+ <i>How to use the replication plugin for BabuDB for Java.</i>
+ 
+ 
+ <br>
+ 
+ <a class="label" style="padding-top: 2px" href="http://code.google.com/p/babudb/w/list?q=label:Featured" title="Listed on project home page">Featured</a>
+ 
+ 
+ 
+ <div id="wikiauthor" style="float:right">
+ Updated <span title="Thu Apr 21 02:50:20 2011">
+ Apr 21, 2011</span>
+ 
+ by 
+
+ <a class="userlink" href="http://code.google.com/u/fx.langner@gmail.com/">fx.langner@gmail.com</a>
+ 
+ </div>
+ </div>
+ </div>
+ 
+ <div id="wikicontent">
+ <div class="vt" id="wikimaincol">
+ <h1><a name="BabuDB_replication"></a>BabuDB replication<a href="#BabuDB_replication" class="section_anchor"></a></h1><h2><a name="Introduction"></a>Introduction<a href="#Introduction" class="section_anchor"></a></h2><p>This
+ guide refers to the replication plugin that will become available with 
+the next major release (TBA 0.5.0). Since the replication mechanism has 
+been separated from the core BabuDB functionalities also its usability 
+has been enhanced. For your application it now does not matter anymore 
+if it uses a single instance of BabuDB or a system of multiple instances
+ that are replicated among each other in background. It will always be 
+accessed through the same well documented interface that can be found 
+within the package  <strong>org.xtreemfs.babudb.api</strong>. The replication itself has no user-application accessible interface at all. </p><h3><a name="Features"></a>Features<a href="#Features" class="section_anchor"></a></h3><p>Using the replication plugin for BabuDB will provide the following features: </p><ul><li><strong>Better protection against data loss</strong>: Database operations continuously be spread among the servers participating at the setup. </li><li><strong>Higher availablility</strong>:
+ An integrated master fail-over mechanism ensures an operational system 
+as long as at least an user defined amount of servers is up and running.
+ You still may need a fail-over mechanism for your application itself, 
+because if the server that is executing your application fails, your 
+system will be not available as well. </li><li><strong>Completely transparent integration with BabuDB</strong>:
+ Any application that has been written to run using BabuDB 0.5.0 without
+ replication, will run on a replicated multiple-instance BabuDB system 
+as well. </li></ul><p></p><h3><a name="Preconditions_necessary_to_use_replication"></a>Preconditions necessary to use replication<a href="#Preconditions_necessary_to_use_replication" class="section_anchor"></a></h3><ul><li>A
+ server running a BabuDB instance that is said to attend one 
+replication-setup has to be able to connect to each other servers of the
+ setup via a TCP/IP connection with limited latency. </li><li>They all 
+must offer system clocks that are loosely synchronized within the setup 
+ensuring a well known maximal time drift (by default that timedrift is 
+assumed to be less than 3 seconds). </li></ul><h2><a name="Quickstart"></a>Quickstart<a href="#Quickstart" class="section_anchor"></a></h2><p>This
+ guide describes how to setup an example with two BabuDB instances 
+running at the same host. The more common way to setup replicated BabuDB
+ instances will involve multiple hosts, but in case of a 
+quickstart-scenario this will do. A sample application based on this 
+quickstart can be found <a href="http://code.google.com/p/babudb/downloads/detail?name=sampleApp.zip" rel="nofollow">here</a>. </p><h3><a name="Preparations"></a>Preparations<a href="#Preparations" class="section_anchor"></a></h3><ul><li>Ensure that you put your latest BabuDB release including its dependencies to <tt>myBabuDBPath</tt>. </li><li>Unzip the release of the replication plugin into <tt>myPluginPath</tt> on your harddrive. </li><li>Check whether you have installed a SUN/Oracle JRE of at least version 1.6. </li></ul><h3><a name="Configuration"></a>Configuration<a href="#Configuration" class="section_anchor"></a></h3><p>First
+ of all we need to configure the replication plugin by creating one 
+configuration file for each BabuDB instance taking part in our setup. 
+For the two instance of our example these will be 
+pluginConfig0.properties with the following content:  </p><pre class="prettyprint"><span class="pln">plugin</span><span class="pun">.</span><span class="pln">jar </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="typ">Replication</span><span class="pun">-</span><span class="lit">1.0</span><span class="pun">.</span><span class="lit">0_0.5</span><span class="pun">.</span><span class="lit">0.jar</span><span class="pln"><br><br></span><span class="com"># paths to libraries this plugin depends on</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="pln">PBRPC</span><span class="pun">.</span><span class="pln">jar<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="typ">Flease</span><span class="pun">.</span><span class="pln">jar<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">2</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">extLib</span><span class="pun">/</span><span class="pln">protobuf</span><span class="pun">-</span><span class="pln">java</span><span class="pun">-</span><span class="lit">2.3</span><span class="pun">.</span><span class="lit">0.jar</span><span class="pln"><br><br></span><span class="com"># DB backup directory - needed for the initial loading of the BabuDB from the </span><span class="pln"><br></span><span class="com"># master in replication context</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">backupDir </span><span class="pun">=</span><span class="pln"> </span><span class="str">/tmp/</span><span class="pln">backup0<br><br></span><span class="com"># number of servers that at least have to be up to date</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">sync</span><span class="pun">.</span><span class="pln">n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pln"><br><br></span><span class="com"># it is possible to set the local address and port of this server explicitly. if not it will be</span><span class="pln"><br></span><span class="com"># chosen from the list of participants added right hereafter (default).</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">localhost </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">localport </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35666</span><span class="pln"><br><br></span><span class="com"># participants of the replication including the local address</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">0.port</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35666</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">1.port</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35667</span></pre><p>and pluginConfig1.properties with similar content: </p><pre class="prettyprint"><span class="pln">plugin</span><span class="pun">.</span><span class="pln">jar </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="typ">Replication</span><span class="pun">-</span><span class="lit">1.0</span><span class="pun">.</span><span class="lit">0_0.5</span><span class="pun">.</span><span class="lit">0.jar</span><span class="pln"><br><br></span><span class="com"># paths to libraries this plugin depends on</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="pln">PBRPC</span><span class="pun">.</span><span class="pln">jar<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">lib</span><span class="pun">/</span><span class="typ">Flease</span><span class="pun">.</span><span class="pln">jar<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">dependency</span><span class="pun">.</span><span class="lit">2</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> myPluginPath</span><span class="pun">/</span><span class="pln">extLib</span><span class="pun">/</span><span class="pln">protobuf</span><span class="pun">-</span><span class="pln">java</span><span class="pun">-</span><span class="lit">2.3</span><span class="pun">.</span><span class="lit">0.jar</span><span class="pln"><br><br></span><span class="com"># DB backup directory - needed for the initial loading of the BabuDB from the </span><span class="pln"><br></span><span class="com"># master in replication context</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">backupDir </span><span class="pun">=</span><span class="pln"> </span><span class="str">/tmp/</span><span class="pln">backup1<br><br></span><span class="com"># number of servers that at least have to be up to date</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">sync</span><span class="pun">.</span><span class="pln">n </span><span class="pun">=</span><span class="pln"> </span><span class="lit">2</span><span class="pln"><br><br></span><span class="com"># it is possible to set the local address and port of this server explicitly. if not it will be</span><span class="pln"><br></span><span class="com"># chosen from the list of participants added right hereafter (default).</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">localhost </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">localport </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35667</span><span class="pln"><br><br></span><span class="com"># participants of the replication including the local address</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">0</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">0.port</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35666</span><span class="pln"><br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">1</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> localhost<br>babudb</span><span class="pun">.</span><span class="pln">repl</span><span class="pun">.</span><span class="pln">participant</span><span class="pun">.</span><span class="lit">1.port</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="lit">35667</span></pre><p>Both files have to be saved to <tt>myBabuDBPath</tt>. </p><h3><a name="Startup"></a>Startup<a href="#Startup" class="section_anchor"></a></h3><p>Now
+ we need to extend the configuration of the single BabuDB instances with
+ the reference to the plugin's configuration and fire them up. This will
+ be part of the initialization of our application program:  </p><pre class="prettyprint"><span class="typ">ConfigBuilder</span><span class="pln"> builder0 </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ConfigBuilder</span><span class="pun">();</span><span class="pln"><br>builder0</span><span class="pun">.</span><span class="pln">setDataPath</span><span class="pun">(</span><span class="str">"/tmp/babudb0"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"/tmp/babudb0/log"</span><span class="pun">).</span><span class="pln">setLogAppendSyncMode</span><span class="pun">(</span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">SYNC_WRITE</span><span class="pun">);</span><span class="pln"><br>builder0</span><span class="pun">.</span><span class="pln">addPlugin</span><span class="pun">(</span><span class="str">"myBabuDBPath/pluginConfig0.properties"</span><span class="pun">);</span><span class="pln"><br></span><span class="typ">BabuDBConfig</span><span class="pln"> config0 </span><span class="pun">=</span><span class="pln"> builder0</span><span class="pun">.</span><span class="pln">build</span><span class="pun">();</span><span class="pln"><br><br></span><span class="typ">ConfigBuilder</span><span class="pln"> builder1 </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">ConfigBuilder</span><span class="pun">();</span><span class="pln"><br>builder1</span><span class="pun">.</span><span class="pln">setDataPath</span><span class="pun">(</span><span class="str">"/tmp/babudb1"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"/tmp/babudb1/log"</span><span class="pun">).</span><span class="pln">setLogAppendSyncMode</span><span class="pun">(</span><span class="typ">SyncMode</span><span class="pun">.</span><span class="pln">SYNC_WRITE</span><span class="pun">);</span><span class="pln"><br>builder1</span><span class="pun">.</span><span class="pln">addPlugin</span><span class="pun">(</span><span class="str">"myBabuDBPath/pluginConfig1.properties"</span><span class="pun">);</span><span class="pln"><br></span><span class="typ">BabuDBConfig</span><span class="pln"> config1 </span><span class="pun">=</span><span class="pln"> builder1</span><span class="pun">.</span><span class="pln">build</span><span class="pun">();</span><span class="pln"><br><br></span><span class="typ">BabuDB</span><span class="pln"> babuDB0 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="pln">config0</span><span class="pun">);</span><span class="pln"><br></span><span class="typ">BabuDB</span><span class="pln"> babuDB1 </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BabuDBFactory</span><span class="pun">.</span><span class="pln">createBabuDB</span><span class="pun">(</span><span class="pln">config1</span><span class="pun">);</span></pre><p>The
+ data stored at any of both instance will be replicated to the other 
+one, while you may treat both of them as if they were single instances, 
+like described at <a href="http://code.google.com/p/babudb/wiki/UsageExampleJava">UsageExampleJava</a>. </p><h2><a name="Technical_details"></a>Technical details<a href="#Technical_details" class="section_anchor"></a></h2><p>The following details should not bother you, if you only want to <i>use</i> the replication plugin but they will if you want to <i>optimize your setup</i> or <i>develop depending plugins</i>.  </p><p>The
+ replication mechanism underlies a master-slave related replication 
+model. Databases are replicated by the granularity of single operations.
+ Any operation performed by the user will cause a log entry to be 
+written to the pending on-disk log file. These log entries are 
+serialized and send to the slaves via Google's <a href="http://code.google.com/p/protobuf/" rel="nofollow">protocol buffer RPC architecture</a>.
+ Mutual exclusion for the master is garanted by Flease a quorum-based 
+algorithm, that was developed within the XtreemFS research. The user 
+specifies behavior of the replication by deciding how many of the total 
+amount <i>n</i> of hosts participating at replication setup have at least to be up-to-date.  </p><h3><a name="Invariants"></a>Invariants<a href="#Invariants" class="section_anchor"></a></h3><ul><li>A
+ participating server can be holder of the master privilege, obey such a
+ master as its slave or remain in a well defined idle-mode.  </li><li>A slave does obey only one master at a time. </li><li>If a master cannot spread an operation to at least <i>k out of n</i> slaves it rejects further incomming requests until the required amount of servers becomes available/reachable again.  </li><li>At
+ any time every participant can state a steadily distinct LSN (Logentry 
+Sequence Number) representing its progress. It is the identifier of the 
+last entry written to its on-disk log file. </li></ul><p>For even more technical details visit <a href="http://code.google.com/p/babudb/wiki/BabuDBReplicationForJava" rel="nofollow">BabuDBReplicationForJava</a>. </p>
+ </div>
+ </div>
+ </td></tr><tr>
+</tr></tbody></table>
+ </div>
+
+
+ 
+ 
+ 
+ 
+ 
+ <div id="commentform">
+ <form action="../w/detail.do" method="post">
+ <table>
+ <tbody><tr><td class="vt">
+ <input name="pagename" value="UsageReplicationForJava" type="hidden">
+ <input name="token" value="M1vi8FKW9QG4ikOqYPu9DObIhCc:1346573136574" type="hidden">
+ <div class="graytext" style="float: right;">
+ Hint: You can use <a href="http://code.google.com/p/support/wiki/WikiSyntax">Wiki Syntax.</a>
+ </div>
+ <div>Enter a comment:</div>
+ <textarea name="content" rows="6" cols="100"></textarea><br><br>
+ <input name="submit" value="Submit" type="submit">
+ </td>
+ </tr></tbody></table>
+ </form>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ <form name="delcom" action="../w/delComment.do" method="POST">
+ <input name="sequence_num" value="" type="hidden">
+ <input name="create_time" value="" type="hidden">
+ <input name="mode" value="" type="hidden">
+ <input name="pagename" value="UsageReplicationForJava" type="hidden">
+ <input name="token" value="M1vi8FKW9QG4ikOqYPu9DObIhCc:1346573136574" type="hidden">
+ </form>
+
+
+ <script src="UsageReplicationForJava_files/prettify.js"></script>
+ <script type="text/javascript">
+ prettyPrint();
+ </script>
+
+<script type="text/javascript" src="UsageReplicationForJava_files/dit_scripts.js"></script>
+
+
+
+  
+ 
+ 
+ <script type="text/javascript" src="UsageReplicationForJava_files/ph_core.js"></script>
+ 
+ <script type="text/javascript" src="UsageReplicationForJava_files/ph_dwiki.js"></script>
+ 
+ 
+ 
+ 
+</div> 
+
+<div id="footer" dir="ltr">
+ <div class="text">
+ <a href="http://code.google.com/projecthosting/terms.html">Terms</a> -
+ <a href="http://www.google.com/privacy.html">Privacy</a> -
+ <a href="http://code.google.com/p/support/">Project Hosting Help</a>
+ </div>
+</div>
+ <div class="hostedBy" style="margin-top: -20px;">
+ <span style="vertical-align: top;">Powered by <a href="http://code.google.com/projecthosting/">Google Project Hosting</a></span>
+ </div>
+
+ 
+ 
+
+
+ 
+ 
+
+
+
+<div style="position: absolute; display: none; top: 18px; left: 908px;" id="menuDiv-projects-dropdown" class="menuDiv instance0"><div style="display: none;" class="menuCategory default"></div><b style="display: block;" class="categoryTitle projects">Projects</b><div class="menuCategory projects first"><a href="http://code.google.com/p/cassius/" style="display: block;" class="menuItem">cassius</a><a href="http://code.google.com/p/plothon/" style="display: block;" class="menuItem">plothon</a><a href="http://code.google.com/p/pyminuit/" style="display: block;" class="menuItem">pyminuit</a><a href="http://code.google.com/p/pyminuit2/" style="display: block;" class="menuItem">pyminuit2</a><a href="http://code.google.com/p/svgfig/" style="display: block;" class="menuItem">svgfig</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://code.google.com/hosting/" style="display: block;" class="menuItem">Find open source projects...</a><a href="http://code.google.com/hosting/createProject" style="display: block;" class="menuItem">Create a project...</a></div></div><div style="position: absolute; display: none; top: 18px; left: 753px;" id="menuDiv-multilogin-dropdown" class="menuDiv instance1"><div class="menuCategory default first"><span style="display: block;" class="menuText"><b>jpivarski@gmail.com</b></span><a href="http://code.google.com/p/babudb/wiki/UsageReplicationForJava?authuser=1" style="display: block;" class="menuItem">jim.pivarski@opendatagroup.com</a></div><div class="menuCategory controls"><hr class="menuSeparator"><a href="http://www.google.com/accounts/AddSession?service=code&amp;continue=http%3A%2F%2Fcode.google.com%2Fp%2Fbabudb%2Fwiki%2FUsageReplicationForJava" style="display: block;" class="menuItem"><nobr>Sign in with another account...</nobr></a></div></div></body></html>

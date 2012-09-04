@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/580/trunk/java/test/org/xtreemfs/babudb
+END
+BabuDBTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/580/trunk/java/test/org/xtreemfs/babudb/BabuDBTest.java
+END
+CopyDatabaseTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/503/trunk/java/test/org/xtreemfs/babudb/CopyDatabaseTest.java
+END
+BackupTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/503/trunk/java/test/org/xtreemfs/babudb/BackupTest.java
+END
+TransactionTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/512/trunk/java/test/org/xtreemfs/babudb/TransactionTest.java
+END
+ConcurrencyTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/503/trunk/java/test/org/xtreemfs/babudb/ConcurrencyTest.java
+END
