@@ -1,0 +1,9 @@
+The arbitrary-precision integer arithmetic needs:
+    * construct from normal int -> BigInteger
+    # convert to a floating-point number
+    * add and subtract BigIntegers
+    * check for non-negative
+    * negate (flip the sign bit, wherever that is)
+    * left-shift (1 << denomexp) to a BigInteger
+    * left-shift (BigInteger << denomexp)
+    * right-shift (BigInteger >> numbits)

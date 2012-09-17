@@ -3,16 +3,15 @@
 import math
 
 class BigComplex(object):
-    bits = 31  # which is log(2**31, 10) = 9.33 digits
-    twos = None
-    overtwos = None
-    twopi = 2.*math.pi
-    overtwopi = 0.5/math.pi
+    TWOS = []
+    OVERTWOS = []
+    TWOPI = 2.*math.pi
+    OVERTWOPI = 0.5/math.pi
 
     @classmethod
-    def init(__class__):
-        __class__.twos = [float(2**n) for n in xrange(0, __class__.bits)]
-        __class__.overtwos = [1./float(2**n) for n in xrange(0, __class__.bits)]
+    def (__class__, bits):
+        __class__.TWOS = [float(2**n) for n in xrange(0, bits)]
+        __class__.OVERTWOS = [1./float(2**n) for n in xrange(0, bits)]
 
     def __init__(self, mag, numer, denomexp):
         self.mag = mag
@@ -23,12 +22,18 @@ class BigComplex(object):
 
     def frompolar(self, r, phi):
         # switch to [0, 2pi)
-        while phi < 0.: phi += self.twopi
-        while phi >= self.twopi: phi -= self.twopi
+        while phi < 0.: phi += self.TWOPI
+        while phi >= self.TWOPI: phi -= self.TWOPI
 
         self.mag = r
         self.denomexp = (self.bits - 1)
-        self.numer = int(round(phi * self.overtwopi * self.twos[self.denomexp]))
+        self.numer = int(round(phi * self.OVERTWOPI * self.TWOS[self.denomexp]))
+
+
+
+############################## here
+
+
 
     def topolar(self):
         numer = self.numer
@@ -49,7 +54,7 @@ class BigComplex(object):
 
         if not nonnegative:
             numer = -numer
-        return self.mag, numer * self.overtwos[denomexp] * self.twopi
+        return self.mag, numer * self.OVERTWOS[denomexp] * self.TWOPI
             
     def fromcoord(self, real, imag):
         r = math.sqrt(real**2 + imag**2)
@@ -106,17 +111,17 @@ class BigComplex(object):
 
         if not nonnegative:
             diff_numer = -diff_numer
-        diffphi = diff_numer * self.overtwos[diff_denomexp] * self.twopi
+        diffphi = diff_numer * self.OVERTWOS[diff_denomexp] * self.TWOPI
 
         # get the polar coordinates of the rotated phasor
         mag = math.sqrt((self.mag + other.mag*math.cos(diffphi))**2 + (other.mag*math.sin(diffphi))**2)
         phi = math.atan2(other.mag*math.sin(diffphi), self.mag + other.mag*math.cos(diffphi))
 
         # convert it to a BigComplex in [0, 2pi)
-        while phi < 0.: phi += self.twopi
-        while phi >= self.twopi: phi -= self.twopi
+        while phi < 0.: phi += self.TWOPI
+        while phi >= self.TWOPI: phi -= self.TWOPI
         denomexp = (self.bits - 1)
-        numer = int(round(phi * self.overtwopi * self.twos[denomexp]))
+        numer = int(round(phi * self.OVERTWOPI * self.TWOS[denomexp]))
 
         # rotate back (add the self angle back in)
         numer = (self.numer << denomexp) + (numer << self.denomexp)
