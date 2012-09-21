@@ -31,11 +31,11 @@ function HyperbolicMapFromJSON(data) {
     if (this.pointFill == undefined) { this.pointFill = "#000000"; }
 
     for (var i in this.drawables) {
-	if (this.drawables[i]["type"] == "polygon") {
-	    for (var j in this.drawables[i]["d"]) {
-		this.convertPoint(this.drawables[i]["d"][j]);
-	    }
-	}
+        if (this.drawables[i]["type"] == "polygon") {
+            for (var j in this.drawables[i]["d"]) {
+                this.convertPoint(this.drawables[i]["d"][j]);
+            }
+        }
     }
 }
 
@@ -48,18 +48,19 @@ HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
     // var coshr = 0.5*(Math.exp(r/2.0) + Math.exp(-r/2.0));
 
     // if (r == 0.0) {
-    // 	point[0] = 0.0;
-    // 	point[1] = 0.0;
+    //         point[0] = 0.0;
+    //         point[1] = 0.0;
     // }
     // else {
-    // 	point[0] = sinhr*x/r;
-    // 	point[1] = sinhr*y/r;
+    //         point[0] = sinhr*x/r;
+    //         point[1] = sinhr*y/r;
     // }
 
     var eta = point[0];
     var phi = point[1];
     var sinhr = 0.5*(Math.exp(eta) - Math.exp(-eta));
     var coshr = 0.5*(Math.exp(eta) + Math.exp(-eta));
+
     point[0] = sinhr*Math.cos(phi);
     point[1] = sinhr*Math.sin(phi);
 
@@ -77,6 +78,9 @@ HyperbolicMapFromJSON.prototype.nextDrawable = function() {
 //////////////////////////////////////////// HyperbolicViewport
 
 function HyperbolicViewport(service, elem, width, height) {
+    this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
+    this.THRESHOLD = 0.95;
+
     this.offsetReal = 0.0;
     this.offsetImag = 0.0;
     this.zoom = 0.95;
@@ -90,10 +94,8 @@ function HyperbolicViewport(service, elem, width, height) {
     this.service = service;
     
     if (typeof elem == "string") {
-	elem = document.getElementById(elem);
+        elem = document.getElementById(elem);
     }
-
-    this.MAX_STRAIGHT_LINE_LENGTH = -0.1;
 
     this.canvas = document.createElement("canvas");
     this.canvas.width = width;
@@ -106,7 +108,6 @@ function HyperbolicViewport(service, elem, width, height) {
     elem.appendChild(this.canvas);
     this.draw();
 
-    this.THRESHOLD = 0.95;
     this.isMouseDown = false;
     this.finger1Real = null;
     this.finger1Imag = null;
@@ -114,35 +115,35 @@ function HyperbolicViewport(service, elem, width, height) {
     this.finger2Imag = null;
 
     document.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
-	event.preventDefault();
-	var x, y;
-	[x, y] = hyperbolicViewport.mousePosition(event);
+        event.preventDefault();
+        var x, y;
+        [x, y] = hyperbolicViewport.mousePosition(event);
 
-	hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
-	hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
+        hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
+        hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
 
-	if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
-	    hyperbolicViewport.isMouseDown = true;
-	}
+        if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
+            hyperbolicViewport.isMouseDown = true;
+        }
 
     }; }(this));
 
     document.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
-	if (hyperbolicViewport.isMouseDown) {
-	    var x, y;
-	    [x, y] = hyperbolicViewport.mousePosition(event);
-	    if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
-		hyperbolicViewport.updateOffset(x, y);
-	    }
-	}
+        if (hyperbolicViewport.isMouseDown) {
+            var x, y;
+            [x, y] = hyperbolicViewport.mousePosition(event);
+            if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
+                hyperbolicViewport.updateOffset(x, y);
+            }
+        }
     }; }(this));
 
     document.addEventListener("mouseup", function(hyperbolicViewport) { return function(event) {
-	hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
-	hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
-	hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
-	hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
-	hyperbolicViewport.isMouseDown = false;
+        hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
+        hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
+        hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
+        hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
+        hyperbolicViewport.isMouseDown = false;
     }; }(this));
 }
 
@@ -151,7 +152,7 @@ HyperbolicViewport.prototype.mousePosition = function(event) {
     var scale = this.zoom*this.canvas.width/2.0;
 
     return [(event.pageX - this.canvas.offsetLeft - shift)/scale,
-	    -(event.pageY - this.canvas.offsetTop - shift)/scale];
+            -(event.pageY - this.canvas.offsetTop - shift)/scale];
 }
 
 HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
@@ -207,7 +208,9 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
 
 HyperbolicViewport.prototype.draw = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+    var THRESHOLD2 = this.THRESHOLD*this.THRESHOLD;
+    var MAX_STRAIGHT_LINE_LENGTH2 = this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH;
+
     var shift = this.canvas.width/2.0;
     var scale = this.zoom*this.canvas.width/2.0;
 
@@ -222,166 +225,174 @@ HyperbolicViewport.prototype.draw = function() {
     this.service.loadDrawables();
     var drawable;
     while (drawable = this.service.nextDrawable()) {
-	if (drawable["type"] == "polygon") {
-	    var points = [];
-	    var filledges = [];
-	    var drawedges = [];
+        if (drawable["type"] == "polygon") {
+            var points = [];
+            var filledges = [];
+            var drawedges = [];
+            var willDraw = false;
 
-	    for (var j in drawable["d"]) {
-		var px, py, pc, x1, y1, x2, y2;
+            for (var j in drawable["d"]) {
+                var px, py, pc, x1, y1, x2, y2;
 
-		px = drawable["d"][j][0];
-		py = drawable["d"][j][1];
-		pc = drawable["d"][j][2];
-		[x1, y1] = this.internalToScreen(px, py, pc);
+                px = drawable["d"][j][0];
+                py = drawable["d"][j][1];
+                pc = drawable["d"][j][2];
+                [x1, y1] = this.internalToScreen(px, py, pc);
 
-		var jnext = parseInt(j) + 1;
-		if (j == drawable["d"].length - 1) { jnext = 0; }
+                var jnext = parseInt(j) + 1;
+                if (j == drawable["d"].length - 1) { jnext = 0; }
 
-		px = drawable["d"][jnext][0];
-		py = drawable["d"][jnext][1];
-		pc = drawable["d"][jnext][2];
-		[x2, y2] = this.internalToScreen(px, py, pc);
+                px = drawable["d"][jnext][0];
+                py = drawable["d"][jnext][1];
+                pc = drawable["d"][jnext][2];
+                [x2, y2] = this.internalToScreen(px, py, pc);
 
-		var options = drawable["d"][j][3];
-		if (options == undefined) { options = ""; }
-		else { options = options.toLowerCase(); }
+                if (x1*x1 + y1*y1 < THRESHOLD2  ||
+                    x2*x2 + y2*y2 < THRESHOLD2) {
+                    willDraw = true;
+                }
 
-		var drawLine = (options.indexOf("l") != -1);
-		if (options.indexOf("p") != -1) {
-		    points.push([x1*scale + shift, -y1*scale + shift]);
-		}
+                var options = drawable["d"][j][3];
+                if (options == undefined) { options = ""; }
+                else { options = options.toLowerCase(); }
 
-		var denom = x1*y2 - x2*y1;
-		var dist2 = (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
+                var drawLine = (options.indexOf("l") != -1);
+                if (options.indexOf("p") != -1) {
+                    points.push([x1*scale + shift, -y1*scale + shift]);
+                }
 
-		if (Math.abs(denom) > 1e-10  &&  dist2 > this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH) {
-    		    var a = (-x1*x1*y2 + x2*x2*y1 - y1*y1*y2 + y1*y2*y2 + y1 - y2)/denom;
-    		    var b = (x1*x1*x2 - x1*x2*x2 - x1*y2*y2 - x1 + x2*y1*y1 + x2)/denom;
-    		    var cx = -0.5*a;
-    		    var cy = -0.5*b;
-    		    var r2 = -1 + 0.25*(a*a + b*b);
-    		    var phi1 = -Math.atan2(y1 - cy, x1 - cx);
-    		    var phi2 = -Math.atan2(y2 - cy, x2 - cx);
+                var denom = x1*y2 - x2*y1;
+                var dist2 = (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
 
-    		    var deltaphi = phi1 - phi2;
-    		    while (deltaphi >= Math.PI) { deltaphi -= 2*Math.PI; }
-    		    while (deltaphi < -Math.PI) { deltaphi += 2*Math.PI; }
+                if (Math.abs(denom) > 1e-10  &&  dist2 > MAX_STRAIGHT_LINE_LENGTH2) {
+                    var a = (-x1*x1*y2 + x2*x2*y1 - y1*y1*y2 + y1*y2*y2 + y1 - y2)/denom;
+                    var b = (x1*x1*x2 - x1*x2*x2 - x1*y2*y2 - x1 + x2*y1*y1 + x2)/denom;
+                    var cx = -0.5*a;
+                    var cy = -0.5*b;
+                    var r2 = -1 + 0.25*(a*a + b*b);
+                    var phi1 = -Math.atan2(y1 - cy, x1 - cx);
+                    var phi2 = -Math.atan2(y2 - cy, x2 - cx);
 
-		    var edge = ["a", cx*scale + shift, -cy*scale + shift, Math.sqrt(r2)*scale, phi1, phi2, (deltaphi > 0)];
-		    filledges.push(edge);
-		    if (drawLine) {
-			drawedges.push(["m", x1*scale + shift, -y1*scale + shift]);
-			drawedges.push(edge);
-		    }
-		}
-		else {
-		    var edge1 = ["m", x1*scale + shift, -y1*scale + shift];
-		    var edge2 = ["l", x2*scale + shift, -y2*scale + shift];
+                    var deltaphi = phi1 - phi2;
+                    while (deltaphi >= Math.PI) { deltaphi -= 2*Math.PI; }
+                    while (deltaphi < -Math.PI) { deltaphi += 2*Math.PI; }
 
-		    filledges.push(edge1);
-		    filledges.push(edge2);
-		    if (drawLine) {
-			drawedges.push(edge1);
-			drawedges.push(edge2);
-		    }
-		}
-	    }
+                    var edge = ["a", cx*scale + shift, -cy*scale + shift, Math.sqrt(r2)*scale, phi1, phi2, (deltaphi > 0)];
+                    filledges.push(edge);
+                    if (drawLine) {
+                        drawedges.push(["m", x1*scale + shift, -y1*scale + shift]);
+                        drawedges.push(edge);
+                    }
+                }
+                else {
+                    var edge1 = ["m", x1*scale + shift, -y1*scale + shift];
+                    var edge2 = ["l", x2*scale + shift, -y2*scale + shift];
 
-	    // clip the filling to the polygon
-	    var fillStyle = drawable["fillStyle"];
-	    if (fillStyle == undefined) { fillStyle = this.service.fillStyle; }
+                    filledges.push(edge1);
+                    filledges.push(edge2);
+                    if (drawLine) {
+                        drawedges.push(edge1);
+                        drawedges.push(edge2);
+                    }
+                }
+            }
 
-	    if (fillStyle != "none") {
-		this.context.save();
-		this.context.fillStyle = fillStyle;
+            if (willDraw) {
+                // clip the filling to the polygon
+                var fillStyle = drawable["fillStyle"];
+                if (fillStyle == undefined) { fillStyle = this.service.fillStyle; }
 
-		this.context.beginPath();
-		for (var j in filledges) {
-		    if (filledges[j][0] == "a") {
-			this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
-		    }
-		    else if (filledges[j][0] == "l") {
-			this.context.lineTo(filledges[j][1], filledges[j][2]);
-		    }
-		    else if (filledges[j][0] == "m") {
-			this.context.moveTo(filledges[j][1], filledges[j][2]);
-		    }
-		}
-		this.context.clip();
-		
-		// fill the polygon
-		this.context.beginPath();
-		for (var j in filledges) {
-		    if (filledges[j][0] == "a") {
-			this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
-		    }
-		    else if (filledges[j][0] == "l") {
-			this.context.lineTo(filledges[j][1], filledges[j][2]);
-		    }
-		    else if (filledges[j][0] == "m") {
-			this.context.moveTo(filledges[j][1], filledges[j][2]);
-		    }
-		}
-		this.context.fill();
-		this.context.restore();
-	    }
+                if (fillStyle != "none") {
+                    this.context.save();
+                    this.context.fillStyle = fillStyle;
 
-	    // draw a line around it
-	    this.context.save();
+                    this.context.beginPath();
+                    for (var j in filledges) {
+                        if (filledges[j][0] == "a") {
+                            this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
+                        }
+                        else if (filledges[j][0] == "l") {
+                            this.context.lineTo(filledges[j][1], filledges[j][2]);
+                        }
+                        else if (filledges[j][0] == "m") {
+                            this.context.moveTo(filledges[j][1], filledges[j][2]);
+                        }
+                    }
+                    this.context.clip();
+                    
+                    // fill the polygon
+                    this.context.beginPath();
+                    for (var j in filledges) {
+                        if (filledges[j][0] == "a") {
+                            this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
+                        }
+                        else if (filledges[j][0] == "l") {
+                            this.context.lineTo(filledges[j][1], filledges[j][2]);
+                        }
+                        else if (filledges[j][0] == "m") {
+                            this.context.moveTo(filledges[j][1], filledges[j][2]);
+                        }
+                    }
+                    this.context.fill();
+                    this.context.restore();
+                }
 
-	    var strokeStyle = drawable["strokeStyle"];
-	    if (strokeStyle == undefined) { strokeStyle = this.service.strokeStyle; }
-	    this.context.strokeStyle = strokeStyle;
+                // draw a line around it
+                this.context.save();
 
-	    var lineWidth = drawable["lineWidth"];
-	    if (lineWidth == undefined) { lineWidth = this.service.lineWidth; }
-	    this.context.lineWidth = lineWidth;
+                var strokeStyle = drawable["strokeStyle"];
+                if (strokeStyle == undefined) { strokeStyle = this.service.strokeStyle; }
+                this.context.strokeStyle = strokeStyle;
 
-	    var lineCap = drawable["lineCap"];
-	    if (lineCap == undefined) { lineCap = this.service.lineCap; }
-	    this.context.lineCap = lineCap;
+                var lineWidth = drawable["lineWidth"];
+                if (lineWidth == undefined) { lineWidth = this.service.lineWidth; }
+                this.context.lineWidth = lineWidth;
 
-	    var lineJoin = drawable["lineJoin"];
-	    if (lineJoin == undefined) { lineJoin = this.service.lineJoin; }
-	    this.context.lineJoin = lineJoin;
+                var lineCap = drawable["lineCap"];
+                if (lineCap == undefined) { lineCap = this.service.lineCap; }
+                this.context.lineCap = lineCap;
 
-	    var miterLimit = drawable["miterLimit"];
-	    if (miterLimit == undefined) { miterLimit = this.service.miterLimit; }
-	    this.context.miterLimit = miterLimit;
+                var lineJoin = drawable["lineJoin"];
+                if (lineJoin == undefined) { lineJoin = this.service.lineJoin; }
+                this.context.lineJoin = lineJoin;
 
-	    this.context.beginPath();
-	    for (var j in drawedges) {
-		if (drawedges[j][0] == "a") {
-		    this.context.arc(drawedges[j][1], drawedges[j][2], drawedges[j][3], drawedges[j][4], drawedges[j][5], drawedges[j][6]);
-		}
-		else if (drawedges[j][0] == "l") {
-		    this.context.lineTo(drawedges[j][1], drawedges[j][2]);
-		}
-		else if (drawedges[j][0] == "m") {
-		    this.context.moveTo(drawedges[j][1], drawedges[j][2]);
-		}
-	    }
-	    this.context.stroke();
-	    this.context.restore();
+                var miterLimit = drawable["miterLimit"];
+                if (miterLimit == undefined) { miterLimit = this.service.miterLimit; }
+                this.context.miterLimit = miterLimit;
 
-	    // draw the points
-	    this.context.save();
+                this.context.beginPath();
+                for (var j in drawedges) {
+                    if (drawedges[j][0] == "a") {
+                        this.context.arc(drawedges[j][1], drawedges[j][2], drawedges[j][3], drawedges[j][4], drawedges[j][5], drawedges[j][6]);
+                    }
+                    else if (drawedges[j][0] == "l") {
+                        this.context.lineTo(drawedges[j][1], drawedges[j][2]);
+                    }
+                    else if (drawedges[j][0] == "m") {
+                        this.context.moveTo(drawedges[j][1], drawedges[j][2]);
+                    }
+                }
+                this.context.stroke();
+                this.context.restore();
 
-	    var pointFill = drawable["pointFill"];
-	    if (pointFill == undefined) { pointFill = this.service.pointFill; }
-	    this.context.fillStyle = pointFill;
+                // draw the points
+                this.context.save();
 
-	    var pointRadius = drawable["pointFill"];
-	    if (pointRadius == undefined) { pointRadius = this.service.pointRadius; }
+                var pointFill = drawable["pointFill"];
+                if (pointFill == undefined) { pointFill = this.service.pointFill; }
+                this.context.fillStyle = pointFill;
 
-	    for (var j in points) {
-		this.context.beginPath();
-		this.context.arc(points[j][0], points[j][1], pointRadius, 0.0, 2*Math.PI);
-		this.context.fill();
-	    }
+                var pointRadius = drawable["pointFill"];
+                if (pointRadius == undefined) { pointRadius = this.service.pointRadius; }
 
-	    this.context.restore();
-	}
+                for (var j in points) {
+                    this.context.beginPath();
+                    this.context.arc(points[j][0], points[j][1], pointRadius, 0.0, 2*Math.PI);
+                    this.context.fill();
+                }
+
+                this.context.restore();
+            }
+        }
     }
 }
