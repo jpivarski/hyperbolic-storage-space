@@ -16,14 +16,14 @@
 //     var rho2 = Math.LN2*row;
 
 //     for (var col = 0;  col < (1 << row);  col++) {
-// 	var theta1 = 2.0*Math.PI*col/(1 << row);
-// 	var theta2 = 2.0*Math.PI*(col + 1)/(1 << row);
+//         var theta1 = 2.0*Math.PI*col/(1 << row);
+//         var theta2 = 2.0*Math.PI*(col + 1)/(1 << row);
 
-// 	points.push(convert([rho1, theta1]));
-// 	points.push(convert([rho1, theta2]));
-// 	points.push(convert([rho2, theta2]));
+//         points.push(convert([rho1, theta1]));
+//         points.push(convert([rho1, theta2]));
+//         points.push(convert([rho2, theta2]));
 
-// 	if (col > 5) { break; }
+//         if (col > 5) { break; }
 //     }
 // }
 // points = JSON.stringify(points);
@@ -36,12 +36,12 @@
 //     var coshr = 0.5*(Math.exp(r/2.0) + Math.exp(-r/2.0));
 
 //     if (r == 0.0) {
-// 	x = 0.0;
-// 	y = 0.0;
+//         x = 0.0;
+//         y = 0.0;
 //     }
 //     else {
-// 	x = sinhr*x/r;
-// 	y = sinhr*y/r;
+//         x = sinhr*x/r;
+//         y = sinhr*y/r;
 //     }
 
 //     var preal = x;
@@ -81,14 +81,14 @@ var points = JSON.stringify({"fillStyle": "#ffff00", "lineWidth": 1.5, "drawable
 //     var rho2 = Math.LN2*row;
 
 //     for (var col = 0;  col < (1 << row);  col++) {
-// 	var theta1 = 2.0*Math.PI*col/(1 << row);
-// 	var theta2 = 2.0*Math.PI*(col + 1)/(1 << row);
+//         var theta1 = 2.0*Math.PI*col/(1 << row);
+//         var theta2 = 2.0*Math.PI*(col + 1)/(1 << row);
 
-// 	points.push(convert([rho2, theta1, "pl"]));
-// 	points.push(convert([rho1, theta1, "pl"]));
-// 	points.push(convert([rho1, theta2, "p"]));
+//         points.push(convert([rho2, theta1, "pl"]));
+//         points.push(convert([rho1, theta1, "pl"]));
+//         points.push(convert([rho1, theta2, "p"]));
 
-// 	if (col > 3) { break; }
+//         if (col > 3) { break; }
 //     }
 // }
 
@@ -100,15 +100,16 @@ function convert(x, y, ell=true) {
     var denom = x*x + y*y + 2*y + 1;
     [x, y] = [2*x/denom, (x*x + y*y - 1)/denom];
 
-    var r = x*x + y*y;
-    var eta = 0.5*Math.log((1 + r)/(1 - r));
+    var r = Math.sqrt(x*x + y*y);
+    var eta = 0.5*(Math.log(1 + r) - Math.log(1 - r));
+
     var phi = Math.atan2(y, x);
 
     if (ell) {
-	return [eta, phi, "L"];
+        return [eta, phi, "L"];
     }
     else {
-	return [eta, phi];
+        return [eta, phi];
     }
 }
 
@@ -116,13 +117,13 @@ var points = [];
 for (var row = -15;  row <= 15;  row++) {
     var size = Math.pow(2, row);
 
-    for (var col = -2;  col <= 2;  col++) {
-	if (col == -2) {
-	    points.push({"type": "polygon", "d": [convert(size*(col), size), convert(size*(col+0.5), size), convert(size*(col+1), size), convert(size*(col+1), 2*size), convert(size*(col), 2*size)]});
-	}
-	else {
-	    points.push({"type": "polygon", "d": [convert(size*(col), size), convert(size*(col+0.5), size), convert(size*(col+1), size), convert(size*(col+1), 2*size, ell=false)]});
-	}
+    for (var col = -4;  col <= 4;  col++) {
+        if (col == -4) {
+            points.push({"type": "polygon", "d": [convert(size*(col), size), convert(size*(col+0.5), size), convert(size*(col+1), size), convert(size*(col+1), 2*size), convert(size*(col), 2*size)]});
+        }
+        else {
+            points.push({"type": "polygon", "d": [convert(size*(col), size), convert(size*(col+0.5), size), convert(size*(col+1), size), convert(size*(col+1), 2*size, ell=false)]});
+        }
     }
 }
 
