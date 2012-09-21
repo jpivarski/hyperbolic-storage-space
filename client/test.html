@@ -97,11 +97,21 @@ var points = JSON.stringify({"fillStyle": "#ffff00", "lineWidth": 1.5, "drawable
 //     ]});
 
 function convert(x, y, ell=true) {
+    // apply an offset in the half-plane
+    // this is not correct
+    // var Br = 0.0;
+    // var Bi = 0.0;
+    // var denom = (x*x + y*y)*Br*Br + 2*x*Br*(1 - Bi) + Math.pow(1 - Bi, 2);
+    // [x, y] = [-(-Bi*Bi*x + Bi*Br*y*y + Bi*Br*x*x + Bi*Br + 2*Bi*x + Br*Br*x - Br*y*y - Br*x*x - Br - x)/denom, -(-Bi*Bi*y + 2*Bi*y - Br*Br*y - y)/denom];
+
+    [x, y] = [1*(x + 0), 1*y];
+
+    // convert to the disk
     // var denom = x*x + y*y + 2*y + 1;
     // [x, y] = [2*x/denom, (x*x + y*y - 1)/denom];
     // var r = Math.sqrt(x*x + y*y);
 
-    // or compose them and simplify...
+    // or do it in one step (the algebra simplifies)...
     // var r = Math.sqrt(4*Math.pow(x, 2)/Math.pow(Math.pow(x, 2) + Math.pow(y, 2) + 2*y + 1, 2) + Math.pow(Math.pow(x, 2) + Math.pow(y, 2) - 1, 2)/Math.pow(Math.pow(x, 2) + Math.pow(y, 2) + 2*y + 1, 2));
     var r = Math.sqrt((x*x + y*y - 2*y + 1)/(x*x + y*y + 2*y + 1));
     var eta = 0.5*(Math.log(1 + r) - Math.log(1 - r));

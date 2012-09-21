@@ -86,10 +86,10 @@ function HyperbolicViewport(service, elem, width, height) {
     this.zoom = 0.95;
     this.rotation = 0.0;
 
-    this.offsetRealNow = 0.0;
-    this.offsetImagNow = 0.0;
+    this.offsetRealNow = this.offsetReal;
+    this.offsetImagNow = this.offsetImag;
     this.zoomNow = 0.95;
-    this.rotationNow = 0.0;
+    this.rotationNow = this.rotation;
 
     this.service = service;
     
