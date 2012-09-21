@@ -230,5 +230,11 @@ view(Overlay(Curve("exp(x)", 0, 10), Curve("2**(x/log(2))", 0, 10, linecolor="re
 
 ######################################################################
 
+denom = (Pr**2 + Pi**2)*Br**2 + 2*Pr*Br*(1 - Bi) + (1 - Bi)**2
+numer = (Pr**2 + Pi**2)*Br*(Bi - 1) - (Pr + I*Pi)*(Bi - 1)**2 + (Pr - I*Pi)*Br**2 + Br*(Bi - 1)
 
+print numer.expand()
+# -I*Bi**2*Pi - Bi**2*Pr + Bi*Br*Pi**2 + Bi*Br*Pr**2 + Bi*Br + 2*I*Bi*Pi + 2*Bi*Pr - I*Br**2*Pi + Br**2*Pr - Br*Pi**2 - Br*Pr**2 - Br - I*Pi - Pr
 
+# Real part: -Bi*Bi*Pr + Bi*Br*Pi*Pi + Bi*Br*Pr*Pr + Bi*Br + 2*Bi*Pr + Br*Br*Pr - Br*Pi*Pi - Br*Pr*Pr - Br - Pr
+# Imag part: -I*Bi*Bi*Pi + 2*I*Bi*Pi - I*Br*Br*Pi - I*Pi
