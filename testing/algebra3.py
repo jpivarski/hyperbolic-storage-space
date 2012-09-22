@@ -136,8 +136,8 @@ def func(phi, a=0.9, Br=-0.3, Bi=0.95):
 
     return x/denom, y/denom
 
-Br = 0.
-Bi = 0.9
+Br = 0.3
+Bi = 0.5
 
 xlist = []
 ylist = []

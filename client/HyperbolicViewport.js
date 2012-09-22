@@ -81,7 +81,7 @@ function HyperbolicViewport(service, elem, width, height) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
     this.THRESHOLD = 0.95;
 
-    this.offsetReal = 0.0;
+    this.offsetReal = 0.9;
     this.offsetImag = 0.0;
     this.zoom = 0.95;
     this.rotation = 0.0;
