@@ -26,6 +26,21 @@ print ccode((((Pr + I*Pi) + (Br + I*Bi)*sqrt(Pr*Pr + Pi*Pi + 1)) * ((Br + I*Bi)*
 print ccode((((Br - I*Bi)*(Pr + I*Pi) + sqrt(Pr*Pr + Pi*Pi + 1)) * ((Br + I*Bi)*(Pr - I*Pi) + sqrt(Pr*Pr + Pi*Pi + 1))).expand())
 # Bi*Bi*Pi*Pi + Bi*Bi*Pr*Pr + 2*Bi*Pi*pone + Br*Br*Pi*Pi + Br*Br*Pr*Pr + 2*Br*Pr*pone + Pi*Pi + Pr*Pr + 1
 
+### START EXTENDING B TO THE WHOLE PLANE
+
+# numerator
+print ccode(((sqrt(1 + Br*Br + Bi*Bi)*(Pr + I*Pi) + (Br + I*Bi)*sqrt(Pr*Pr + Pi*Pi + 1)) * ((Br + I*Bi)*(Pr - I*Pi) + sqrt(1 + Br*Br + Bi*Bi)*sqrt(Pr*Pr + Pi*Pi + 1))).expand())
+# I*Bi*Bi*Pi*pone - Bi*Bi*Pr*pone + 2*Bi*Br*Pi*pone + 2*I*Bi*Br*Pr*pone + I*Bi*Pi*Pi*bone + I*Bi*Pr*Pr*bone + I*Bi*bone*(Pi*Pi + Pr*Pr + 1) - I*Br*Br*Pi*pone + Br*Br*Pr*pone + Br*Pi*Pi*bone + Br*Pr*Pr*bone + Br*bone*(Pi*Pi + Pr*Pr + 1) + I*Pi*(Bi*Bi + Br*Br + 1)*pone + Pr*(Bi*Bi + Br*Br + 1)*pone
+
+# Real part: -Bi*Bi*Pr*pone + 2*Bi*Br*Pi*pone + Br*Br*Pr*pone + Br*Pi*Pi*bone + Br*Pr*Pr*bone + Br*bone*(Pi*Pi + Pr*Pr + 1) + Pr*(Bi*Bi + Br*Br + 1)*pone
+# Imag part: I*Bi*Bi*Pi*pone + 2*I*Bi*Br*Pr*pone + I*Bi*Pi*Pi*bone + I*Bi*Pr*Pr*bone + I*Bi*bone*(Pi*Pi + Pr*Pr + 1) - I*Br*Br*Pi*pone + I*Pi*(Bi*Bi + Br*Br + 1)*pone
+
+# denominator
+print ccode((((Br - I*Bi)*(Pr + I*Pi) + sqrt(1 + Br*Br + Bi*Bi)*sqrt(Pr*Pr + Pi*Pi + 1)) * ((Br + I*Bi)*(Pr - I*Pi) + sqrt(1 + Br*Br + Bi*Bi)*sqrt(Pr*Pr + Pi*Pi + 1))).expand())
+# Bi*Bi*Pi*Pi + Bi*Bi*Pr*Pr + 2*Bi*Pi*bone*pone + Br*Br*Pi*Pi + Br*Br*Pr*Pr + 2*Br*Pr*bone*pone + (Bi*Bi + Br*Br + 1)*(Pi*Pi + Pr*Pr + 1)
+
+### END EXTENDING B TO THE WHOLE PLANE
+
 ######################################################################
 
 solution = solve([Br*Pr*Fr - Br*Pi*Fi + Bi*Pr*Fi + Bi*Pi*Fr - Br*sqrt(Pr*Pr + Pi*Pi + 1) + + Fr*sqrt(Pr*Pr + Pi*Pi + 1) - Pr,
@@ -70,11 +85,37 @@ print ccode((((Rr + I*Ri) + (dBr + I*dBi)*(Br - I*Bi)) * ((Rr - I*Ri)*(dBr + I*d
 
 # Imag part: -I*Bi*Bi*Ri*dBi*dBi + I*Bi*Bi*Ri*dBr*dBr - 2*I*Bi*Bi*Rr*dBi*dBr - 4*I*Bi*Br*Ri*dBi*dBr + 2*I*Bi*Br*Rr*dBi*dBi - 2*I*Bi*Br*Rr*dBr*dBr - I*Bi*Ri*Ri*dBr - I*Bi*Rr*Rr*dBr - I*Bi*dBr + I*Br*Br*Ri*dBi*dBi - I*Br*Br*Ri*dBr*dBr + 2*I*Br*Br*Rr*dBi*dBr + I*Br*Ri*Ri*dBi + I*Br*Rr*Rr*dBi + I*Br*dBi + I*Ri
 
-
-
 # denominator
 print ccode((((Rr + I*Ri)*(dBr - I*dBi)*(Br + I*Bi) + 1) * ((Rr - I*Ri)*(dBr + I*dBi)*(Br - I*Bi) + 1)).expand())
 # Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2*Bi*Ri*dBr + 2*Bi*Rr*dBi + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2*Br*Ri*dBi + 2*Br*Rr*dBr + 1
+
+### START EXTENDING B TO THE WHOLE PLANE
+
+# offset numerator
+print ccode((((dBr + I*dBi)*sqrt(1 - Br*Br - Bi*Bi) + (Rr + I*Ri)*(Br + I*Bi)*sqrt(1 - dBr*dBr - dBi*dBi)) * ((dBr - I*dBi)*(Br + I*Bi) + (Rr - I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
+# -Bi*Bi*Ri*dBi*dB2 - I*Bi*Bi*Ri*dBr*dB2 + I*Bi*Bi*Rr*dBi*dB2 - Bi*Bi*Rr*dBr*dB2 + 2*I*Bi*Br*Ri*dBi*dB2 - 2*Bi*Br*Ri*dBr*dB2 + 2*Bi*Br*Rr*dBi*dB2 + 2*I*Bi*Br*Rr*dBr*dB2 + I*Bi*Ri*Ri*B2*dB2*dB2 + I*Bi*Rr*Rr*B2*dB2*dB2 + I*Bi*dBi*dBi*B2 + I*Bi*dBr*dBr*B2 + Br*Br*Ri*dBi*dB2 + I*Br*Br*Ri*dBr*dB2 - I*Br*Br*Rr*dBi*dB2 + Br*Br*Rr*dBr*dB2 + Br*Ri*Ri*B2*dB2*dB2 + Br*Rr*Rr*B2*dB2*dB2 + Br*dBi*dBi*B2 + Br*dBr*dBr*B2 + Ri*dBi*B2*B2*dB2 - I*Ri*dBr*B2*B2*dB2 + I*Rr*dBi*B2*B2*dB2 + Rr*dBr*B2*B2*dB2
+
+# Real part: -Bi*Bi*Ri*dBi*dB2 - Bi*Bi*Rr*dBr*dB2 - 2*Bi*Br*Ri*dBr*dB2 + 2*Bi*Br*Rr*dBi*dB2 + Br*Br*Ri*dBi*dB2 + Br*Br*Rr*dBr*dB2 + Br*Ri*Ri*B2*dB2*dB2 + Br*Rr*Rr*B2*dB2*dB2 + Br*dBi*dBi*B2 + Br*dBr*dBr*B2 + Ri*dBi*B2*B2*dB2 + Rr*dBr*B2*B2*dB2
+
+# Imag part: -Bi*Bi*Ri*dBr*dB2 + Bi*Bi*Rr*dBi*dB2 + 2*Bi*Br*Ri*dBi*dB2 + 2*Bi*Br*Rr*dBr*dB2 + Bi*Ri*Ri*B2*dB2*dB2 + Bi*Rr*Rr*B2*dB2*dB2 + Bi*dBi*dBi*B2 + Bi*dBr*dBr*B2 + Br*Br*Ri*dBr*dB2 - Br*Br*Rr*dBi*dB2 - Ri*dBr*B2*B2*dB2 + Rr*dBi*B2*B2*dB2
+
+# offset denominator
+print ccode((((dBr + I*dBi)*(Br - I*Bi) + (Rr + I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi)) * ((dBr - I*dBi)*(Br + I*Bi) + (Rr - I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
+# Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr*B2*dB2 + 2*Bi*Rr*dBi*B2*dB2 + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi*B2*dB2 + 2*Br*Rr*dBr*B2*dB2 + Ri*Ri*B2*B2*dB2*dB2 + Rr*Rr*B2*B2*dB2*dB2
+
+# rotation numerator
+print ccode((((Rr + I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi) + (dBr + I*dBi)*(Br - I*Bi)) * ((Rr - I*Ri)*(dBr + I*dBi)*(Br - I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
+# -I*Bi*Bi*Ri*dBi*dBi - 2*Bi*Bi*Ri*dBi*dBr + I*Bi*Bi*Ri*dBr*dBr + Bi*Bi*Rr*dBi*dBi - 2*I*Bi*Bi*Rr*dBi*dBr - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 4*I*Bi*Br*Ri*dBi*dBr - 2*Bi*Br*Ri*dBr*dBr + 2*I*Bi*Br*Rr*dBi*dBi + 4*Bi*Br*Rr*dBi*dBr - 2*I*Bi*Br*Rr*dBr*dBr + Bi*Ri*Ri*dBi*B2*dB2 - I*Bi*Ri*Ri*dBr*B2*dB2 + Bi*Rr*Rr*dBi*B2*dB2 - I*Bi*Rr*Rr*dBr*B2*dB2 + Bi*dBi*B2*dB2 - I*Bi*dBr*B2*dB2 + I*Br*Br*Ri*dBi*dBi + 2*Br*Br*Ri*dBi*dBr - I*Br*Br*Ri*dBr*dBr - Br*Br*Rr*dBi*dBi + 2*I*Br*Br*Rr*dBi*dBr + Br*Br*Rr*dBr*dBr + I*Br*Ri*Ri*dBi*B2*dB2 + Br*Ri*Ri*dBr*B2*dB2 + I*Br*Rr*Rr*dBi*B2*dB2 + Br*Rr*Rr*dBr*B2*dB2 + I*Br*dBi*B2*dB2 + Br*dBr*B2*dB2 + I*Ri*B2*B2*dB2*dB2 + Rr*B2*B2*dB2*dB2
+
+# Real part: -2*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 2*Bi*Br*Ri*dBr*dBr + 4*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*B2*dB2 + Bi*Rr*Rr*dBi*B2*dB2 + Bi*dBi*B2*dB2 + 2*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*B2*dB2 + Br*Rr*Rr*dBr*B2*dB2 + Br*dBr*B2*dB2 + Rr*B2*B2*dB2*dB2
+
+# Imag part: -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2*Bi*Bi*Rr*dBi*dBr - 4*Bi*Br*Ri*dBi*dBr + 2*Bi*Br*Rr*dBi*dBi - 2*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*B2*dB2 - Bi*Rr*Rr*dBr*B2*dB2 - Bi*dBr*B2*dB2 + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*B2*dB2 + Br*Rr*Rr*dBi*B2*dB2 + Br*dBi*B2*dB2 + Ri*B2*B2*dB2*dB2
+
+# rotation denominator
+print ccode((((Rr + I*Ri)*(dBr - I*dBi)*(Br + I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi)) * ((Rr - I*Ri)*(dBr + I*dBi)*(Br - I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
+# Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2*Bi*Ri*dBr*B2*dB2 + 2*Bi*Rr*dBi*B2*dB2 + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2*Br*Ri*dBi*B2*dB2 + 2*Br*Rr*dBr*B2*dB2 + B2*B2*dB2*dB2
+
+### END EXTENDING B TO THE WHOLE PLANE
 
 ######################################################################
 
@@ -136,8 +177,8 @@ def func(phi, a=0.9, Br=-0.3, Bi=0.95):
 
     return x/denom, y/denom
 
-Br = 0.3
-Bi = 0.5
+Br = 0.0
+Bi = 0.0
 
 xlist = []
 ylist = []

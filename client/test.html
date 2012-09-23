@@ -97,33 +97,38 @@ var points = JSON.stringify({"fillStyle": "#ffff00", "lineWidth": 1.5, "drawable
 //     ]});
 
 function convert(x, y, ell=true) {
-    // apply an offset in the half-plane
-    // this is not correct
-    var Br = 0.9;
-    var Bi = 0.0;
-    var a = 0.9;
-    // var denom = (x*x + y*y)*Br*Br + 2*x*Br*(1 - Bi) + Math.pow(1 - Bi, 2);
-    // [x, y] = [-(-Bi*Bi*x + Bi*Br*y*y + Bi*Br*x*x + Bi*Br + 2*Bi*x + Br*Br*x - Br*y*y - Br*x*x - Br - x)/denom, -(-Bi*Bi*y + 2*Bi*y - Br*Br*y - y)/denom];
+    x = parseFloat(x);
+    y = parseFloat(y);
 
-    var p1 = Math.atan2((Bi*Bi + 2*Bi - Br*Br + 1), (2*Bi*Br + 2*Br));
-    var d1 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p1) + Bi*Bi - 4*Bi*Br*a*Math.cos(p1) + 2*Bi*a*a - 4*Bi*a*Math.sin(p1) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p1) + Br*Br - 4*Br*a*Math.cos(p1) + a*a - 2*a*Math.sin(p1) + 1;
-    var x1 = (-2*Bi*Bi*a*Math.cos(p1) + 4*Bi*Br*a*Math.sin(p1) + 2*Br*Br*a*Math.cos(p1) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p1))/d1;
-    var y1 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d1;
+    // THIS BLOCK WILL ONLY BE USED TO FIND OUT WHICH TILES TO EXPORT, NOT TO APPLY CORRECTIONS TO THE CLIENT'S OFFSET
+    // // apply an offset in the half-plane
+    // // this is not correct
+    // var Br = 0.0;
+    // var Bi = 0.0;
+    // var a = 0.9;
+    // // var denom = (x*x + y*y)*Br*Br + 2*x*Br*(1 - Bi) + Math.pow(1 - Bi, 2);
+    // // [x, y] = [-(-Bi*Bi*x + Bi*Br*y*y + Bi*Br*x*x + Bi*Br + 2*Bi*x + Br*Br*x - Br*y*y - Br*x*x - Br - x)/denom, -(-Bi*Bi*y + 2*Bi*y - Br*Br*y - y)/denom];
 
-    var p2 = Math.atan2(-(Bi*Bi + 2*Bi - Br*Br + 1), -(2*Bi*Br + 2*Br));
-    var d2 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p2) + Bi*Bi - 4*Bi*Br*a*Math.cos(p2) + 2*Bi*a*a - 4*Bi*a*Math.sin(p2) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p2) + Br*Br - 4*Br*a*Math.cos(p2) + a*a - 2*a*Math.sin(p2) + 1;
-    var x2 = (-2*Bi*Bi*a*Math.cos(p2) + 4*Bi*Br*a*Math.sin(p2) + 2*Br*Br*a*Math.cos(p2) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p2))/d2;
-    var y2 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d2;
+    // var p1 = Math.atan2((Bi*Bi + 2*Bi - Br*Br + 1), (2*Bi*Br + 2*Br));
+    // var d1 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p1) + Bi*Bi - 4*Bi*Br*a*Math.cos(p1) + 2*Bi*a*a - 4*Bi*a*Math.sin(p1) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p1) + Br*Br - 4*Br*a*Math.cos(p1) + a*a - 2*a*Math.sin(p1) + 1;
+    // var x1 = (-2*Bi*Bi*a*Math.cos(p1) + 4*Bi*Br*a*Math.sin(p1) + 2*Br*Br*a*Math.cos(p1) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p1))/d1;
+    // var y1 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d1;
 
-    var x3 = (x1 + x2)/2.0;
-    var y3 = (y1 + y2)/2.0;
+    // var p2 = Math.atan2(-(Bi*Bi + 2*Bi - Br*Br + 1), -(2*Bi*Br + 2*Br));
+    // var d2 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p2) + Bi*Bi - 4*Bi*Br*a*Math.cos(p2) + 2*Bi*a*a - 4*Bi*a*Math.sin(p2) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p2) + Br*Br - 4*Br*a*Math.cos(p2) + a*a - 2*a*Math.sin(p2) + 1;
+    // var x2 = (-2*Bi*Bi*a*Math.cos(p2) + 4*Bi*Br*a*Math.sin(p2) + 2*Br*Br*a*Math.cos(p2) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p2))/d2;
+    // var y2 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d2;
 
-    [x, y] = [1*(x + x3), 1*y];
+    // var x3 = (x1 + x2)/2.0;
+    // var y3 = (y1 + y2)/2.0;
+
+    // [x, y] = [y3*x + x3, y3*y];
 
     // convert to the disk
     // var denom = x*x + y*y + 2*y + 1;
     // [x, y] = [2*x/denom, (x*x + y*y - 1)/denom];
     // var r = Math.sqrt(x*x + y*y);
+    // END OF THIS BLOCK
 
     // or do it in one step (the algebra simplifies)...
     // var r = Math.sqrt(4*Math.pow(x, 2)/Math.pow(Math.pow(x, 2) + Math.pow(y, 2) + 2*y + 1, 2) + Math.pow(Math.pow(x, 2) + Math.pow(y, 2) - 1, 2)/Math.pow(Math.pow(x, 2) + Math.pow(y, 2) + 2*y + 1, 2));
