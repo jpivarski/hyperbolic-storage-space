@@ -162,15 +162,15 @@ HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
     // START EXPANDING B TO THE WHOLE PLANE
     // // compute a Mobius transformation composed with the internal -> screen transformation
     // // F = (P + B*sqrt(|P|^2 + 1))/(conj(B)*P + sqrt(|P|^2 + 1))
-    // var real = -Bi*Bi*preal*pone + 2*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag + Br*preal*preal + Br*(pimag*pimag + preal*preal + 1.0) + preal*pone;
-    // var imag = Bi*Bi*pimag*pone + 2*Bi*Br*preal*pone + Bi*pimag*pimag + Bi*preal*preal + Bi*(pimag*pimag + preal*preal + 1.0) - Br*Br*pimag*pone + pimag*pone;
-    // var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2*Bi*pimag*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2*Br*preal*pone + pimag*pimag + preal*preal + 1.0;
+    // var real = -Bi*Bi*preal*pone + 2.0*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag + Br*preal*preal + Br*(pimag*pimag + preal*preal + 1.0) + preal*pone;
+    // var imag = Bi*Bi*pimag*pone + 2.0*Bi*Br*preal*pone + Bi*pimag*pimag + Bi*preal*preal + Bi*(pimag*pimag + preal*preal + 1.0) - Br*Br*pimag*pone + pimag*pone;
+    // var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2.0*Bi*pimag*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2.0*Br*preal*pone + pimag*pimag + preal*preal + 1.0;
 
     // F = ((1+|B|^2)*P + B*sqrt(|P|^2 + 1))/(conj(B)*P + (1+|B|^2)*sqrt(|P|^2 + 1))
-    var bone = Math.sqrt(1 + Br*Br + Bi*Bi);
-    var real = -Bi*Bi*preal*pone + 2*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag*bone + Br*preal*preal*bone + Br*bone*(pimag*pimag + preal*preal + 1) + preal*(Bi*Bi + Br*Br + 1)*pone;
-    var imag = Bi*Bi*pimag*pone + 2*Bi*Br*preal*pone + Bi*pimag*pimag*bone + Bi*preal*preal*bone + Bi*bone*(pimag*pimag + preal*preal + 1) - Br*Br*pimag*pone + pimag*(Bi*Bi + Br*Br + 1)*pone;
-    var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2*Bi*pimag*bone*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2*Br*preal*bone*pone + (Bi*Bi + Br*Br + 1)*(pimag*pimag + preal*preal + 1);
+    var bone = Math.sqrt(1.0 + Br*Br + Bi*Bi);
+    var real = -Bi*Bi*preal*pone + 2.0*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag*bone + Br*preal*preal*bone + Br*bone*(pimag*pimag + preal*preal + 1.0) + preal*(Bi*Bi + Br*Br + 1.0)*pone;
+    var imag = Bi*Bi*pimag*pone + 2.0*Bi*Br*preal*pone + Bi*pimag*pimag*bone + Bi*preal*preal*bone + Bi*bone*(pimag*pimag + preal*preal + 1.0) - Br*Br*pimag*pone + pimag*(Bi*Bi + Br*Br + 1.0)*pone;
+    var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2.0*Bi*pimag*bone*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2.0*Br*preal*bone*pone + (Bi*Bi + Br*Br + 1.0)*(pimag*pimag + preal*preal + 1.0);
     // END EXPANDING B TO THE WHOLE PLANE
 
     real /= denom;
@@ -190,7 +190,7 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     var dBi = (-Fi*pone + Pi - (Fi*Pr + Fr*Pi)*(-Fr*pone + Pr)/(-Fi*Pi + Fr*Pr - pone))/(Fi*Pi - Fr*Pr - (Fi*Pr + Fr*Pi)*(Fi*Pr + Fr*Pi)/(-Fi*Pi + Fr*Pr - pone) - pone);
 
     // START EXPANDING B TO THE WHOLE PLANE
-    var dBoneMinus = Math.sqrt(1 - dBr*dBr - dBi*dBi);
+    var dBoneMinus = Math.sqrt(1.0 - dBr*dBr - dBi*dBi);
     [dBr, dBi] = [dBr/dBoneMinus, dBi/dBoneMinus];
     // END EXPANDING B TO THE WHOLE PLANE
 
@@ -202,14 +202,14 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     // START EXPANDING B TO THE WHOLE PLANE
     // // compose the old offset with the new offset
     // // Bprime = (dB + R*B)/(dB*conj(B) + R)
-    // var real = -Bi*Bi*Ri*dBi - Bi*Bi*Rr*dBr - 2*Bi*Br*Ri*dBr + 2*Bi*Br*Rr*dBi + Br*Br*Ri*dBi + Br*Br*Rr*dBr + Br*Ri*Ri + Br*Rr*Rr + Br*dBi*dBi + Br*dBr*dBr + Ri*dBi + Rr*dBr;
-    // var imag = -Bi*Bi*Ri*dBr + Bi*Bi*Rr*dBi + 2*Bi*Br*Ri*dBi + 2*Bi*Br*Rr*dBr + Bi*Ri*Ri + Bi*Rr*Rr + Bi*dBi*dBi + Bi*dBr*dBr + Br*Br*Ri*dBr - Br*Br*Rr*dBi - Ri*dBr + Rr*dBi;
-    // var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr + 2*Bi*Rr*dBi + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi + 2*Br*Rr*dBr + Ri*Ri + Rr*Rr;
-    var dBone = Math.sqrt(1 + dBr*dBr + dBi*dBi);
-    var Bone = Math.sqrt(1 + Br*Br + Bi*Bi);
-    var real = -Bi*Bi*Ri*dBi*dBone - Bi*Bi*Rr*dBr*dBone - 2*Bi*Br*Ri*dBr*dBone + 2*Bi*Br*Rr*dBi*dBone + Br*Br*Ri*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone;
-    var imag = -Bi*Bi*Ri*dBr*dBone + Bi*Bi*Rr*dBi*dBone + 2*Bi*Br*Ri*dBi*dBone + 2*Bi*Br*Rr*dBr*dBone + Bi*Ri*Ri*Bone*dBone*dBone + Bi*Rr*Rr*Bone*dBone*dBone + Bi*dBi*dBi*Bone + Bi*dBr*dBr*Bone + Br*Br*Ri*dBr*dBone - Br*Br*Rr*dBi*dBone - Ri*dBr*Bone*Bone*dBone + Rr*dBi*Bone*Bone*dBone;
-    var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr*Bone*dBone + 2*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi*Bone*dBone + 2*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone;
+    // var real = -Bi*Bi*Ri*dBi - Bi*Bi*Rr*dBr - 2.0*Bi*Br*Ri*dBr + 2.0*Bi*Br*Rr*dBi + Br*Br*Ri*dBi + Br*Br*Rr*dBr + Br*Ri*Ri + Br*Rr*Rr + Br*dBi*dBi + Br*dBr*dBr + Ri*dBi + Rr*dBr;
+    // var imag = -Bi*Bi*Ri*dBr + Bi*Bi*Rr*dBi + 2.0*Bi*Br*Ri*dBi + 2.0*Bi*Br*Rr*dBr + Bi*Ri*Ri + Bi*Rr*Rr + Bi*dBi*dBi + Bi*dBr*dBr + Br*Br*Ri*dBr - Br*Br*Rr*dBi - Ri*dBr + Rr*dBi;
+    // var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2.0*Bi*Ri*dBr + 2.0*Bi*Rr*dBi + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2.0*Br*Ri*dBi + 2.0*Br*Rr*dBr + Ri*Ri + Rr*Rr;
+    var dBone = Math.sqrt(1.0 + dBr*dBr + dBi*dBi);
+    var Bone = Math.sqrt(1.0 + Br*Br + Bi*Bi);
+    var real = -Bi*Bi*Ri*dBi*dBone - Bi*Bi*Rr*dBr*dBone - 2.0*Bi*Br*Ri*dBr*dBone + 2.0*Bi*Br*Rr*dBi*dBone + Br*Br*Ri*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone;
+    var imag = -Bi*Bi*Ri*dBr*dBone + Bi*Bi*Rr*dBi*dBone + 2.0*Bi*Br*Ri*dBi*dBone + 2.0*Bi*Br*Rr*dBr*dBone + Bi*Ri*Ri*Bone*dBone*dBone + Bi*Rr*Rr*Bone*dBone*dBone + Bi*dBi*dBi*Bone + Bi*dBr*dBr*Bone + Br*Br*Ri*dBr*dBone - Br*Br*Rr*dBi*dBone - Ri*dBr*Bone*Bone*dBone + Rr*dBi*Bone*Bone*dBone;
+    var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2.0*Bi*Ri*dBr*Bone*dBone + 2.0*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2.0*Br*Ri*dBi*Bone*dBone + 2.0*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone;
     denom = Math.sqrt(denom*denom - real*real - imag*imag);
     // END EXPANDING B TO THE WHOLE PLANE
 
@@ -219,12 +219,12 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     // START EXPANDING B TO THE WHOLE PLANE
     // // also compose to get a new rotation
     // // Rprime = (R + dB*conj(B))/(R*dB*B + 1)
-    // real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi + Bi*Rr*Rr*dBi + Bi*dBi + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr + Br*Rr*Rr*dBr + Br*dBr + Rr;
-    // imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr - Bi*Rr*Rr*dBr - Bi*dBr + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi + Br*Rr*Rr*dBi + Br*dBi + Ri;
+    // real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi + Bi*Rr*Rr*dBi + Bi*dBi + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr + Br*Rr*Rr*dBr + Br*dBr + Rr;
+    // imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr - Bi*Rr*Rr*dBr - Bi*dBr + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi + Br*Rr*Rr*dBi + Br*dBi + Ri;
     // // denom = Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2.0*Bi*Ri*dBr + 2.0*Bi*Rr*dBi + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2.0*Br*Ri*dBi + 2.0*Br*Rr*dBr + 1.0;
-    real = -2*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 2*Bi*Br*Ri*dBr*dBr + 4*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone;
-    imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2*Bi*Bi*Rr*dBi*dBr - 4*Bi*Br*Ri*dBi*dBr + 2*Bi*Br*Rr*dBi*dBi - 2*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
-    // denom = Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2*Bi*Ri*dBr*Bone*dBone + 2*Bi*Rr*dBi*Bone*dBone + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2*Br*Ri*dBi*Bone*dBone + 2*Br*Rr*dBr*Bone*dBone + Bone*Bone*dBone*dBone;
+    real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone;
+    imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
+    // denom = Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2.0*Bi*Ri*dBr*Bone*dBone + 2.0*Bi*Rr*dBi*Bone*dBone + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2.0*Br*Ri*dBi*Bone*dBone + 2.0*Br*Rr*dBr*Bone*dBone + Bone*Bone*dBone*dBone;
     // END EXPANDING B TO THE WHOLE PLANE
 
     this.rotationNow = Math.atan2(imag, real);  // Math.atan2(imag/denom, real/denom);
