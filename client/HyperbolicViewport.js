@@ -210,13 +210,11 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     var real = -Bi*Bi*Ri*dBi*dBone - Bi*Bi*Rr*dBr*dBone - 2*Bi*Br*Ri*dBr*dBone + 2*Bi*Br*Rr*dBi*dBone + Br*Br*Ri*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone;
     var imag = -Bi*Bi*Ri*dBr*dBone + Bi*Bi*Rr*dBi*dBone + 2*Bi*Br*Ri*dBi*dBone + 2*Bi*Br*Rr*dBr*dBone + Bi*Ri*Ri*Bone*dBone*dBone + Bi*Rr*Rr*Bone*dBone*dBone + Bi*dBi*dBi*Bone + Bi*dBr*dBr*Bone + Br*Br*Ri*dBr*dBone - Br*Br*Rr*dBi*dBone - Ri*dBr*Bone*Bone*dBone + Rr*dBi*Bone*Bone*dBone;
     var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr*Bone*dBone + 2*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi*Bone*dBone + 2*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone;
+    denom = Math.sqrt(denom*denom - real*real - imag*imag);
     // END EXPANDING B TO THE WHOLE PLANE
 
     this.offsetRealNow = real/denom;
     this.offsetImagNow = imag/denom;
-
-    var BoneMinus = Math.sqrt(1 - this.offsetRealNow*this.offsetRealNow - this.offsetImagNow*this.offsetImagNow);
-    [this.offsetRealNow, this.offsetImagNow] = [this.offsetRealNow/BoneMinus, this.offsetImagNow/BoneMinus];
 
     // START EXPANDING B TO THE WHOLE PLANE
     // // also compose to get a new rotation

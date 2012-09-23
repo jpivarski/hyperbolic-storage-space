@@ -93,27 +93,27 @@ print ccode((((Rr + I*Ri)*(dBr - I*dBi)*(Br + I*Bi) + 1) * ((Rr - I*Ri)*(dBr + I
 
 # offset numerator
 print ccode((((dBr + I*dBi)*sqrt(1 - Br*Br - Bi*Bi) + (Rr + I*Ri)*(Br + I*Bi)*sqrt(1 - dBr*dBr - dBi*dBi)) * ((dBr - I*dBi)*(Br + I*Bi) + (Rr - I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
-# -Bi*Bi*Ri*dBi*dB2 - I*Bi*Bi*Ri*dBr*dB2 + I*Bi*Bi*Rr*dBi*dB2 - Bi*Bi*Rr*dBr*dB2 + 2*I*Bi*Br*Ri*dBi*dB2 - 2*Bi*Br*Ri*dBr*dB2 + 2*Bi*Br*Rr*dBi*dB2 + 2*I*Bi*Br*Rr*dBr*dB2 + I*Bi*Ri*Ri*B2*dB2*dB2 + I*Bi*Rr*Rr*B2*dB2*dB2 + I*Bi*dBi*dBi*B2 + I*Bi*dBr*dBr*B2 + Br*Br*Ri*dBi*dB2 + I*Br*Br*Ri*dBr*dB2 - I*Br*Br*Rr*dBi*dB2 + Br*Br*Rr*dBr*dB2 + Br*Ri*Ri*B2*dB2*dB2 + Br*Rr*Rr*B2*dB2*dB2 + Br*dBi*dBi*B2 + Br*dBr*dBr*B2 + Ri*dBi*B2*B2*dB2 - I*Ri*dBr*B2*B2*dB2 + I*Rr*dBi*B2*B2*dB2 + Rr*dBr*B2*B2*dB2
+# -Bi*Bi*Ri*dBi*dBone - I*Bi*Bi*Ri*dBr*dBone + I*Bi*Bi*Rr*dBi*dBone - Bi*Bi*Rr*dBr*dBone + 2*I*Bi*Br*Ri*dBi*dBone - 2*Bi*Br*Ri*dBr*dBone + 2*Bi*Br*Rr*dBi*dBone + 2*I*Bi*Br*Rr*dBr*dBone + I*Bi*Ri*Ri*Bone*dBone*dBone + I*Bi*Rr*Rr*Bone*dBone*dBone + I*Bi*dBi*dBi*Bone + I*Bi*dBr*dBr*Bone + Br*Br*Ri*dBi*dBone + I*Br*Br*Ri*dBr*dBone - I*Br*Br*Rr*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone - I*Ri*dBr*Bone*Bone*dBone + I*Rr*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone
 
-# Real part: -Bi*Bi*Ri*dBi*dB2 - Bi*Bi*Rr*dBr*dB2 - 2*Bi*Br*Ri*dBr*dB2 + 2*Bi*Br*Rr*dBi*dB2 + Br*Br*Ri*dBi*dB2 + Br*Br*Rr*dBr*dB2 + Br*Ri*Ri*B2*dB2*dB2 + Br*Rr*Rr*B2*dB2*dB2 + Br*dBi*dBi*B2 + Br*dBr*dBr*B2 + Ri*dBi*B2*B2*dB2 + Rr*dBr*B2*B2*dB2
+# Real part: -Bi*Bi*Ri*dBi*dBone - Bi*Bi*Rr*dBr*dBone - 2*Bi*Br*Ri*dBr*dBone + 2*Bi*Br*Rr*dBi*dBone + Br*Br*Ri*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone
 
-# Imag part: -Bi*Bi*Ri*dBr*dB2 + Bi*Bi*Rr*dBi*dB2 + 2*Bi*Br*Ri*dBi*dB2 + 2*Bi*Br*Rr*dBr*dB2 + Bi*Ri*Ri*B2*dB2*dB2 + Bi*Rr*Rr*B2*dB2*dB2 + Bi*dBi*dBi*B2 + Bi*dBr*dBr*B2 + Br*Br*Ri*dBr*dB2 - Br*Br*Rr*dBi*dB2 - Ri*dBr*B2*B2*dB2 + Rr*dBi*B2*B2*dB2
+# Imag part: -Bi*Bi*Ri*dBr*dBone + Bi*Bi*Rr*dBi*dBone + 2*Bi*Br*Ri*dBi*dBone + 2*Bi*Br*Rr*dBr*dBone + Bi*Ri*Ri*Bone*dBone*dBone + Bi*Rr*Rr*Bone*dBone*dBone + Bi*dBi*dBi*Bone + Bi*dBr*dBr*Bone + Br*Br*Ri*dBr*dBone - Br*Br*Rr*dBi*dBone - Ri*dBr*Bone*Bone*dBone + Rr*dBi*Bone*Bone*dBone
 
 # offset denominator
 print ccode((((dBr + I*dBi)*(Br - I*Bi) + (Rr + I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi)) * ((dBr - I*dBi)*(Br + I*Bi) + (Rr - I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
-# Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr*B2*dB2 + 2*Bi*Rr*dBi*B2*dB2 + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi*B2*dB2 + 2*Br*Rr*dBr*B2*dB2 + Ri*Ri*B2*B2*dB2*dB2 + Rr*Rr*B2*B2*dB2*dB2
+# Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2*Bi*Ri*dBr*Bone*dBone + 2*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2*Br*Ri*dBi*Bone*dBone + 2*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone
 
 # rotation numerator
 print ccode((((Rr + I*Ri)*sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi) + (dBr + I*dBi)*(Br - I*Bi)) * ((Rr - I*Ri)*(dBr + I*dBi)*(Br - I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
-# -I*Bi*Bi*Ri*dBi*dBi - 2*Bi*Bi*Ri*dBi*dBr + I*Bi*Bi*Ri*dBr*dBr + Bi*Bi*Rr*dBi*dBi - 2*I*Bi*Bi*Rr*dBi*dBr - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 4*I*Bi*Br*Ri*dBi*dBr - 2*Bi*Br*Ri*dBr*dBr + 2*I*Bi*Br*Rr*dBi*dBi + 4*Bi*Br*Rr*dBi*dBr - 2*I*Bi*Br*Rr*dBr*dBr + Bi*Ri*Ri*dBi*B2*dB2 - I*Bi*Ri*Ri*dBr*B2*dB2 + Bi*Rr*Rr*dBi*B2*dB2 - I*Bi*Rr*Rr*dBr*B2*dB2 + Bi*dBi*B2*dB2 - I*Bi*dBr*B2*dB2 + I*Br*Br*Ri*dBi*dBi + 2*Br*Br*Ri*dBi*dBr - I*Br*Br*Ri*dBr*dBr - Br*Br*Rr*dBi*dBi + 2*I*Br*Br*Rr*dBi*dBr + Br*Br*Rr*dBr*dBr + I*Br*Ri*Ri*dBi*B2*dB2 + Br*Ri*Ri*dBr*B2*dB2 + I*Br*Rr*Rr*dBi*B2*dB2 + Br*Rr*Rr*dBr*B2*dB2 + I*Br*dBi*B2*dB2 + Br*dBr*B2*dB2 + I*Ri*B2*B2*dB2*dB2 + Rr*B2*B2*dB2*dB2
+# -I*Bi*Bi*Ri*dBi*dBi - 2*Bi*Bi*Ri*dBi*dBr + I*Bi*Bi*Ri*dBr*dBr + Bi*Bi*Rr*dBi*dBi - 2*I*Bi*Bi*Rr*dBi*dBr - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 4*I*Bi*Br*Ri*dBi*dBr - 2*Bi*Br*Ri*dBr*dBr + 2*I*Bi*Br*Rr*dBi*dBi + 4*Bi*Br*Rr*dBi*dBr - 2*I*Bi*Br*Rr*dBr*dBr + Bi*Ri*Ri*dBi*Bone*dBone - I*Bi*Ri*Ri*dBr*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone - I*Bi*Rr*Rr*dBr*Bone*dBone + Bi*dBi*Bone*dBone - I*Bi*dBr*Bone*dBone + I*Br*Br*Ri*dBi*dBi + 2*Br*Br*Ri*dBi*dBr - I*Br*Br*Ri*dBr*dBr - Br*Br*Rr*dBi*dBi + 2*I*Br*Br*Rr*dBi*dBr + Br*Br*Rr*dBr*dBr + I*Br*Ri*Ri*dBi*Bone*dBone + Br*Ri*Ri*dBr*Bone*dBone + I*Br*Rr*Rr*dBi*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + I*Br*dBi*Bone*dBone + Br*dBr*Bone*dBone + I*Ri*Bone*Bone*dBone*dBone + Rr*Bone*Bone*dBone*dBone
 
-# Real part: -2*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 2*Bi*Br*Ri*dBr*dBr + 4*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*B2*dB2 + Bi*Rr*Rr*dBi*B2*dB2 + Bi*dBi*B2*dB2 + 2*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*B2*dB2 + Br*Rr*Rr*dBr*B2*dB2 + Br*dBr*B2*dB2 + Rr*B2*B2*dB2*dB2
+# Real part: -2*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2*Bi*Br*Ri*dBi*dBi - 2*Bi*Br*Ri*dBr*dBr + 4*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone
 
-# Imag part: -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2*Bi*Bi*Rr*dBi*dBr - 4*Bi*Br*Ri*dBi*dBr + 2*Bi*Br*Rr*dBi*dBi - 2*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*B2*dB2 - Bi*Rr*Rr*dBr*B2*dB2 - Bi*dBr*B2*dB2 + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*B2*dB2 + Br*Rr*Rr*dBi*B2*dB2 + Br*dBi*B2*dB2 + Ri*B2*B2*dB2*dB2
+# Imag part: -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2*Bi*Bi*Rr*dBi*dBr - 4*Bi*Br*Ri*dBi*dBr + 2*Bi*Br*Rr*dBi*dBi - 2*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone
 
 # rotation denominator
 print ccode((((Rr + I*Ri)*(dBr - I*dBi)*(Br + I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi)) * ((Rr - I*Ri)*(dBr + I*dBi)*(Br - I*Bi) + sqrt(1 - dBr*dBr - dBi*dBi)*sqrt(1 - Br*Br - Bi*Bi))).expand())
-# Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2*Bi*Ri*dBr*B2*dB2 + 2*Bi*Rr*dBi*B2*dB2 + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2*Br*Ri*dBi*B2*dB2 + 2*Br*Rr*dBr*B2*dB2 + B2*B2*dB2*dB2
+# Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2*Bi*Ri*dBr*Bone*dBone + 2*Bi*Rr*dBi*Bone*dBone + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2*Br*Ri*dBi*Bone*dBone + 2*Br*Rr*dBr*Bone*dBone + Bone*Bone*dBone*dBone
 
 ### END EXTENDING B TO THE WHOLE PLANE
 
