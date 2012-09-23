@@ -1,0 +1,13 @@
+<web-app>
+  <display-name>Hyperbolic Storage Space</display-name>
+  
+  <servlet>
+    <servlet-name>HyperbolicGraphicsServer</servlet-name>
+    <servlet-class>org.hyperbolicstorage.HyperbolicGraphicsServer</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>HyperbolicGraphicsServer</servlet-name>
+    <url-pattern>/server</url-pattern>
+  </servlet-mapping>
+</web-app>

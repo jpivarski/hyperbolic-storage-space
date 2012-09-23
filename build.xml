@@ -1,0 +1,50 @@
+<project default="war">
+  <target name="clean">
+    <delete dir="build" />
+    <delete file="HyperbolicStorage.war" />
+    <delete includeEmptyDirs="true" failonerror="false">
+      <fileset dir="WebContent/WEB-INF/classes">
+        <include name="**/*.class" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="build" />
+    <javac srcdir="src" destdir="build">
+      <classpath>
+        <pathelement location="/usr/share/java/servlet-api-2.5.jar" />
+        <fileset dir="WebContent/WEB-INF/lib">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="war" depends="compile">
+    <copy todir="WebContent/WEB-INF/classes">
+      <fileset dir="build">
+        <include name="**/*.class" />
+      </fileset>
+    </copy>
+
+    <war destfile="HyperbolicStorage.war" webxml="WebContent/WEB-INF/web.xml">
+      <fileset dir="WebContent/">
+        <exclude name="**/*.jsp"/>
+        <exclude name="**/*.html"/>
+        <exclude name="**/*.js"/>
+        <exclude name="**/*.css"/>
+        <exclude name="**/*.png"/>
+        <exclude name="**/*.jpg"/>
+        <exclude name="**/*.gif"/>
+        
+        <include name="WEB-INF/**/*.class"/>
+        <include name="WEB-INF/**/*.jar"/>
+        
+        <exclude name="**/*~"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="src/**"/>
+      </fileset>
+    </war>
+  </target>
+</project>
