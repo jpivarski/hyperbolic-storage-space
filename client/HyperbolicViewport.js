@@ -1,4 +1,4 @@
-//////////////////////////////////////////// HyperbolicMappingService -> HyperbolicMapFromJSON
+//////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapFromJSON
 
 function HyperbolicMapFromJSON(data) {
     data = JSON.parse(data);

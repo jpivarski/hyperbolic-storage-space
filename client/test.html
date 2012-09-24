@@ -163,12 +163,12 @@ for (var row = -15;  row <= 15;  row++) {
 
 points = JSON.stringify({"fillStyle": "none", "lineWidth": 1.5, "drawables": points});
 
-var hyperbolicMappingService;
+var hyperbolicMapService;
 var hyperbolicViewport;
 
 function init() {
-    hyperbolicMappingService = new HyperbolicMapFromJSON(points);
-    hyperbolicViewport = new HyperbolicViewport(hyperbolicMappingService, "hyperbolicViewport", 500, 500);
+    hyperbolicMapService = new HyperbolicMapFromJSON(points);
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 500, 500);
 }
 
 </script>

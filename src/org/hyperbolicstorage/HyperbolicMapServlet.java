@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class HyperbolicGraphicsServer extends HttpServlet {
+public class HyperbolicMapServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         processRequest(request, response);
