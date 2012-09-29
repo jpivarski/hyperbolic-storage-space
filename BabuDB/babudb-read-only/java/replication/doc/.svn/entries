@@ -1,37 +1,0 @@
-10
-
-dir
-615
-http://babudb.googlecode.com/svn/trunk/java/replication/doc
-http://babudb.googlecode.com/svn
-
-
-
-2011-01-07T10:21:22.858242Z
-368
-fx.langner
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-d4c7dd96-b7b2-11dd-893d-d98698f66bbf
-
-babuDBReplicationSequences
-dir
-
-slaveLogic
-dir
-
-masterLogic
-dir
-
