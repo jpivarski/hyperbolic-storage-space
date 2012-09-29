@@ -10,17 +10,21 @@ try:
     DatabaseInterface = jpype.JClass("org.hyperbolicstorage.DatabaseInterface")
     databaseInterface = DatabaseInterface("babudb")
 
-    databaseInterface.insertGeographical("one", "ONE")
-    databaseInterface.insertGeographical("two", "TWO")
-    databaseInterface.insertGeographical("three", "THREE")
-    databaseInterface.insertGeographical("four", "FOUR")
+    databaseInterface.insert(10, 8, -22, "one")
+    databaseInterface.insert(10, 6, -3, "two")
+    databaseInterface.insert(-4, 5, 7, "three")
+    databaseInterface.insert(10, 8, 99, "four")
+    databaseInterface.insert(10, 5, 0, "five")
 
-    databaseInterface.deleteGeographical("three")
+    print databaseInterface.getOne(10, 8, -22)
+    print databaseInterface.getOne(10, 6, -3)
+    print databaseInterface.getOne(-4, 5, 7)
+    print databaseInterface.getOne(10, 8, 99)
+    print databaseInterface.getOne(10, 5, 0)
+    print databaseInterface.getOne(-4, 5, 0)
 
-    print databaseInterface.getGeographical("one")
-    print databaseInterface.getGeographical("two")
-    print databaseInterface.getGeographical("three")
-    print databaseInterface.getGeographical("four")
+    print databaseInterface.getRange(10, 0, 8)
+    print databaseInterface.getRange(10, 0, 9)
 
     databaseInterface.close()
 
