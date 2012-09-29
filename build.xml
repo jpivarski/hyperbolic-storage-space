@@ -1,7 +1,8 @@
-<project default="war">
+<project default="jar">
   <target name="clean">
     <delete dir="build" />
     <delete file="HyperbolicStorage.war" />
+    <delete file="HyperbolicStorage.jar" />
     <delete includeEmptyDirs="true" failonerror="false">
       <fileset dir="WebContent/WEB-INF/classes">
         <include name="**/*.class" />
@@ -47,4 +48,14 @@
       </fileset>
     </war>
   </target>
+
+  <target name="jar" depends="compile">
+    <jar jarfile="HyperbolicStorage.jar" basedir="build">
+      <!-- <manifest> -->
+      <!--   <attribute name="Main-Class" value="???" /> -->
+      <!-- </manifest> -->
+      <zipfileset src="WebContent/WEB-INF/lib/BabuDB-0.5.6.jar" includes="**/*.class" />
+    </jar>
+  </target>
+
 </project>
