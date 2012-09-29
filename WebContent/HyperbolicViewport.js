@@ -64,7 +64,7 @@ HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
     point[0] = sinhr*Math.cos(phi);
     point[1] = sinhr*Math.sin(phi);
 
-    point.splice(2, 0, coshr);
+    // point.splice(2, 0, coshr);
 }
 
 HyperbolicMapFromJSON.prototype.loadDrawables = function(offset, callback) {
@@ -262,7 +262,8 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][j][0];
                 py = drawable["d"][j][1];
-                pc = drawable["d"][j][2];
+                // pc = drawable["d"][j][2];
+                pc = Math.sqrt(1.0 + drawable["d"][j][0]*drawable["d"][j][0] + drawable["d"][j][1]*drawable["d"][j][1]);
                 [x1, y1] = this.internalToScreen(px, py, pc);
 
                 var jnext = parseInt(j) + 1;
@@ -270,7 +271,8 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][jnext][0];
                 py = drawable["d"][jnext][1];
-                pc = drawable["d"][jnext][2];
+                // pc = drawable["d"][jnext][2];
+                pc = Math.sqrt(1.0 + drawable["d"][jnext][0]*drawable["d"][jnext][0] + drawable["d"][jnext][1]*drawable["d"][jnext][1]);
                 [x2, y2] = this.internalToScreen(px, py, pc);
 
                 if (x1*x1 + y1*y1 < THRESHOLD2  ||

@@ -105,7 +105,7 @@ public class DatabaseInterface {
         }
     }
 
-    public Set<String> getRange(long latitude, long minLongitude, long maxLongitude) throws IOException {
+    public int getRange(long latitude, long minLongitude, long maxLongitude, Set<String> output) throws IOException {
         byte[] emptyId = {-128, -128, -128, -128, -128, -128, -128, -128};
 
         // inclusive
@@ -124,14 +124,14 @@ public class DatabaseInterface {
         result = geoTiles.rangeLookup(0, from.array(), to.array(), null);
 
         try {
+            int count = 0;
             Iterator<Entry<byte[], byte[]>> iterator = result.get();
-
-            Set<String> output = new java.util.HashSet<String>();
             while (iterator.hasNext()) {
                 Entry<byte[], byte[]> keyValuePair = iterator.next();
                 output.add(new String(keyValuePair.getValue()));
+                count++;
             }
-            return output;
+            return count;
         }
         catch (BabuDBException exception) {
             throw new IOException("BabuDBException during lookup: " + exception.getMessage());
