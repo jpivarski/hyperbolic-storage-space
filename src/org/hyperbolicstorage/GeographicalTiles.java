@@ -12,6 +12,13 @@ public class GeographicalTiles {
         double radius;
     }
 
+    protected static class IndexRange {
+        long min;
+        long max;
+    }
+
+    protected static double LOG2 = Math.log(2);
+
     private GeographicalTiles() { }
 
     public static Point2D.Double halfPlane_to_hyperShadow(Point2D.Double p) {
@@ -37,9 +44,11 @@ public class GeographicalTiles {
     }
 
     protected static Circle centralCircle(Point2D.Double offset, double a) {
-        double Bdenom = Math.sqrt(1.0 + offset.x*offset.x + offset.y*offset.y);
-        double Br = offset.x/Bdenom;
-        double Bi = offset.y/Bdenom;
+        // NOTE: loss of precision for large |(offset.x,offset.y)| values
+
+        double Bone = Math.sqrt(1.0 + offset.x*offset.x + offset.y*offset.y);
+        double Br = offset.x/Bone;
+        double Bi = offset.y/Bone;
 
         double p1 = Math.atan2((Bi*Bi + 2*Bi - Br*Br + 1), (2*Bi*Br + 2*Br));
         double d1 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p1) + Bi*Bi - 4*Bi*Br*a*Math.cos(p1) + 2*Bi*a*a - 4*Bi*a*Math.sin(p1) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p1) + Br*Br - 4*Br*a*Math.cos(p1) + a*a - 2*a*Math.sin(p1) + 1;
@@ -53,7 +62,32 @@ public class GeographicalTiles {
 
         Circle output = new Circle();
         output.center = new Point2D.Double((x1 + x2)/2.0, (y1 + y2)/2.0);
-        output.radius = (y2 - y1)/2.0;
+        output.radius = Math.abs(y2 - y1)/2.0;
+        return output;
+    }
+
+    protected static IndexRange latitudeRange(Circle visible) {
+        double ymin = visible.center.y - visible.radius;
+        double ymax = visible.center.y + visible.radius;
+
+        IndexRange output = new IndexRange();
+        output.min = (long)Math.floor(Math.log(ymin)/LOG2);
+        output.max = (long)Math.ceil(Math.log(ymax)/LOG2);
+        return output;
+    }
+
+    protected static IndexRange longitudeRange(Circle visible, long latitude) {
+        double y = Math.pow(2, latitude);
+        double discr = Math.pow(visible.radius, 2) - Math.pow(y - visible.center.y, 2);
+        if (discr <= 0) { return null; }
+        discr = Math.sqrt(discr);
+
+        double xmin = visible.center.x - discr;
+        double xmax = visible.center.x + discr;
+
+        IndexRange output = new IndexRange();
+        output.min = (long)Math.floor(xmin/y);
+        output.max = (long)Math.ceil(xmax/y);
         return output;
     }
 
@@ -74,10 +108,16 @@ public class GeographicalTiles {
         return comma;
     }
 
-    public static boolean writeGrid(OutputStream stream, boolean comma) throws IOException {
-        for (int row = -8;  row <= 8;  row++) {
-            double size = Math.pow(2, row);
-            for (int col = -4;  col <= 4;  col++) {
+    public static boolean writeGrid(OutputStream stream, boolean comma, double offsetx, double offsety, double radius) throws IOException {
+        Circle visible = centralCircle(new Point2D.Double(offsetx, offsety), radius);
+        IndexRange latitudes = latitudeRange(visible);
+
+        for (long latitude = latitudes.min;  latitude <= latitudes.max;  latitude++) {
+            IndexRange longitudes = longitudeRange(visible, latitude);
+            if (longitudes == null) { continue; }
+
+            double size = Math.pow(2, latitude);
+            for (long longitude = longitudes.min;  longitude <= longitudes.max;  longitude++) {
                 if (!comma) {
                     comma = true;
                 } else {
@@ -87,24 +127,14 @@ public class GeographicalTiles {
                 stream.write("{\"type\": \"polygon\", \"d\": [".getBytes());
                 boolean comma2 = false;
 
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(col), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(col+0.5), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(col+1), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(col+1), 2*size)), null, comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+0.5), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+1), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+1), 2*size)), null, comma2);
 
                 stream.write("]}\n".getBytes());
             }
         }
-
-        Circle c = centralCircle(new Point2D.Double(3.0, 4.0), 0.8);
-
-        stream.write(",{\"id\": \"visibleCircle4\", \"type\": \"polygon\", \"strokeStyle\": \"#ff0000\", \"d\": [".getBytes());
-        boolean comma2 = false;
-        for (int i = 0;  i < 200;  i++) {
-            double phi = 2.0*Math.PI * i/200;
-            comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(c.center.x + c.radius * Math.cos(phi), c.center.y + c.radius * Math.sin(phi))), "L", comma2);
-        }
-        stream.write("]}\n".getBytes());
 
         return comma;
     }

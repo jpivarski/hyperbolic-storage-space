@@ -1,3 +1,57 @@
+//////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapServlet
+
+function HyperbolicMapServlet(url) {
+    if (url == null) {
+        this.url = "get";
+    } else {
+        this.url = url;
+    }
+
+    this.fillStyle = "none";
+    this.strokeStyle = "#000000";
+    this.lineWidth = 1.0;
+    this.lineCap = "butt";
+    this.lineJoin = "miter";
+    this.miterLimit = 10.0;
+    this.pointRadius = 3.5;
+    this.pointFill = "#000000";
+
+    this.drawables = null;
+}
+
+HyperbolicMapServlet.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) {
+    var xmlhttp = new XMLHttpRequest();
+
+    if (async) {
+        xmlhttp.onreadystatechange = function(h) { return function() {
+            if (xmlhttp.readyState == 4  &&  xmlhttp.status == 200) {
+                h.drawables = JSON.parse(xmlhttp.responseText);
+                if (hyperbolicViewport != null) { hyperbolicViewport.draw(); }
+            }
+        } }(this);
+    }
+
+    xmlhttp.open("GET", this.url + "?Bx=" + offsetx + "&By=" + offsety + "&a=" + radius, async);
+    xmlhttp.send();
+
+    if (!async) {
+        this.drawables = JSON.parse(xmlhttp.responseText);
+        if (hyperbolicViewport != null) { hyperbolicViewport.draw(); }
+    }
+}
+
+HyperbolicMapServlet.prototype.beginDrawableLoop = function(offsetx, offsety, radius) {
+    if (this.drawables == null) {
+        this.downloadDrawables(offsetx, offsety, radius, false, null);
+    }
+
+    this.i = 0;
+}
+
+HyperbolicMapServlet.prototype.nextDrawable = function() {
+    return this.drawables[this.i++];
+}
+
 //////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapFromJSON
 
 function HyperbolicMapFromJSON(data) {
@@ -29,45 +83,11 @@ function HyperbolicMapFromJSON(data) {
 
     this.pointFill = data["pointFill"];
     if (this.pointFill == undefined) { this.pointFill = "#000000"; }
-
-    // for (var i in this.drawables) {
-    //     if (this.drawables[i]["type"] == "polygon") {
-    //         for (var j in this.drawables[i]["d"]) {
-    //             this.convertPoint(this.drawables[i]["d"][j]);
-    //         }
-    //     }
-    // }
 }
 
-// HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
-    // var x = point[0];
-    // var y = point[1];
+HyperbolicMapFromJSON.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
 
-    // var r = Math.sqrt(x*x + y*y);
-    // var sinhr = 0.5*(Math.exp(r/2.0) - Math.exp(-r/2.0));
-    // var coshr = 0.5*(Math.exp(r/2.0) + Math.exp(-r/2.0));
-
-    // if (r == 0.0) {
-    //         point[0] = 0.0;
-    //         point[1] = 0.0;
-    // }
-    // else {
-    //         point[0] = sinhr*x/r;
-    //         point[1] = sinhr*y/r;
-    // }
-
-    // var eta = point[0];
-    // var phi = point[1];
-    // var sinhr = 0.5*(Math.exp(eta) - Math.exp(-eta));
-    // var coshr = 0.5*(Math.exp(eta) + Math.exp(-eta));
-
-    // point[0] = sinhr*Math.cos(phi);
-    // point[1] = sinhr*Math.sin(phi);
-
-    // point.splice(2, 0, coshr);
-// }
-
-HyperbolicMapFromJSON.prototype.loadDrawables = function(offset, callback) {
+HyperbolicMapFromJSON.prototype.beginDrawableLoop = function(offsetx, offsety, radius) {
     this.i = 0;
 }
 
@@ -77,12 +97,23 @@ HyperbolicMapFromJSON.prototype.nextDrawable = function() {
 
 //////////////////////////////////////////// HyperbolicViewport
 
-function HyperbolicViewport(service, elem, width, height) {
+function HyperbolicViewport(service, elem, width, height, options) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
-    this.THRESHOLD = 0.95;
+    this.VIEW_THRESHOLD = 0.9;
+    this.DOWNLOAD_THRESHOLD = 0.95;
+    this.NUMERICAL_STABILITY_THRESHOLD = 100.0;
 
-    this.offsetReal = 3.0;
-    this.offsetImag = 4.0;
+    if (options == null) {
+        this.options = {};
+        for (prop in this.defaultOptions) {
+            this.options[prop] = this.defaultOptions[prop];
+        }
+    } else {
+        this.options = options;
+    }
+
+    this.offsetReal = 0.0;
+    this.offsetImag = 0.0;
     this.zoom = 0.95;
     this.rotation = 0.0;
 
@@ -122,7 +153,7 @@ function HyperbolicViewport(service, elem, width, height) {
         hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
         hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
 
-        if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
+        if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
             hyperbolicViewport.isMouseDown = true;
         }
 
@@ -132,7 +163,7 @@ function HyperbolicViewport(service, elem, width, height) {
         if (hyperbolicViewport.isMouseDown) {
             var x, y;
             [x, y] = hyperbolicViewport.mousePosition(event);
-            if (x*x + y*y < hyperbolicViewport.THRESHOLD*hyperbolicViewport.THRESHOLD) {
+            if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
                 hyperbolicViewport.updateOffset(x, y);
             }
         }
@@ -144,8 +175,13 @@ function HyperbolicViewport(service, elem, width, height) {
         hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
         hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
         hyperbolicViewport.isMouseDown = false;
+
+        hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
+
     }; }(this));
 }
+
+HyperbolicViewport.prototype.defaultOptions = {"lineColor": "#000000", "rimColor": "#f5d6ab"};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
     var shift = this.canvas.width/2.0;
@@ -158,20 +194,11 @@ HyperbolicViewport.prototype.mousePosition = function(event) {
 HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
     var Br = this.offsetRealNow;
     var Bi = this.offsetImagNow;
-
-    // START EXPANDING B TO THE WHOLE PLANE
-    // // compute a Mobius transformation composed with the internal -> screen transformation
-    // // F = (P + B*sqrt(|P|^2 + 1))/(conj(B)*P + sqrt(|P|^2 + 1))
-    // var real = -Bi*Bi*preal*pone + 2.0*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag + Br*preal*preal + Br*(pimag*pimag + preal*preal + 1.0) + preal*pone;
-    // var imag = Bi*Bi*pimag*pone + 2.0*Bi*Br*preal*pone + Bi*pimag*pimag + Bi*preal*preal + Bi*(pimag*pimag + preal*preal + 1.0) - Br*Br*pimag*pone + pimag*pone;
-    // var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2.0*Bi*pimag*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2.0*Br*preal*pone + pimag*pimag + preal*preal + 1.0;
-
-    // F = ((1+|B|^2)*P + B*sqrt(|P|^2 + 1))/(conj(B)*P + (1+|B|^2)*sqrt(|P|^2 + 1))
+    // NOTE: loss of precision for large |(Br,Bi)| values
     var bone = Math.sqrt(1.0 + Br*Br + Bi*Bi);
     var real = -Bi*Bi*preal*pone + 2.0*Bi*Br*pimag*pone + Br*Br*preal*pone + Br*pimag*pimag*bone + Br*preal*preal*bone + Br*bone*(pimag*pimag + preal*preal + 1.0) + preal*(Bi*Bi + Br*Br + 1.0)*pone;
     var imag = Bi*Bi*pimag*pone + 2.0*Bi*Br*preal*pone + Bi*pimag*pimag*bone + Bi*preal*preal*bone + Bi*bone*(pimag*pimag + preal*preal + 1.0) - Br*Br*pimag*pone + pimag*(Bi*Bi + Br*Br + 1.0)*pone;
     var denom = Bi*Bi*pimag*pimag + Bi*Bi*preal*preal + 2.0*Bi*pimag*bone*pone + Br*Br*pimag*pimag + Br*Br*preal*preal + 2.0*Br*preal*bone*pone + (Bi*Bi + Br*Br + 1.0)*(pimag*pimag + preal*preal + 1.0);
-    // END EXPANDING B TO THE WHOLE PLANE
 
     real /= denom;
     imag /= denom;
@@ -184,57 +211,44 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     var Pi = this.finger1Imag;
     var pone = Math.sqrt(Pr*Pr + Pi*Pi + 1.0);
 
-    // compute a new offset (dBr, dBi) assuming that the initial offset was zero: this is a change in offset
-    // F = (P + B*sqrt(|P|^2 + 1))/(conj(B)*P + sqrt(|P|^2 + 1)) solved for B (I used sympy)
+    // compute a new offset (dBr,dBi) assuming that the initial offset was zero: this is a change in offset
     var dBr = -(Fi*Pr + Fr*Pi)*(-Fi*pone + Pi - (Fi*Pr + Fr*Pi)*(-Fr*pone + Pr)/(-Fi*Pi + Fr*Pr - pone))/((-Fi*Pi + Fr*Pr - pone)*(Fi*Pi - Fr*Pr - (Fi*Pr + Fr*Pi)*(Fi*Pr + Fr*Pi)/(-Fi*Pi + Fr*Pr - pone) - pone)) + (-Fr*pone + Pr)/(-Fi*Pi + Fr*Pr - pone);
     var dBi = (-Fi*pone + Pi - (Fi*Pr + Fr*Pi)*(-Fr*pone + Pr)/(-Fi*Pi + Fr*Pr - pone))/(Fi*Pi - Fr*Pr - (Fi*Pr + Fr*Pi)*(Fi*Pr + Fr*Pi)/(-Fi*Pi + Fr*Pr - pone) - pone);
 
-    // START EXPANDING B TO THE WHOLE PLANE
+    // NOTE: loss of precision for large |(dBr,dBi)| values
     var dBoneMinus = Math.sqrt(1.0 - dBr*dBr - dBi*dBi);
     [dBr, dBi] = [dBr/dBoneMinus, dBi/dBoneMinus];
-    // END EXPANDING B TO THE WHOLE PLANE
 
     var Rr = Math.cos(this.rotation);
     var Ri = Math.sin(this.rotation);
     var Br = this.offsetReal;
     var Bi = this.offsetImag;
 
-    // START EXPANDING B TO THE WHOLE PLANE
-    // // compose the old offset with the new offset
-    // // Bprime = (dB + R*B)/(dB*conj(B) + R)
-    // var real = -Bi*Bi*Ri*dBi - Bi*Bi*Rr*dBr - 2.0*Bi*Br*Ri*dBr + 2.0*Bi*Br*Rr*dBi + Br*Br*Ri*dBi + Br*Br*Rr*dBr + Br*Ri*Ri + Br*Rr*Rr + Br*dBi*dBi + Br*dBr*dBr + Ri*dBi + Rr*dBr;
-    // var imag = -Bi*Bi*Ri*dBr + Bi*Bi*Rr*dBi + 2.0*Bi*Br*Ri*dBi + 2.0*Bi*Br*Rr*dBr + Bi*Ri*Ri + Bi*Rr*Rr + Bi*dBi*dBi + Bi*dBr*dBr + Br*Br*Ri*dBr - Br*Br*Rr*dBi - Ri*dBr + Rr*dBi;
-    // var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2.0*Bi*Ri*dBr + 2.0*Bi*Rr*dBi + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2.0*Br*Ri*dBi + 2.0*Br*Rr*dBr + Ri*Ri + Rr*Rr;
     var dBone = Math.sqrt(1.0 + dBr*dBr + dBi*dBi);
     var Bone = Math.sqrt(1.0 + Br*Br + Bi*Bi);
     var real = -Bi*Bi*Ri*dBi*dBone - Bi*Bi*Rr*dBr*dBone - 2.0*Bi*Br*Ri*dBr*dBone + 2.0*Bi*Br*Rr*dBi*dBone + Br*Br*Ri*dBi*dBone + Br*Br*Rr*dBr*dBone + Br*Ri*Ri*Bone*dBone*dBone + Br*Rr*Rr*Bone*dBone*dBone + Br*dBi*dBi*Bone + Br*dBr*dBr*Bone + Ri*dBi*Bone*Bone*dBone + Rr*dBr*Bone*Bone*dBone;
     var imag = -Bi*Bi*Ri*dBr*dBone + Bi*Bi*Rr*dBi*dBone + 2.0*Bi*Br*Ri*dBi*dBone + 2.0*Bi*Br*Rr*dBr*dBone + Bi*Ri*Ri*Bone*dBone*dBone + Bi*Rr*Rr*Bone*dBone*dBone + Bi*dBi*dBi*Bone + Bi*dBr*dBr*Bone + Br*Br*Ri*dBr*dBone - Br*Br*Rr*dBi*dBone - Ri*dBr*Bone*Bone*dBone + Rr*dBi*Bone*Bone*dBone;
     var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2.0*Bi*Ri*dBr*Bone*dBone + 2.0*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2.0*Br*Ri*dBi*Bone*dBone + 2.0*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone;
     denom = Math.sqrt(denom*denom - real*real - imag*imag);
-    // END EXPANDING B TO THE WHOLE PLANE
 
-    this.offsetRealNow = real/denom;
-    this.offsetImagNow = imag/denom;
+    var offsetRealNow = real/denom;
+    var offsetImagNow = imag/denom;
+    if (offsetRealNow*offsetRealNow + offsetImagNow*offsetImagNow < this.NUMERICAL_STABILITY_THRESHOLD*this.NUMERICAL_STABILITY_THRESHOLD) {
+        this.offsetRealNow = offsetRealNow;
+        this.offsetImagNow = offsetImagNow;
+    }
 
-    // START EXPANDING B TO THE WHOLE PLANE
-    // // also compose to get a new rotation
-    // // Rprime = (R + dB*conj(B))/(R*dB*B + 1)
-    // real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi + Bi*Rr*Rr*dBi + Bi*dBi + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr + Br*Rr*Rr*dBr + Br*dBr + Rr;
-    // imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr - Bi*Rr*Rr*dBr - Bi*dBr + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi + Br*Rr*Rr*dBi + Br*dBi + Ri;
-    // // denom = Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2.0*Bi*Ri*dBr + 2.0*Bi*Rr*dBi + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2.0*Br*Ri*dBi + 2.0*Br*Rr*dBr + 1.0;
     real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone;
     imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
-    // denom = Bi*Bi*Ri*Ri*dBi*dBi + Bi*Bi*Ri*Ri*dBr*dBr + Bi*Bi*Rr*Rr*dBi*dBi + Bi*Bi*Rr*Rr*dBr*dBr - 2.0*Bi*Ri*dBr*Bone*dBone + 2.0*Bi*Rr*dBi*Bone*dBone + Br*Br*Ri*Ri*dBi*dBi + Br*Br*Ri*Ri*dBr*dBr + Br*Br*Rr*Rr*dBi*dBi + Br*Br*Rr*Rr*dBr*dBr + 2.0*Br*Ri*dBi*Bone*dBone + 2.0*Br*Rr*dBr*Bone*dBone + Bone*Bone*dBone*dBone;
-    // END EXPANDING B TO THE WHOLE PLANE
 
-    this.rotationNow = Math.atan2(imag, real);  // Math.atan2(imag/denom, real/denom);
+    this.rotationNow = Math.atan2(imag, real);
 
     this.draw();
 }
 
 HyperbolicViewport.prototype.draw = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    var THRESHOLD2 = this.THRESHOLD*this.THRESHOLD;
+    var VIEW_THRESHOLD2 = this.VIEW_THRESHOLD*this.VIEW_THRESHOLD;
     var MAX_STRAIGHT_LINE_LENGTH2 = this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH;
 
     var shift = this.canvas.width/2.0;
@@ -243,12 +257,7 @@ HyperbolicViewport.prototype.draw = function() {
     this.rotationCosNow = Math.cos(this.rotationNow);
     this.rotationSinNow = Math.sin(this.rotationNow);
 
-    // draw the world-circle
-    this.context.beginPath();
-    this.context.arc(shift, shift, scale, 0.0, 2.0*Math.PI);
-    this.context.stroke();
-
-    this.service.loadDrawables();
+    this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.DOWNLOAD_THRESHOLD);
     var drawable;
     while (drawable = this.service.nextDrawable()) {
         if (drawable["type"] == "polygon") {
@@ -262,7 +271,6 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][j][0];
                 py = drawable["d"][j][1];
-                // pc = drawable["d"][j][2];
                 pc = Math.sqrt(1.0 + drawable["d"][j][0]*drawable["d"][j][0] + drawable["d"][j][1]*drawable["d"][j][1]);
                 [x1, y1] = this.internalToScreen(px, py, pc);
 
@@ -271,12 +279,11 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][jnext][0];
                 py = drawable["d"][jnext][1];
-                // pc = drawable["d"][jnext][2];
                 pc = Math.sqrt(1.0 + drawable["d"][jnext][0]*drawable["d"][jnext][0] + drawable["d"][jnext][1]*drawable["d"][jnext][1]);
                 [x2, y2] = this.internalToScreen(px, py, pc);
 
-                if (x1*x1 + y1*y1 < THRESHOLD2  ||
-                    x2*x2 + y2*y2 < THRESHOLD2) {
+                if (x1*x1 + y1*y1 < VIEW_THRESHOLD2  ||
+                    x2*x2 + y2*y2 < VIEW_THRESHOLD2) {
                     willDraw = true;
                 }
 
@@ -423,4 +430,19 @@ HyperbolicViewport.prototype.draw = function() {
             }
         }
     }
+
+    // draw the world-circle
+    this.context.fillStyle = this.options["rimColor"];
+    this.context.beginPath();
+    this.context.arc(shift, shift, scale, 0.0, 2.0*Math.PI);
+    this.context.arc(shift, shift, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+    this.context.fill();
+
+    this.context.strokeStyle = this.options["lineColor"];
+    this.context.beginPath();
+    this.context.arc(shift, shift, scale, 0.0, 2.0*Math.PI);
+    this.context.stroke();
+    this.context.beginPath();
+    this.context.arc(shift, shift, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+    this.context.stroke();
 }

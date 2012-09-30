@@ -8,11 +8,7 @@ var hyperbolicMapService;
 var hyperbolicViewport;
 
 function init() {
-    xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "get", false);
-    xmlhttp.send();
-
-    hyperbolicMapService = new HyperbolicMapFromJSON(xmlhttp.responseText);
+    hyperbolicMapService = new HyperbolicMapServlet();
     hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 500, 500);
 }
 

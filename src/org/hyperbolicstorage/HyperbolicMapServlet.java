@@ -3,14 +3,16 @@ package org.hyperbolicstorage;
 import org.hyperbolicstorage.DatabaseInterface;
 import org.hyperbolicstorage.GeographicalTiles;
 
+import java.lang.Float;
+
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletOutputStream;
-import java.io.IOException;
 
 public class HyperbolicMapServlet extends HttpServlet {
     // static DatabaseInterface databaseInterface = null;
@@ -34,13 +36,32 @@ public class HyperbolicMapServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-	// request.getParameter("");
+	String Bx = request.getParameter("Bx");
+	String By = request.getParameter("By");
+	String a = request.getParameter("a");
+
+        double offsetx, offsety, radius;
+        if (Bx == null) {
+            offsetx = 0.0;
+        } else {
+            offsetx = Float.parseFloat(Bx);
+        }
+        if (By == null) {
+            offsety = 0.0;
+        } else {
+            offsety = Float.parseFloat(By);
+        }
+        if (a == null) {
+            radius = 0.99;
+        } else {
+            radius = Float.parseFloat(a);
+        }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        stream.write("{\"fillstyle\": \"none\", \"lineWidth\": 1.5, \"drawables\": [".getBytes());
+        stream.write("[".getBytes());
         boolean comma = false;
-        comma = GeographicalTiles.writeGrid(stream, comma);
-        stream.write("]}\n".getBytes());
+        comma = GeographicalTiles.writeGrid(stream, comma, offsetx, offsety, radius);
+        stream.write("]\n".getBytes());
 
 	response.setContentType("application/json;charset=UTF-8");
         response.setContentLength(stream.size());
