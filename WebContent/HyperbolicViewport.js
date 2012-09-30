@@ -30,16 +30,16 @@ function HyperbolicMapFromJSON(data) {
     this.pointFill = data["pointFill"];
     if (this.pointFill == undefined) { this.pointFill = "#000000"; }
 
-    for (var i in this.drawables) {
-        if (this.drawables[i]["type"] == "polygon") {
-            for (var j in this.drawables[i]["d"]) {
-                this.convertPoint(this.drawables[i]["d"][j]);
-            }
-        }
-    }
+    // for (var i in this.drawables) {
+    //     if (this.drawables[i]["type"] == "polygon") {
+    //         for (var j in this.drawables[i]["d"]) {
+    //             this.convertPoint(this.drawables[i]["d"][j]);
+    //         }
+    //     }
+    // }
 }
 
-HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
+// HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
     // var x = point[0];
     // var y = point[1];
 
@@ -65,7 +65,7 @@ HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
     // point[1] = sinhr*Math.sin(phi);
 
     // point.splice(2, 0, coshr);
-}
+// }
 
 HyperbolicMapFromJSON.prototype.loadDrawables = function(offset, callback) {
     this.i = 0;
@@ -81,8 +81,8 @@ function HyperbolicViewport(service, elem, width, height) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
     this.THRESHOLD = 0.95;
 
-    this.offsetReal = 0.0;
-    this.offsetImag = 0.0;
+    this.offsetReal = 3.0;
+    this.offsetImag = 4.0;
     this.zoom = 0.95;
     this.rotation = 0.0;
 

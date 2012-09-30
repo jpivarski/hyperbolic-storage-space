@@ -3,10 +3,13 @@ package org.hyperbolicstorage;
 import org.hyperbolicstorage.DatabaseInterface;
 import org.hyperbolicstorage.GeographicalTiles;
 
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 
 public class HyperbolicMapServlet extends HttpServlet {
@@ -32,16 +35,17 @@ public class HyperbolicMapServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	// request.getParameter("");
-	response.setContentType("application/json");
-        PrintWriter printWriter = response.getWriter();
 
-        printWriter.print("{\"fillstyle\": \"none\", \"lineWidth\": 1.5, \"drawables\": [");
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        stream.write("{\"fillstyle\": \"none\", \"lineWidth\": 1.5, \"drawables\": [".getBytes());
         boolean comma = false;
+        comma = GeographicalTiles.writeGrid(stream, comma);
+        stream.write("]}\n".getBytes());
 
-        comma = GeographicalTiles.printGrid(printWriter, comma);
-
-        printWriter.println("]}");
-        printWriter.close();
-
+	response.setContentType("application/json;charset=UTF-8");
+        response.setContentLength(stream.size());
+	ServletOutputStream servletOutputStream = response.getOutputStream();
+        servletOutputStream.write(stream.toByteArray());
+        servletOutputStream.close();
     }
 }
