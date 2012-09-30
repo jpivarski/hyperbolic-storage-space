@@ -56,13 +56,13 @@ HyperbolicMapFromJSON.prototype.convertPoint = function(point) {
     //         point[1] = sinhr*y/r;
     // }
 
-    var eta = point[0];
-    var phi = point[1];
-    var sinhr = 0.5*(Math.exp(eta) - Math.exp(-eta));
-    var coshr = 0.5*(Math.exp(eta) + Math.exp(-eta));
+    // var eta = point[0];
+    // var phi = point[1];
+    // var sinhr = 0.5*(Math.exp(eta) - Math.exp(-eta));
+    // var coshr = 0.5*(Math.exp(eta) + Math.exp(-eta));
 
-    point[0] = sinhr*Math.cos(phi);
-    point[1] = sinhr*Math.sin(phi);
+    // point[0] = sinhr*Math.cos(phi);
+    // point[1] = sinhr*Math.sin(phi);
 
     // point.splice(2, 0, coshr);
 }
@@ -280,7 +280,7 @@ HyperbolicViewport.prototype.draw = function() {
                     willDraw = true;
                 }
 
-                var options = drawable["d"][j][3];
+                var options = drawable["d"][j][2];
                 if (options == undefined) { options = ""; }
                 else { options = options.toLowerCase(); }
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<script type="text/javascript" src="HyperbolicViewport.js"></script>
+<script type="text/javascript">
+
+var hyperbolicMapService;
+var hyperbolicViewport;
+
+function init() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "get", false);
+    xmlhttp.send();
+
+    hyperbolicMapService = new HyperbolicMapFromJSON(xmlhttp.responseText);
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 500, 500);
+}
+
+</script>
+<body onload="init();">
+<div id="hyperbolicViewport" style="margin: 20px;"></div>
+</body>
+</html>

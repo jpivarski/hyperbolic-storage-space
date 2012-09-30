@@ -12,7 +12,7 @@
 
   <target name="compile">
     <mkdir dir="build" />
-    <javac srcdir="src" destdir="build">
+    <javac srcdir="src" destdir="build" includeantruntime="true">
       <classpath>
         <pathelement location="/usr/share/java/servlet-api-2.5.jar" />
         <fileset dir="WebContent/WEB-INF/lib">
@@ -31,13 +31,13 @@
 
     <war destfile="HyperbolicStorage.war" webxml="WebContent/WEB-INF/web.xml">
       <fileset dir="WebContent/">
-        <exclude name="**/*.jsp"/>
-        <exclude name="**/*.html"/>
-        <exclude name="**/*.js"/>
-        <exclude name="**/*.css"/>
-        <exclude name="**/*.png"/>
-        <exclude name="**/*.jpg"/>
-        <exclude name="**/*.gif"/>
+        <include name="**/*.jsp"/>
+        <include name="**/*.html"/>
+        <include name="**/*.js"/>
+        <include name="**/*.css"/>
+        <include name="**/*.png"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.gif"/>
         
         <include name="WEB-INF/**/*.class"/>
         <include name="WEB-INF/**/*.jar"/>

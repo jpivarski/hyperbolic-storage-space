@@ -36,7 +36,7 @@ public class HyperbolicMapServlet extends HttpServlet {
         PrintWriter printWriter = response.getWriter();
 
         printWriter.print("{\"fillstyle\": \"none\", \"lineWidth\": 1.5, \"drawables\": [");
-        String comma = "";
+        boolean comma = false;
 
         comma = GeographicalTiles.printGrid(printWriter, comma);
 

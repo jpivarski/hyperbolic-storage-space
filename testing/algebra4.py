@@ -5,6 +5,15 @@ import random
 x = sympy.Symbol("x")
 y = sympy.Symbol("y")
 
+sqrtplus = sympy.sqrt(x*x + y*y + 2*y + 1)
+sqrtminus = sympy.sqrt(x*x + y*y - 2*y + 1)
+sinheta = sympy.sqrt((sqrtplus + sqrtminus)/(sqrtplus - sqrtminus))/2 - sympy.sqrt((sqrtplus - sqrtminus)/(sqrtminus + sqrtplus))/2
+denom = sympy.sqrt((2 * x)**2 + (x*x + y*y - 1)**2)
+
+sinheta_over_denom = sympy.sqrt((sqrtplus + sqrtminus)/(sqrtplus - sqrtminus)/((2 * x)**2 + (x*x + y*y - 1)**2))/2 - sympy.sqrt((sqrtplus - sqrtminus)/(sqrtminus + sqrtplus)/((2 * x)**2 + (x*x + y*y - 1)**2))/2
+
+##################
+
 r = sympy.sqrt((x**2 + y**2 - 2*y + 1) / (x**2 + y**2 + 2*y + 1))
 
 print sympy.printing.ccode((sympy.sqrt((1 + r)/(1 - r))/2 - sympy.sqrt((1 - r)/(1 + r))/2).expand())
