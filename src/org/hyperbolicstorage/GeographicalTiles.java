@@ -124,15 +124,22 @@ public class GeographicalTiles {
                     stream.write(",".getBytes());
                 }
 
-                stream.write("{\"type\": \"polygon\", \"d\": [".getBytes());
+                stream.write("{\"type\": \"polygon\", \"class\": \"grid\", \"d\": [".getBytes());
                 boolean comma2 = false;
 
                 comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude), size)), "L", comma2);
                 comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+0.5), size)), "L", comma2);
                 comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+1), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+1), 2*size)), null, comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+1), 2.0*size)), null, comma2);
 
                 stream.write("]}\n".getBytes());
+
+                Point2D.Double boxCenter = halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+0.5), 1.5*size));
+                Point2D.Double box1up = halfPlane_to_hyperShadow(new Point2D.Double(size*(longitude+0.5), 1.7*size));
+
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"ax\": %g, \"ay\": %g, \"upx\": %g, \"upy\": %g}\n", latitude, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
+
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"top\", \"d\": \"%d\", \"ax\": %g, \"ay\": %g, \"upx\": %g, \"upy\": %g}\n", longitude, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
             }
         }
 

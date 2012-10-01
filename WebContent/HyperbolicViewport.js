@@ -1,3 +1,73 @@
+//////////////////////////////////////////// style classes
+
+function HyperbolicStyleClass(fillStyle, strokeStyle, lineWidth, pointRadius, pointFill, textAlign, textBaseline, font, lineCap, lineJoin, miterLimit) {
+    if (fillStyle == null) {
+        this.fillStyle = "none";
+    } else {
+        this.fillStyle = fillStyle;
+    }
+
+    if (strokeStyle == null) {
+        this.strokeStyle = "#000000";
+    } else {
+        this.strokeStyle = strokeStyle;
+    }
+
+    if (lineWidth == null) {
+        this.lineWidth = 1.0;
+    } else {
+        this.lineWidth = lineWidth;
+    }
+
+    if (pointRadius == null) {
+        this.pointRadius = 3.5;
+    } else {
+        this.pointRadius = pointRadius;
+    }
+
+    if (pointFill == null) {
+        this.pointFill = "#000000";
+    } else {
+        this.pointFill = pointFill;
+    }
+
+    if (textAlign == null) {
+        this.textAlign = "center";
+    } else {
+        this.textAlign = textAlign;
+    }
+
+    if (textBaseline == null) {
+        this.textBaseline = "alphabetic";
+    } else {
+        this.textBaseline = textBaseline;
+    }
+
+    if (font == null) {
+        this.font = "10px sans-serif";
+    } else {
+        this.font = font;
+    }
+
+    if (lineCap == null) {
+        this.lineCap = "butt";
+    } else {
+        this.lineCap = lineCap;
+    }
+
+    if (lineJoin == null) {
+        this.lineJoin = "miter";
+    } else {
+        this.lineJoin = lineJoin;
+    }
+
+    if (miterLimit == null) {
+        this.miterLimit = 10.0;
+    } else {
+        this.miterLimit = miterLimit;
+    }
+}
+
 //////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapServlet
 
 function HyperbolicMapServlet(url) {
@@ -7,14 +77,9 @@ function HyperbolicMapServlet(url) {
         this.url = url;
     }
 
-    this.fillStyle = "none";
-    this.strokeStyle = "#000000";
-    this.lineWidth = 1.0;
-    this.lineCap = "butt";
-    this.lineJoin = "miter";
-    this.miterLimit = 10.0;
-    this.pointRadius = 3.5;
-    this.pointFill = "#000000";
+    this.styles = {"default": new HyperbolicStyleClass(),
+                   "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
+                   "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")};
 
     this.drawables = null;
 }
@@ -60,29 +125,9 @@ function HyperbolicMapFromJSON(data) {
     this.drawables = data["drawables"];
     if (this.drawables == undefined) { this.drawables = []; }
 
-    this.fillStyle = data["fillStyle"];
-    if (this.fillStyle == undefined) { this.fillStyle = "none"; }
-
-    this.strokeStyle = data["strokeStyle"];
-    if (this.strokeStyle == undefined) { this.strokeStyle = "#000000"; }
-
-    this.lineWidth = data["lineWidth"];
-    if (this.lineWidth == undefined) { this.lineWidth = 1.0; }
-
-    this.lineCap = data["lineCap"];
-    if (this.lineCap == undefined) { this.lineCap = "butt"; }
-
-    this.lineJoin = data["lineJoin"];
-    if (this.lineJoin == undefined) { this.lineJoin = "miter"; }
-
-    this.miterLimit = data["miterLimit"];
-    if (this.miterLimit == undefined) { this.miterLimit = 10.0; }
-
-    this.pointRadius = data["pointRadius"];
-    if (this.pointRadius == undefined) { this.pointRadius = 3.5; }
-
-    this.pointFill = data["pointFill"];
-    if (this.pointFill == undefined) { this.pointFill = "#000000"; }
+    this.styles = {"default": new HyperbolicStyleClass(),
+                   "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
+                   "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")};
 }
 
 HyperbolicMapFromJSON.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
@@ -102,6 +147,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.VIEW_THRESHOLD = 0.9;
     this.DOWNLOAD_THRESHOLD = 0.95;
     this.NUMERICAL_STABILITY_THRESHOLD = 100.0;
+    this.FONT_SCALE = 20.0;
+    this.MIN_TEXT_SIZE = 1.0;
 
     if (options == null) {
         this.options = {};
@@ -260,6 +307,13 @@ HyperbolicViewport.prototype.draw = function() {
     this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.DOWNLOAD_THRESHOLD);
     var drawable;
     while (drawable = this.service.nextDrawable()) {
+        var styleClass = drawable["class"];
+        if (styleClass == undefined) {
+            styleClass = this.service.styles["default"];
+        } else {
+            styleClass = this.service.styles[styleClass];
+        }
+
         if (drawable["type"] == "polygon") {
             var points = [];
             var filledges = [];
@@ -271,7 +325,7 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][j][0];
                 py = drawable["d"][j][1];
-                pc = Math.sqrt(1.0 + drawable["d"][j][0]*drawable["d"][j][0] + drawable["d"][j][1]*drawable["d"][j][1]);
+                pc = Math.sqrt(1.0 + px*px + py*py);
                 [x1, y1] = this.internalToScreen(px, py, pc);
 
                 var jnext = parseInt(j) + 1;
@@ -279,7 +333,7 @@ HyperbolicViewport.prototype.draw = function() {
 
                 px = drawable["d"][jnext][0];
                 py = drawable["d"][jnext][1];
-                pc = Math.sqrt(1.0 + drawable["d"][jnext][0]*drawable["d"][jnext][0] + drawable["d"][jnext][1]*drawable["d"][jnext][1]);
+                pc = Math.sqrt(1.0 + px*px + py*py);
                 [x2, y2] = this.internalToScreen(px, py, pc);
 
                 if (x1*x1 + y1*y1 < VIEW_THRESHOLD2  ||
@@ -288,8 +342,11 @@ HyperbolicViewport.prototype.draw = function() {
                 }
 
                 var options = drawable["d"][j][2];
-                if (options == undefined) { options = ""; }
-                else { options = options.toLowerCase(); }
+                if (options == undefined) {
+                    options = "";
+                } else {
+                    options = options.toLowerCase();
+                }
 
                 var drawLine = (options.indexOf("l") != -1);
                 if (options.indexOf("p") != -1) {
@@ -318,8 +375,7 @@ HyperbolicViewport.prototype.draw = function() {
                         drawedges.push(["m", x1*scale + shift, -y1*scale + shift]);
                         drawedges.push(edge);
                     }
-                }
-                else {
+                } else {
                     var edge1 = ["m", x1*scale + shift, -y1*scale + shift];
                     var edge2 = ["l", x2*scale + shift, -y2*scale + shift];
 
@@ -335,7 +391,7 @@ HyperbolicViewport.prototype.draw = function() {
             if (willDraw) {
                 // clip the filling to the polygon
                 var fillStyle = drawable["fillStyle"];
-                if (fillStyle == undefined) { fillStyle = this.service.fillStyle; }
+                if (fillStyle == undefined) { fillStyle = styleClass.fillStyle; }
 
                 if (fillStyle != "none") {
                     this.context.save();
@@ -345,11 +401,9 @@ HyperbolicViewport.prototype.draw = function() {
                     for (var j in filledges) {
                         if (filledges[j][0] == "a") {
                             this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
-                        }
-                        else if (filledges[j][0] == "l") {
+                        } else if (filledges[j][0] == "l") {
                             this.context.lineTo(filledges[j][1], filledges[j][2]);
-                        }
-                        else if (filledges[j][0] == "m") {
+                        } else if (filledges[j][0] == "m") {
                             this.context.moveTo(filledges[j][1], filledges[j][2]);
                         }
                     }
@@ -360,11 +414,9 @@ HyperbolicViewport.prototype.draw = function() {
                     for (var j in filledges) {
                         if (filledges[j][0] == "a") {
                             this.context.arc(filledges[j][1], filledges[j][2], filledges[j][3], filledges[j][4], filledges[j][5], filledges[j][6]);
-                        }
-                        else if (filledges[j][0] == "l") {
+                        } else if (filledges[j][0] == "l") {
                             this.context.lineTo(filledges[j][1], filledges[j][2]);
-                        }
-                        else if (filledges[j][0] == "m") {
+                        } else if (filledges[j][0] == "m") {
                             this.context.moveTo(filledges[j][1], filledges[j][2]);
                         }
                     }
@@ -376,34 +428,32 @@ HyperbolicViewport.prototype.draw = function() {
                 this.context.save();
 
                 var strokeStyle = drawable["strokeStyle"];
-                if (strokeStyle == undefined) { strokeStyle = this.service.strokeStyle; }
+                if (strokeStyle == undefined) { strokeStyle = styleClass.strokeStyle; }
                 this.context.strokeStyle = strokeStyle;
 
                 var lineWidth = drawable["lineWidth"];
-                if (lineWidth == undefined) { lineWidth = this.service.lineWidth; }
+                if (lineWidth == undefined) { lineWidth = styleClass.lineWidth; }
                 this.context.lineWidth = lineWidth;
 
                 var lineCap = drawable["lineCap"];
-                if (lineCap == undefined) { lineCap = this.service.lineCap; }
+                if (lineCap == undefined) { lineCap = styleClass.lineCap; }
                 this.context.lineCap = lineCap;
 
                 var lineJoin = drawable["lineJoin"];
-                if (lineJoin == undefined) { lineJoin = this.service.lineJoin; }
+                if (lineJoin == undefined) { lineJoin = styleClass.lineJoin; }
                 this.context.lineJoin = lineJoin;
 
                 var miterLimit = drawable["miterLimit"];
-                if (miterLimit == undefined) { miterLimit = this.service.miterLimit; }
+                if (miterLimit == undefined) { miterLimit = styleClass.miterLimit; }
                 this.context.miterLimit = miterLimit;
 
                 this.context.beginPath();
                 for (var j in drawedges) {
                     if (drawedges[j][0] == "a") {
                         this.context.arc(drawedges[j][1], drawedges[j][2], drawedges[j][3], drawedges[j][4], drawedges[j][5], drawedges[j][6]);
-                    }
-                    else if (drawedges[j][0] == "l") {
+                    } else if (drawedges[j][0] == "l") {
                         this.context.lineTo(drawedges[j][1], drawedges[j][2]);
-                    }
-                    else if (drawedges[j][0] == "m") {
+                    } else if (drawedges[j][0] == "m") {
                         this.context.moveTo(drawedges[j][1], drawedges[j][2]);
                     }
                 }
@@ -414,11 +464,11 @@ HyperbolicViewport.prototype.draw = function() {
                 this.context.save();
 
                 var pointFill = drawable["pointFill"];
-                if (pointFill == undefined) { pointFill = this.service.pointFill; }
+                if (pointFill == undefined) { pointFill = styleClass.pointFill; }
                 this.context.fillStyle = pointFill;
 
                 var pointRadius = drawable["pointFill"];
-                if (pointRadius == undefined) { pointRadius = this.service.pointRadius; }
+                if (pointRadius == undefined) { pointRadius = styleClass.pointRadius; }
 
                 for (var j in points) {
                     this.context.beginPath();
@@ -426,6 +476,45 @@ HyperbolicViewport.prototype.draw = function() {
                     this.context.fill();
                 }
 
+                this.context.restore();
+            }
+        }
+
+        if (drawable["type"] == "text") {
+            var px, py, pc, ax, ay, upx, upy;
+            px = drawable["ax"];
+            py = drawable["ay"];
+            pc = Math.sqrt(1.0 + px*px + py*py);
+            [ax, ay] = this.internalToScreen(px, py, pc);
+
+            px = drawable["upx"];
+            py = drawable["upy"];
+            pc = Math.sqrt(1.0 + px*px + py*py);
+            [upx, upy] = this.internalToScreen(px, py, pc);
+
+            var size = this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
+            if (size > this.MIN_TEXT_SIZE) {
+                var fillStyle = drawable["fillStyle"];
+                if (fillStyle == undefined) { fillStyle = styleClass.fillStyle; }
+                this.context.fillStyle = fillStyle;
+
+                var textAlign = drawable["textAlign"];
+                if (textAlign == undefined) { textAlign = styleClass.textAlign; }
+                this.context.textAlign = textAlign;
+
+                var textBaseline = drawable["textBaseline"];
+                if (textBaseline == undefined) { textBaseline = styleClass.textBaseline; }
+                this.context.textBaseline = textBaseline;
+
+                var font = drawable["font"];
+                if (font == undefined) { font = styleClass.font; }
+                this.context.font = font;
+
+                this.context.save();
+                this.context.translate(ax*scale + shift, -ay*scale + shift);
+                this.context.rotate(-Math.atan2(upy - ay, upx - ax) + Math.PI/2.0);
+                this.context.scale(size, size);
+                this.context.fillText(drawable["d"], 0.0, 0.0);
                 this.context.restore();
             }
         }
