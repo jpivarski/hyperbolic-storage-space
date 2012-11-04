@@ -78,8 +78,11 @@ function HyperbolicMapServlet(url) {
     }
 
     this.styles = {"default": new HyperbolicStyleClass(),
-                   "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
-                   "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")};
+                   // "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
+                   // "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")
+                   "grid": new HyperbolicStyleClass("none", "#538bf5"),
+                   "gridText": new HyperbolicStyleClass("#538bf5", "#538bf5")
+                  };
 
     this.drawables = null;
 }
@@ -148,7 +151,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.DOWNLOAD_THRESHOLD = 0.95;
     this.NUMERICAL_STABILITY_THRESHOLD = 100.0;
     this.FONT_SCALE = 20.0;
-    this.MIN_TEXT_SIZE = 1.0;
+//    this.MIN_TEXT_SIZE = 1.0;
+    this.MIN_TEXT_SIZE = 0.5;
 
     if (options == null) {
         this.options = {};
@@ -186,7 +190,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
     elem.appendChild(this.canvas);
     this.draw();
 
-    this.isMouseDown = false;
+    this.isMouseScrolling = false;
+    this.isMouseRotating = false;
     this.finger1Real = null;
     this.finger1Imag = null;
     this.finger2Real = null;
@@ -197,23 +202,35 @@ function HyperbolicViewport(service, elem, width, height, options) {
         var x, y;
         [x, y] = hyperbolicViewport.mousePosition(event);
 
-        hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
-        hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
-
-        if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
-            hyperbolicViewport.isMouseDown = true;
+        var rad2 = x*x + y*y;
+        if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
+            hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
+            hyperbolicViewport.isMouseScrolling = true;
+        }
+        else if (rad2 < 1.0) {
+            hyperbolicViewport.finger1Real = x;
+            hyperbolicViewport.finger1Imag = y;
+            hyperbolicViewport.isMouseRotating = true;
         }
 
     }; }(this));
 
     document.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
-        if (hyperbolicViewport.isMouseDown) {
+        if (hyperbolicViewport.isMouseScrolling) {
             var x, y;
             [x, y] = hyperbolicViewport.mousePosition(event);
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
                 hyperbolicViewport.updateOffset(x, y);
             }
         }
+
+        else if (hyperbolicViewport.isMouseRotating) {
+            var x, y;
+            [x, y] = hyperbolicViewport.mousePosition(event);
+            hyperbolicViewport.updateRotation(x, y);
+        }
+
     }; }(this));
 
     document.addEventListener("mouseup", function(hyperbolicViewport) { return function(event) {
@@ -221,7 +238,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
         hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
         hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
-        hyperbolicViewport.isMouseDown = false;
+        hyperbolicViewport.isMouseScrolling = false;
+        hyperbolicViewport.isMouseRotating = false;
 
         hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
 
@@ -289,6 +307,15 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
 
     this.rotationNow = Math.atan2(imag, real);
+
+    this.draw();
+}
+
+HyperbolicViewport.prototype.updateRotation = function(x, y) {
+    var oldphi = Math.atan2(this.finger1Imag, this.finger1Real);
+    var newphi = Math.atan2(y, x);
+
+    this.rotationNow = (newphi - oldphi) + this.rotation;
 
     this.draw();
 }
