@@ -78,8 +78,6 @@ function HyperbolicMapServlet(url) {
     }
 
     this.styles = {"default": new HyperbolicStyleClass(),
-                   // "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
-                   // "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")
                    "grid": new HyperbolicStyleClass("none", "#538bf5"),
                    "gridText": new HyperbolicStyleClass("#538bf5", "#538bf5")
                   };
@@ -129,8 +127,9 @@ function HyperbolicMapFromJSON(data) {
     if (this.drawables == undefined) { this.drawables = []; }
 
     this.styles = {"default": new HyperbolicStyleClass(),
-                   "grid": new HyperbolicStyleClass("none", "#c7d4ed"),
-                   "gridText": new HyperbolicStyleClass("#c7d4ed", "#c7d4ed")};
+                   "grid": new HyperbolicStyleClass("none", "#538bf5"),
+                   "gridText": new HyperbolicStyleClass("#538bf5", "#538bf5")
+                  };
 }
 
 HyperbolicMapFromJSON.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
@@ -151,8 +150,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.DOWNLOAD_THRESHOLD = 0.95;
     this.NUMERICAL_STABILITY_THRESHOLD = 100.0;
     this.FONT_SCALE = 20.0;
-//    this.MIN_TEXT_SIZE = 1.0;
-    this.MIN_TEXT_SIZE = 0.5;
+    this.MIN_TEXT_SIZE = 0.5;   // 1.0 for limited browsers
 
     if (options == null) {
         this.options = {};
