@@ -148,7 +148,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
     this.VIEW_THRESHOLD = 0.9;
     this.DOWNLOAD_THRESHOLD = 0.95;
-    this.NUMERICAL_STABILITY_THRESHOLD = 100.0;
+    this.NUMERICAL_STABILITY_THRESHOLD = 1e10; // 100.0;
     this.FONT_SCALE = 20.0;
     this.MIN_TEXT_SIZE = 0.5;   // 1.0 for limited browsers
 
