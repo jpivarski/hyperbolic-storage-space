@@ -1,9 +1,6 @@
 package org.hyperbolicstorage;
 
 import java.lang.Math;
-// import java.math.BigInteger;
-// import java.math.BigDecimal;
-// import java.math.RoundingMode;
 
 import java.io.OutputStream;
 import java.io.IOException;
@@ -25,42 +22,20 @@ public class GeographicalTiles {
     }
 
     protected static double LOG2 = Math.log(2);
-    // protected static BigDecimal ZERO = BigDecimal.ZERO;
-    // protected static BigDecimal ONE = BigDecimal.ONE;
-    // protected static BigDecimal TWO = BigDecimal.ONE.add(BigDecimal.ONE);
-    // protected static BigDecimal HALF = new BigDecimal(BigInteger.valueOf(5), 1);
-    // protected static BigDecimal ONE_POINT_FIVE = new BigDecimal(BigInteger.valueOf(15), 1);
-    // protected static BigDecimal ONE_POINT_SEVEN = new BigDecimal(BigInteger.valueOf(17), 1);
 
-    public static class BigPoint2D {
-        // BigDecimal x;
-        // BigDecimal y;
-
-        // public BigPoint2D(BigDecimal x, BigDecimal y) {
-        //     this.x = x;
-        //     this.y = y;
-        // }
-
+    public static class Point2D {
         double x;
         double y;
 
-        public BigPoint2D(double x, double y) {
-            // this.x = new BigDecimal(x);
-            // this.y = new BigDecimal(y);
+        public Point2D(double x, double y) {
             this.x = x;
             this.y = y;
         }
-
-        // public double xValue() { return x.doubleValue(); }
-        // public double yValue() { return y.doubleValue(); }
-
-        public double xValue() { return x; }
-        public double yValue() { return y; }
     }
 
     private GeographicalTiles() { }
 
-    public static BigPoint2D halfPlane_to_hyperShadow(BigPoint2D p) {
+    public static Point2D halfPlane_to_hyperShadow(Point2D p) {
         double sqrtplus = Math.sqrt(p.x*p.x + p.y*p.y + 2.0*p.y + 1.0);
         double sqrtminus = Math.sqrt(p.x*p.x + p.y*p.y - 2.0*p.y + 1.0);
         double sinheta = Math.sqrt((sqrtplus + sqrtminus)/(sqrtplus - sqrtminus))/2.0 - Math.sqrt((sqrtplus - sqrtminus)/(sqrtminus + sqrtplus))/2.0;
@@ -80,7 +55,7 @@ public class GeographicalTiles {
         double px = sinheta * cosphi;
         double py = sinheta * sinphi;
 
-        return new BigPoint2D(px, py);
+        return new Point2D(px, py);
     }
 
     protected static Circle centralCircle(double offsetx, double offsety, double a) {
@@ -132,7 +107,7 @@ public class GeographicalTiles {
         return output;
     }
 
-    protected static boolean writePoint(OutputStream stream, BigPoint2D p, String options, boolean comma) throws IOException {
+    protected static boolean writePoint(OutputStream stream, Point2D p, String options, boolean comma) throws IOException {
         if (!comma) {
             comma = true;
         } else {
@@ -157,24 +132,7 @@ public class GeographicalTiles {
             IndexRangeL longitudes = longitudeRange(visible, latitude);
             if (longitudes == null) { continue; }
 
-            // BigDecimal size;
-            // if (latitude > 999999999) {
-            //     continue;
-            // }
-            // else if (latitude >= 0) {
-            //     size = TWO.pow(latitude);
-            // }
-            // else if (latitude < -999999999) {
-            //     continue;
-            // }
-            // else {
-            //     size = HALF.pow(-latitude);
-            // }
             double size = Math.pow(2, latitude);
-
-            // BigDecimal size1p5 = size.multiply(ONE_POINT_FIVE);
-            // BigDecimal size1p7 = size.multiply(ONE_POINT_SEVEN);
-
             for (long longitude = longitudes.min;  longitude <= longitudes.max;  longitude++) {
                 if (!comma) {
                     comma = true;
@@ -185,19 +143,19 @@ public class GeographicalTiles {
                 stream.write("{\"type\": \"polygon\", \"class\": \"grid\", \"d\": [".getBytes());
                 boolean comma2 = false;
 
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+0.5), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+1), size)), "L", comma2);
-                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+1), 2.0*size)), null, comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D(size*(longitude), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D(size*(longitude+0.5), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D(size*(longitude+1), size)), "L", comma2);
+                comma2 = writePoint(stream, halfPlane_to_hyperShadow(new Point2D(size*(longitude+1), 2.0*size)), null, comma2);
 
                 stream.write("]}\n".getBytes());
 
-                BigPoint2D boxCenter = halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+0.5), 1.5*size));
-                BigPoint2D box1up = halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+0.5), 1.7*size));
+                Point2D boxCenter = halfPlane_to_hyperShadow(new Point2D(size*(longitude+0.5), 1.5*size));
+                Point2D box1up = halfPlane_to_hyperShadow(new Point2D(size*(longitude+0.5), 1.7*size));
 
-                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", latitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", latitude, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
 
-                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"top\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", longitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"top\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", longitude, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
             }
         }
 
