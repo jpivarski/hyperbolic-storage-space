@@ -195,9 +195,9 @@ public class GeographicalTiles {
                 BigPoint2D boxCenter = halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+0.5), 1.5*size));
                 BigPoint2D box1up = halfPlane_to_hyperShadow(new BigPoint2D(size*(longitude+0.5), 1.7*size));
 
-                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"ax\": %g, \"ay\": %g, \"upx\": %g, \"upy\": %g}\n", latitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", latitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
 
-                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"top\", \"d\": \"%d\", \"ax\": %g, \"ay\": %g, \"upx\": %g, \"upy\": %g}\n", longitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
+                stream.write(String.format(",{\"type\": \"text\", \"class\": \"gridText\", \"textBaseline\": \"top\", \"d\": \"%d\", \"ax\": %.18e, \"ay\": %.18e, \"upx\": %.18e, \"upy\": %.18e}\n", longitude, boxCenter.xValue(), boxCenter.yValue(), box1up.xValue(), box1up.yValue()).getBytes());
             }
         }
 
