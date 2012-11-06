@@ -3,6 +3,7 @@ package org.hyperbolicstorage;
 import java.lang.Math;
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import java.io.OutputStream;
 import java.io.IOException;
@@ -51,21 +52,42 @@ public class GeographicalTiles {
 
     private GeographicalTiles() { }
 
-    public static BigPoint2D halfPlane_to_hyperShadow(BigPoint2D p) {
-        double sqrtplus = Math.sqrt(p.x.pow(2).add(p.y.pow(2)).add(p.y.multiply(TWO)).add(ONE).doubleValue());
-        double sqrtminus = Math.sqrt(p.x.pow(2).add(p.y.pow(2)).subtract(p.y.multiply(TWO)).add(ONE).doubleValue());
-        double sinheta = Math.sqrt((sqrtplus + sqrtminus)/(sqrtplus - sqrtminus))/2.0 - Math.sqrt((sqrtplus - sqrtminus)/(sqrtminus + sqrtplus))/2.0;
-
-        double denom = Math.sqrt(p.x.multiply(TWO).pow(2).add((p.x.pow(2).add(p.y.pow(2)).subtract(ONE)).pow(2)).doubleValue());
-        double cosphi = p.x.multiply(TWO).doubleValue() / denom;
-        double sinphi = (p.x.pow(2).add(p.y.pow(2)).subtract(ONE)).doubleValue() / denom;
-        if (p.x.compareTo(ZERO) == 0  &&  p.y.compareTo(ONE) == 0) {
-            cosphi = 0.0;
-            sinphi = 1.0;
+    public static BigDecimal sqrt(BigDecimal x, int iterations, int precision) {
+        if (x.compareTo(ZERO) == 0) {
+            return x;
         }
 
-        double px = sinheta * cosphi;
-        double py = sinheta * sinphi;
+        BigDecimal result = BigDecimal.valueOf(java.lang.Math.sqrt(x.doubleValue()));
+        for (int i = 0;  i < iterations;  i++) {
+            result = result.subtract((result.pow(2).subtract(x)).divide(result.multiply(TWO), precision, RoundingMode.HALF_UP));
+        }
+        return result;
+    }
+
+    public static BigPoint2D halfPlane_to_hyperShadow(BigPoint2D p) {
+        int iterations = 10;
+        int precision = 1000;
+
+        BigDecimal sqrtplus = sqrt(p.x.pow(2).add(p.y.pow(2)).add(p.y.multiply(TWO)).add(ONE), iterations, precision);
+        BigDecimal sqrtminus = sqrt(p.x.pow(2).add(p.y.pow(2)).subtract(p.y.multiply(TWO)).add(ONE), iterations, precision);
+
+        BigDecimal sinheta = sqrt((sqrtplus.add(sqrtminus)).divide(sqrtplus.subtract(sqrtminus), precision, RoundingMode.HALF_UP), iterations, precision).divide(TWO, precision, RoundingMode.HALF_UP).subtract(sqrt((sqrtplus.subtract(sqrtminus)).divide(sqrtminus.add(sqrtplus), precision, RoundingMode.HALF_UP), iterations, precision).divide(TWO, precision, RoundingMode.HALF_UP));
+
+        BigDecimal denom = sqrt(p.x.multiply(TWO).pow(2).add((p.x.pow(2).add(p.y.pow(2)).subtract(ONE)).pow(2)), iterations, precision);
+
+        BigDecimal cosphi;
+        BigDecimal sinphi;
+        if (p.x.compareTo(ZERO) == 0  &&  p.y.compareTo(ONE) == 0) {
+            cosphi = ZERO;
+            sinphi = ONE;
+        }
+        else {
+            cosphi = p.x.multiply(TWO).divide(denom, precision, RoundingMode.HALF_UP);
+            sinphi = (p.x.pow(2).add(p.y.pow(2)).subtract(ONE)).divide(denom, precision, RoundingMode.HALF_UP);
+        }
+
+        BigDecimal px = sinheta.multiply(cosphi);
+        BigDecimal py = sinheta.multiply(sinphi);
 
         return new BigPoint2D(px, py);
     }
