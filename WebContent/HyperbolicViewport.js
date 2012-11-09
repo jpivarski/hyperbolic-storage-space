@@ -185,7 +185,20 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.context.lineWidth = 1.5;
 
     elem.appendChild(this.canvas);
+
+    this.shellImage = new Image();
+    this.shellImage.src = "turtle.png";
+
+    this.backgroundImage = new Image();
+    this.backgroundImage.src = "stars.jpg";
+
     this.draw();
+    if (!this.shellImage.complete) {
+        this.shellImage.onload = function(hyperbolicViewport) { return function() { hyperbolicViewport.draw(); } }(this);
+    }
+    if (!this.backgroundImage.complete) {
+        this.backgroundImage.onload = function(hyperbolicViewport) { return function() { hyperbolicViewport.draw(); } }(this);
+    }
 
     this.isMouseScrolling = false;
     this.isMouseRotating = false;
@@ -405,22 +418,24 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 }
 
-HyperbolicViewport.prototype.defaultOptions = {"lineColor": "#000000", "rimColor": "#f5d6ab"};
+HyperbolicViewport.prototype.defaultOptions = {"lineColor": "#000000", "rimColor": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.6};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
-    var shift = this.canvas.width/2.0;
+    var shiftx = this.canvas.width/2.0;
+    var shifty = this.canvas.height/2.0;
     var scale = this.zoom*this.canvas.width/2.0;
 
-    return [(event.pageX - this.canvas.offsetLeft - shift)/scale,
-            -(event.pageY - this.canvas.offsetTop - shift)/scale];
+    return [(event.pageX - this.canvas.offsetLeft - shiftx)/scale,
+            -(event.pageY - this.canvas.offsetTop - shifty)/scale];
 }
 
 HyperbolicViewport.prototype.fingerPosition = function(touch) {
-    var shift = this.canvas.width/2.0;
+    var shiftx = this.canvas.width/2.0;
+    var shifty = this.canvas.height/2.0;
     var scale = this.zoom*this.canvas.width/2.0;
 
-    return [(touch.pageX - this.canvas.offsetLeft - shift)/scale,
-            -(touch.pageY - this.canvas.offsetTop - shift)/scale];
+    return [(touch.pageX - this.canvas.offsetLeft - shiftx)/scale,
+            -(touch.pageY - this.canvas.offsetTop - shifty)/scale];
 }
 
 HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
@@ -503,11 +518,42 @@ HyperbolicViewport.prototype.draw = function() {
     var VIEW_THRESHOLD2 = this.VIEW_THRESHOLD*this.VIEW_THRESHOLD;
     var MAX_STRAIGHT_LINE_LENGTH2 = this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH;
 
-    var shift = this.canvas.width/2.0;
+    var shiftx = this.canvas.width/2.0;
+    var shifty = this.canvas.height/2.0;
     var scale = this.zoomNow*this.canvas.width/2.0;
 
     this.rotationCosNow = Math.cos(this.rotationNow);
     this.rotationSinNow = Math.sin(this.rotationNow);
+
+    if (this.backgroundImage.complete  &&  this.shellImage.complete) {
+        if (2.0*scale < Math.sqrt(this.canvas.width*this.canvas.width + this.canvas.height*this.canvas.height)) {
+            var width, height;
+            if (this.canvas.width < this.canvas.height) {
+                height = this.canvas.height;
+                width = this.canvas.height * this.backgroundImage.width/this.backgroundImage.height;
+            }
+            else {
+                width = this.canvas.width;
+                height = this.canvas.width * this.backgroundImage.height/this.backgroundImage.width;
+            }
+
+            this.context.drawImage(this.backgroundImage, (this.canvas.width - width)/2.0, (this.canvas.height - height)/2.0, width, height);
+
+            width = this.options["shellImageScale"]*this.zoomNow*this.canvas.width;
+            height = this.options["shellImageScale"]*this.zoomNow*this.canvas.width*this.shellImage.height/this.shellImage.width;
+
+            this.context.translate(this.canvas.width/2.0, this.canvas.height/2.0);
+            this.context.rotate(-this.rotationNow);
+            this.context.drawImage(this.shellImage, -width/2.0, -height/2.0, width, height);
+            this.context.rotate(this.rotationNow);
+            this.context.translate(-this.canvas.width/2.0, -this.canvas.height/2.0);
+        }
+    }
+
+    this.context.fillStyle = this.options["backgroundColor"];
+    this.context.beginPath();
+    this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
+    this.context.fill();
 
     this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.DOWNLOAD_THRESHOLD);
     var drawable;
@@ -557,7 +603,7 @@ HyperbolicViewport.prototype.draw = function() {
 
                 var drawLine = (options.indexOf("l") != -1);
                 if (options.indexOf("p") != -1) {
-                    points.push([x1*scale + shift, -y1*scale + shift]);
+                    points.push([x1*scale + shiftx, -y1*scale + shifty]);
                 }
 
                 var denom = x1*y2 - x2*y1;
@@ -576,15 +622,15 @@ HyperbolicViewport.prototype.draw = function() {
                     while (deltaphi >= Math.PI) { deltaphi -= 2*Math.PI; }
                     while (deltaphi < -Math.PI) { deltaphi += 2*Math.PI; }
 
-                    var edge = ["a", cx*scale + shift, -cy*scale + shift, Math.sqrt(r2)*scale, phi1, phi2, (deltaphi > 0)];
+                    var edge = ["a", cx*scale + shiftx, -cy*scale + shifty, Math.sqrt(r2)*scale, phi1, phi2, (deltaphi > 0)];
                     filledges.push(edge);
                     if (drawLine) {
-                        drawedges.push(["m", x1*scale + shift, -y1*scale + shift]);
+                        drawedges.push(["m", x1*scale + shiftx, -y1*scale + shifty]);
                         drawedges.push(edge);
                     }
                 } else {
-                    var edge1 = ["m", x1*scale + shift, -y1*scale + shift];
-                    var edge2 = ["l", x2*scale + shift, -y2*scale + shift];
+                    var edge1 = ["m", x1*scale + shiftx, -y1*scale + shifty];
+                    var edge2 = ["l", x2*scale + shiftx, -y2*scale + shifty];
 
                     filledges.push(edge1);
                     filledges.push(edge2);
@@ -702,7 +748,7 @@ HyperbolicViewport.prototype.draw = function() {
             var upx = tmp[0];
             var upy = tmp[1];
 
-            var size = this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
+            var size = this.zoomNow * this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
             if (size > this.MIN_TEXT_SIZE) {
                 var fillStyle = drawable["fillStyle"];
                 if (fillStyle == undefined) { fillStyle = styleClass.fillStyle; }
@@ -721,7 +767,7 @@ HyperbolicViewport.prototype.draw = function() {
                 this.context.font = font;
 
                 this.context.save();
-                this.context.translate(ax*scale + shift, -ay*scale + shift);
+                this.context.translate(ax*scale + shiftx, -ay*scale + shifty);
                 this.context.rotate(-Math.atan2(upy - ay, upx - ax) + Math.PI/2.0);
                 this.context.scale(size, size);
                 this.context.fillText(drawable["d"], 0.0, 0.0);
@@ -733,15 +779,15 @@ HyperbolicViewport.prototype.draw = function() {
     // draw the world-circle
     this.context.fillStyle = this.options["rimColor"];
     this.context.beginPath();
-    this.context.arc(shift, shift, scale, 0.0, 2.0*Math.PI);
-    this.context.arc(shift, shift, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+    this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
+    this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
     this.context.fill();
 
     this.context.strokeStyle = this.options["lineColor"];
     this.context.beginPath();
-    this.context.arc(shift, shift, scale, 0.0, 2.0*Math.PI);
+    this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
     this.context.stroke();
     this.context.beginPath();
-    this.context.arc(shift, shift, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+    this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
     this.context.stroke();
 }
