@@ -167,7 +167,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     this.offsetRealNow = this.offsetReal;
     this.offsetImagNow = this.offsetImag;
-    this.zoomNow = 0.95;
+    this.zoomNow = this.zoom;
     this.rotationNow = this.rotation;
 
     this.service = service;
@@ -480,15 +480,20 @@ HyperbolicViewport.prototype.updateRotation = function(x, y) {
 }
 
 HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
+    var centerx = (this.finger1Real + this.finger2Real)/2.0;
+    var centery = (this.finger1Imag + this.finger2Imag)/2.0;
+
     var oldphi = Math.atan2(this.finger1Imag - this.finger2Imag, this.finger1Real - this.finger2Real);
     var newphi = Math.atan2(y1 - y2, x1 - x2);
     var angle = newphi - oldphi;
 
-    var centerx = (this.finger1Real + this.finger2Real)/2.0;
-    var centery = (this.finger1Imag + this.finger2Imag)/2.0;
+    var oldlength = Math.sqrt(Math.pow(this.finger1Real - this.finger2Real, 2) + Math.pow(this.finger1Imag - this.finger2Imag, 2));
+    var newlength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    var scale = newlength / oldlength;
+    this.zoomNow = scale * this.zoom;
 
-    var centerxPrime = Math.cos(angle)*centerx - Math.sin(angle)*centery;
-    var centeryPrime = Math.sin(angle)*centerx + Math.cos(angle)*centery;
+    var centerxPrime = scale*(Math.cos(angle)*centerx - Math.sin(angle)*centery);
+    var centeryPrime = scale*(Math.sin(angle)*centerx + Math.cos(angle)*centery);
 
     this.updateOffset((x1 + x2)/2.0, (y1 + y2)/2.0, centerxPrime, centeryPrime, Math.cos(this.rotation + angle), Math.sin(this.rotation + angle));
 }
@@ -499,7 +504,7 @@ HyperbolicViewport.prototype.draw = function() {
     var MAX_STRAIGHT_LINE_LENGTH2 = this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH;
 
     var shift = this.canvas.width/2.0;
-    var scale = this.zoom*this.canvas.width/2.0;
+    var scale = this.zoomNow*this.canvas.width/2.0;
 
     this.rotationCosNow = Math.cos(this.rotationNow);
     this.rotationSinNow = Math.sin(this.rotationNow);
