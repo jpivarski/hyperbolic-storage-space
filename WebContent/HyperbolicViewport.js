@@ -266,8 +266,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.isMouseScrolling = true;
-                
-                document.getElementById("mode").innerHTML = "start nothing -> one-finger: isMouseScrolling " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
         else if (hyperbolicViewport.isMouseScrolling  &&  event.targetTouches.length == 2) {
@@ -302,8 +300,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
                 hyperbolicViewport.isMouseScrolling = false;
                 hyperbolicViewport.isTwoFingerTransformation = true;
-
-                document.getElementById("mode").innerHTML = "start one-finger -> two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
         else if (event.targetTouches.length == 2  &&  event.changedTouches.length == 2) {
@@ -324,8 +320,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger2Real = x2/Math.sqrt(1.0 - x2*x2 - y2*y2);
                 hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
                 hyperbolicViewport.isTwoFingerTransformation = true;
-
-                document.getElementById("mode").innerHTML = "start nothing -> two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
     }; }(this));
@@ -338,8 +332,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var y = tmp[1];
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
                 hyperbolicViewport.updateOffset(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag);
-
-                document.getElementById("mode").innerHTML = "move one-finger: isMouseScrolling " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
         if (hyperbolicViewport.isTwoFingerTransformation  &&  event.targetTouches.length == 2) {
@@ -366,8 +358,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 var y2 = tmp[1];
                 if (x1*x1 + y1*y1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  x2*x2 + y2*y2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
                     hyperbolicViewport.updateTransformation(x1, y1, x2, y2);
-
-                    document.getElementById("mode").innerHTML = "move two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
                 }
             }
         }
@@ -390,8 +380,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
             hyperbolicViewport.finger2Imag = null;
 
             hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
-
-            document.getElementById("mode").innerHTML = "end anything -> nothing: " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
         }
 
         else if (event.targetTouches.length == 1) {
@@ -412,8 +400,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
                 hyperbolicViewport.isMouseScrolling = true;
                 hyperbolicViewport.isTwoFingerTransformation = false;
-
-                document.getElementById("mode").innerHTML = "end two-finger -> one-finger: " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
     }; }(this));
