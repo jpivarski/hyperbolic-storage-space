@@ -190,13 +190,13 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     this.isMouseScrolling = false;
     this.isMouseRotating = false;
+    this.isTwoFingerTransformation = false;
     this.finger1Real = null;
     this.finger1Imag = null;
     this.finger2Real = null;
     this.finger2Imag = null;
 
-    document.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
-        event.preventDefault();
+    this.canvas.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
         var tmp = hyperbolicViewport.mousePosition(event);
         var x = tmp[0];
         var y = tmp[1];
@@ -215,7 +215,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     }; }(this));
 
-    document.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
+    this.canvas.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
         if (hyperbolicViewport.isMouseScrolling) {
             var tmp = hyperbolicViewport.mousePosition(event);
             var x = tmp[0];
@@ -234,7 +234,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     }; }(this));
 
-    document.addEventListener("mouseup", function(hyperbolicViewport) { return function(event) {
+    this.canvas.addEventListener("mouseup", function(hyperbolicViewport) { return function(event) {
         hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
         hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
         hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
@@ -244,6 +244,62 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
         hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
 
+    }; }(this));
+
+    this.canvas.addEventListener("touchstart", function(hyperbolicViewport) { return function(event) {
+        event.preventDefault();
+        if (event.targetTouches.length == 1) {
+            var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
+            var x = tmp[0];
+            var y = tmp[1];
+
+            var rad2 = x*x + y*y;
+            if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
+                hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
+                hyperbolicViewport.isMouseScrolling = true;
+            }
+            else if (rad2 < 1.0) {
+                hyperbolicViewport.finger1Real = x;
+                hyperbolicViewport.finger1Imag = y;
+                hyperbolicViewport.isMouseRotating = true;
+            }
+        }
+    }; }(this));
+
+    this.canvas.addEventListener("touchmove", function(hyperbolicViewport) { return function(event) {
+        event.preventDefault();
+        if (event.targetTouches.length == 1) {
+            if (hyperbolicViewport.isMouseScrolling) {
+                var tmp = hyperbolicViewport.fingerPosition(event);
+                var x = tmp[0];
+                var y = tmp[1];
+                if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                    hyperbolicViewport.updateOffset(x, y);
+                }
+            }
+
+            else if (hyperbolicViewport.isMouseRotating) {
+                var tmp = hyperbolicViewport.mousePosition(event);
+                var x = tmp[0];
+                var y = tmp[1];
+                hyperbolicViewport.updateRotation(x, y);
+            }
+        }
+    }; }(this));
+
+    this.canvas.addEventListener("touchend", function(hyperbolicViewport) { return function(event) {
+        event.preventDefault();
+        if (event.targetTouches.length == 0  &&  event.changedTouches.length == 1) {
+            hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
+            hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
+            hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
+            hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
+            hyperbolicViewport.isMouseScrolling = false;
+            hyperbolicViewport.isMouseRotating = false;
+
+            hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
+        }
     }; }(this));
 }
 
@@ -255,6 +311,14 @@ HyperbolicViewport.prototype.mousePosition = function(event) {
 
     return [(event.pageX - this.canvas.offsetLeft - shift)/scale,
             -(event.pageY - this.canvas.offsetTop - shift)/scale];
+}
+
+HyperbolicViewport.prototype.fingerPosition = function(touch) {
+    var shift = this.canvas.width/2.0;
+    var scale = this.zoom*this.canvas.width/2.0;
+
+    return [(touch.pageX - this.canvas.offsetLeft - shift)/scale,
+            -(touch.pageY - this.canvas.offsetTop - shift)/scale];
 }
 
 HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
