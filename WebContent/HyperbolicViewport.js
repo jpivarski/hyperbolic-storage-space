@@ -197,8 +197,9 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     document.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
-        var x, y;
-        [x, y] = hyperbolicViewport.mousePosition(event);
+        var tmp = hyperbolicViewport.mousePosition(event);
+        var x = tmp[0];
+        var y = tmp[1];
 
         var rad2 = x*x + y*y;
         if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
@@ -216,16 +217,18 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     document.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
         if (hyperbolicViewport.isMouseScrolling) {
-            var x, y;
-            [x, y] = hyperbolicViewport.mousePosition(event);
+            var tmp = hyperbolicViewport.mousePosition(event);
+            var x = tmp[0];
+            var y = tmp[1];
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
                 hyperbolicViewport.updateOffset(x, y);
             }
         }
 
         else if (hyperbolicViewport.isMouseRotating) {
-            var x, y;
-            [x, y] = hyperbolicViewport.mousePosition(event);
+            var tmp = hyperbolicViewport.mousePosition(event);
+            var x = tmp[0];
+            var y = tmp[1];
             hyperbolicViewport.updateRotation(x, y);
         }
 
@@ -280,7 +283,8 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
 
     // NOTE: loss of precision for large |(dBr,dBi)| values
     var dBoneMinus = Math.sqrt(1.0 - dBr*dBr - dBi*dBi);
-    [dBr, dBi] = [dBr/dBoneMinus, dBi/dBoneMinus];
+    dBr = dBr/dBoneMinus;
+    dBi = dBi/dBoneMinus;
 
     var Rr = Math.cos(this.rotation);
     var Ri = Math.sin(this.rotation);
@@ -346,12 +350,12 @@ HyperbolicViewport.prototype.draw = function() {
             var willDraw = false;
 
             for (var j in drawable["d"]) {
-                var px, py, pc, x1, y1, x2, y2;
-
-                px = drawable["d"][j][0];
-                py = drawable["d"][j][1];
-                pc = Math.sqrt(1.0 + px*px + py*py);
-                [x1, y1] = this.internalToScreen(px, py, pc);
+                var px = drawable["d"][j][0];
+                var py = drawable["d"][j][1];
+                var pc = Math.sqrt(1.0 + px*px + py*py);
+                var tmp = this.internalToScreen(px, py, pc);
+                var x1 = tmp[0];
+                var y1 = tmp[1];
 
                 var jnext = parseInt(j) + 1;
                 if (j == drawable["d"].length - 1) { jnext = 0; }
@@ -359,7 +363,9 @@ HyperbolicViewport.prototype.draw = function() {
                 px = drawable["d"][jnext][0];
                 py = drawable["d"][jnext][1];
                 pc = Math.sqrt(1.0 + px*px + py*py);
-                [x2, y2] = this.internalToScreen(px, py, pc);
+                tmp = this.internalToScreen(px, py, pc);
+                var x2 = tmp[0];
+                var y2 = tmp[1];
 
                 if (x1*x1 + y1*y1 < VIEW_THRESHOLD2  ||
                     x2*x2 + y2*y2 < VIEW_THRESHOLD2) {
@@ -506,16 +512,19 @@ HyperbolicViewport.prototype.draw = function() {
         }
 
         if (drawable["type"] == "text") {
-            var px, py, pc, ax, ay, upx, upy;
-            px = drawable["ax"];
-            py = drawable["ay"];
-            pc = Math.sqrt(1.0 + px*px + py*py);
-            [ax, ay] = this.internalToScreen(px, py, pc);
+            var px = drawable["ax"];
+            var py = drawable["ay"];
+            var pc = Math.sqrt(1.0 + px*px + py*py);
+            var tmp = this.internalToScreen(px, py, pc);
+            var ax = tmp[0];
+            var ay = tmp[1];
 
             px = drawable["upx"];
             py = drawable["upy"];
             pc = Math.sqrt(1.0 + px*px + py*py);
-            [upx, upy] = this.internalToScreen(px, py, pc);
+            tmp = this.internalToScreen(px, py, pc);
+            var upx = tmp[0];
+            var upy = tmp[1];
 
             var size = this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
             if (size > this.MIN_TEXT_SIZE) {
