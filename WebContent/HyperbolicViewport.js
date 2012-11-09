@@ -148,7 +148,6 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
     this.VIEW_THRESHOLD = 0.9;
     this.DOWNLOAD_THRESHOLD = 0.95;
-    this.NUMERICAL_STABILITY_THRESHOLD = 200.0;   // FIXME: this is hard to back away from when reached
     this.FONT_SCALE = 20.0;
     this.MIN_TEXT_SIZE = 0.5;   // 1.0 for limited browsers
 
@@ -362,12 +361,8 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
     var denom = Bi*Bi*dBi*dBi + Bi*Bi*dBr*dBr - 2.0*Bi*Ri*dBr*Bone*dBone + 2.0*Bi*Rr*dBi*Bone*dBone + Br*Br*dBi*dBi + Br*Br*dBr*dBr + 2.0*Br*Ri*dBi*Bone*dBone + 2.0*Br*Rr*dBr*Bone*dBone + Ri*Ri*Bone*Bone*dBone*dBone + Rr*Rr*Bone*Bone*dBone*dBone;
     denom = Math.sqrt(denom*denom - real*real - imag*imag);
 
-    var offsetRealNow = real/denom;
-    var offsetImagNow = imag/denom;
-    if (offsetRealNow*offsetRealNow + offsetImagNow*offsetImagNow < this.NUMERICAL_STABILITY_THRESHOLD*this.NUMERICAL_STABILITY_THRESHOLD) {
-        this.offsetRealNow = offsetRealNow;
-        this.offsetImagNow = offsetImagNow;
-    }
+    this.offsetRealNow = real/denom;
+    this.offsetImagNow = imag/denom;
 
     real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone;
     imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
