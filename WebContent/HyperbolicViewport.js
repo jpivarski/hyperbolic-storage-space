@@ -190,8 +190,10 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.isMouseScrolling = false;
     this.isMouseRotating = false;
     this.isTwoFingerTransformation = false;
+    this.finger1Id = null;
     this.finger1Real = null;
     this.finger1Imag = null;
+    this.finger2Id = null;
     this.finger2Real = null;
     this.finger2Imag = null;
 
@@ -220,7 +222,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var x = tmp[0];
             var y = tmp[1];
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
-                hyperbolicViewport.updateOffset(x, y);
+                hyperbolicViewport.updateOffset(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag);
             }
         }
 
@@ -240,6 +242,12 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
         hyperbolicViewport.isMouseScrolling = false;
         hyperbolicViewport.isMouseRotating = false;
+        hyperbolicViewport.finger1Id = null;
+        hyperbolicViewport.finger1Real = null;
+        hyperbolicViewport.finger1Imag = null;
+        hyperbolicViewport.finger2Id = null;
+        hyperbolicViewport.finger2Real = null;
+        hyperbolicViewport.finger2Imag = null;
 
         hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
 
@@ -247,57 +255,166 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     this.canvas.addEventListener("touchstart", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
-        if (event.targetTouches.length == 1) {
+        if (event.targetTouches.length == 1  &&  event.changedTouches.length == 1) {
             var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
             var x = tmp[0];
             var y = tmp[1];
 
             var rad2 = x*x + y*y;
             if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.finger1Id = event.targetTouches[0].identifier;
                 hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.isMouseScrolling = true;
+                
+                document.getElementById("mode").innerHTML = "start nothing -> one-finger: isMouseScrolling " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
-            else if (rad2 < 1.0) {
-                hyperbolicViewport.finger1Real = x;
-                hyperbolicViewport.finger1Imag = y;
-                hyperbolicViewport.isMouseRotating = true;
+        }
+        else if (hyperbolicViewport.isMouseScrolling  &&  event.targetTouches.length == 2) {
+            var tmp = hyperbolicViewport.fingerPosition(event.changedTouches[0]);
+            var x2 = tmp[0];
+            var y2 = tmp[1];
+
+            var oldtouch = null;
+            if (event.targetTouches[0].identifier != event.changedTouches[0].identifier) {
+                oldtouch = event.targetTouches[0];
+            }
+            else {
+                oldtouch = event.targetTouches[1];
+            }
+            tmp = hyperbolicViewport.fingerPosition(oldtouch);
+            var x1 = tmp[0];
+            var y1 = tmp[1];
+
+            var rad2_1 = x1*x1 + y1*y1;
+            var rad2_2 = x2*x2 + y2*y2;
+            if (rad2_1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  rad2_2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
+                hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
+                hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
+                hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
+
+                hyperbolicViewport.finger1Real = x1/Math.sqrt(1.0 - x1*x1 - y1*y1);
+                hyperbolicViewport.finger1Imag = y1/Math.sqrt(1.0 - x1*x1 - y1*y1);
+                
+                hyperbolicViewport.finger2Id = event.changedTouches[0].identifier;
+                hyperbolicViewport.finger2Real = x2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+                hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+                hyperbolicViewport.isMouseScrolling = false;
+                hyperbolicViewport.isTwoFingerTransformation = true;
+
+                document.getElementById("mode").innerHTML = "start one-finger -> two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
+            }
+        }
+        else if (event.targetTouches.length == 2  &&  event.changedTouches.length == 2) {
+            var tmp = hyperbolicViewport.fingerPosition(event.changedTouches[0]);
+            var x1 = tmp[0];
+            var y1 = tmp[1];
+            tmp = hyperbolicViewport.fingerPosition(event.changedTouches[1]);
+            var x2 = tmp[0];
+            var y2 = tmp[1];
+
+            var rad2_1 = x1*x1 + y1*y1;
+            var rad2_2 = x2*x2 + y2*y2;
+            if (rad2_1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  rad2_2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.finger1Id = event.changedTouches[0].identifier;
+                hyperbolicViewport.finger1Real = x1/Math.sqrt(1.0 - x1*x1 - y1*y1);
+                hyperbolicViewport.finger1Imag = y1/Math.sqrt(1.0 - x1*x1 - y1*y1);
+                hyperbolicViewport.finger2Id = event.changedTouches[1].identifier;
+                hyperbolicViewport.finger2Real = x2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+                hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+                hyperbolicViewport.isTwoFingerTransformation = true;
+
+                document.getElementById("mode").innerHTML = "start nothing -> two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
             }
         }
     }; }(this));
 
     this.canvas.addEventListener("touchmove", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
-        if (event.targetTouches.length == 1) {
-            if (hyperbolicViewport.isMouseScrolling) {
-                var tmp = hyperbolicViewport.fingerPosition(event);
-                var x = tmp[0];
-                var y = tmp[1];
-                if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
-                    hyperbolicViewport.updateOffset(x, y);
-                }
-            }
+        if (hyperbolicViewport.isMouseScrolling  &&  event.targetTouches.length == 1  &&  event.changedTouches.length == 1) {
+            var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
+            var x = tmp[0];
+            var y = tmp[1];
+            if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.updateOffset(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag);
 
-            else if (hyperbolicViewport.isMouseRotating) {
-                var tmp = hyperbolicViewport.mousePosition(event);
-                var x = tmp[0];
-                var y = tmp[1];
-                hyperbolicViewport.updateRotation(x, y);
+                document.getElementById("mode").innerHTML = "move one-finger: isMouseScrolling " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
+            }
+        }
+        if (hyperbolicViewport.isTwoFingerTransformation  &&  event.targetTouches.length == 2) {
+            var touch1 = null;
+            var touch2 = null;
+            if (event.targetTouches[0].identifier == hyperbolicViewport.finger1Id) {
+                touch1 = event.targetTouches[0];
+            }
+            else if (event.targetTouches[1].identifier == hyperbolicViewport.finger1Id) {
+                touch1 = event.targetTouches[1];
+            }
+            if (event.targetTouches[0].identifier == hyperbolicViewport.finger2Id) {
+                touch2 = event.targetTouches[0];
+            }
+            else if (event.targetTouches[1].identifier == hyperbolicViewport.finger2Id) {
+                touch2 = event.targetTouches[1];
+            }
+            if (touch1 != null  &&  touch2 != null) {
+                var tmp = hyperbolicViewport.fingerPosition(touch1);
+                var x1 = tmp[0];
+                var y1 = tmp[1];
+                tmp = hyperbolicViewport.fingerPosition(touch2);
+                var x2 = tmp[0];
+                var y2 = tmp[1];
+                if (x1*x1 + y1*y1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  x2*x2 + y2*y2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                    hyperbolicViewport.updateTransformation(x1, y1, x2, y2);
+
+                    document.getElementById("mode").innerHTML = "move two-finger: isTwoFingerTransformation " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
+                }
             }
         }
     }; }(this));
 
     this.canvas.addEventListener("touchend", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
-        if (event.targetTouches.length == 0  &&  event.changedTouches.length == 1) {
+        if (event.targetTouches.length == 0) {
             hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
             hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
             hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
             hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
             hyperbolicViewport.isMouseScrolling = false;
-            hyperbolicViewport.isMouseRotating = false;
+            hyperbolicViewport.isTwoFingerTransformation = false;
+            hyperbolicViewport.finger1Id = null;
+            hyperbolicViewport.finger1Real = null;
+            hyperbolicViewport.finger1Imag = null;
+            hyperbolicViewport.finger2Id = null;
+            hyperbolicViewport.finger2Real = null;
+            hyperbolicViewport.finger2Imag = null;
 
             hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
+
+            document.getElementById("mode").innerHTML = "end anything -> nothing: " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
+        }
+
+        else if (event.targetTouches.length == 1) {
+            var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
+            var x = tmp[0];
+            var y = tmp[1];
+
+            var rad2 = x*x + y*y;
+            if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
+                hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
+                hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
+                hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
+
+                hyperbolicViewport.finger1Id = event.targetTouches[0].identifier;
+                hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
+                hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
+
+                hyperbolicViewport.isMouseScrolling = true;
+                hyperbolicViewport.isTwoFingerTransformation = false;
+
+                document.getElementById("mode").innerHTML = "end two-finger -> one-finger: " + hyperbolicViewport.isMouseScrolling + " " + hyperbolicViewport.isTwoFingerTransformation + " " + hyperbolicViewport.finger1Id + " " + hyperbolicViewport.finger1Real + " " + hyperbolicViewport.finger1Imag + " " + hyperbolicViewport.finger2Id + " " + hyperbolicViewport.finger2Real + " " + hyperbolicViewport.finger2Imag;
+            }
         }
     }; }(this));
 }
@@ -335,9 +452,7 @@ HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
     return [this.rotationCosNow*real - this.rotationSinNow*imag, this.rotationCosNow*imag + this.rotationSinNow*real];
 }
 
-HyperbolicViewport.prototype.updateOffset = function(Fr, Fi) {
-    var Pr = this.finger1Real;
-    var Pi = this.finger1Imag;
+HyperbolicViewport.prototype.updateOffset = function(Fr, Fi, Pr, Pi) {
     var pone = Math.sqrt(Pr*Pr + Pi*Pi + 1.0);
 
     // compute a new offset (dBr,dBi) assuming that the initial offset was zero: this is a change in offset
@@ -379,6 +494,10 @@ HyperbolicViewport.prototype.updateRotation = function(x, y) {
     this.rotationNow = (newphi - oldphi) + this.rotation;
 
     this.draw();
+}
+
+HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
+    this.updateOffset((x1 + x2)/2.0, (y1 + y2)/2.0, (this.finger1Real + this.finger2Real)/2.0, (this.finger1Imag + this.finger2Imag)/2.0);
 }
 
 HyperbolicViewport.prototype.draw = function() {
