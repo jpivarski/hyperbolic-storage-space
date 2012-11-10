@@ -170,8 +170,6 @@ HyperbolicMapFromJSON.prototype.nextDrawable = function() {
 
 function HyperbolicViewport(service, elem, width, height, options) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
-    this.VIEW_THRESHOLD = 0.95;
-    this.DOWNLOAD_THRESHOLD = 0.97;
     this.FONT_SCALE = 0.05;
     this.MIN_TEXT_SIZE = 0.5;   // 1.0 for limited browsers
 
@@ -260,6 +258,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.fingersSeparation = null;
 
     this.canvas.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
+        var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
         var tmp = hyperbolicViewport.mousePosition(event);
         var x = tmp[0];
         var y = tmp[1];
@@ -269,7 +268,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
         }
 
         var rad2 = x*x + y*y;
-        if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+        if (rad2 < viewThreshold2) {
             hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
             hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
             hyperbolicViewport.isMouseScrolling = true;
@@ -283,11 +282,13 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 
     this.canvas.addEventListener("mousemove", function(hyperbolicViewport) { return function(event) {
+        var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
+
         if (hyperbolicViewport.isMouseScrolling) {
             var tmp = hyperbolicViewport.mousePosition(event);
             var x = tmp[0];
             var y = tmp[1];
-            if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (x*x + y*y < viewThreshold2) {
                 hyperbolicViewport.updateOffset(x, y);
             }
         }
@@ -318,12 +319,14 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.fingersAngle = null;
         hyperbolicViewport.fingersSeparation = null;
 
-        hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
+        hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.options["downloadThreshold"], true, hyperbolicViewport);
 
     }; }(this));
 
     this.canvas.addEventListener("touchstart", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
+        viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
+
         if (event.targetTouches.length == 1  &&  event.changedTouches.length == 1) {
             var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
             var x = tmp[0];
@@ -334,13 +337,14 @@ function HyperbolicViewport(service, elem, width, height, options) {
             }
 
             var rad2 = x*x + y*y;
-            if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (rad2 < viewThreshold2) {
                 hyperbolicViewport.finger1Id = event.targetTouches[0].identifier;
                 hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.isMouseScrolling = true;
             }
         }
+
         else if (hyperbolicViewport.isMouseScrolling  &&  event.targetTouches.length == 2) {
             var tmp = hyperbolicViewport.fingerPosition(event.changedTouches[0]);
             var x2 = tmp[0];
@@ -359,7 +363,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
             var rad2_1 = x1*x1 + y1*y1;
             var rad2_2 = x2*x2 + y2*y2;
-            if (rad2_1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  rad2_2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (rad2_1 < viewThreshold2  &&  rad2_2 < viewThreshold2) {
                 hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
                 hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
                 hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
@@ -383,6 +387,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.isTwoFingerTransformation = true;
             }
         }
+
         else if (event.targetTouches.length == 2  &&  event.changedTouches.length == 2) {
             var tmp = hyperbolicViewport.fingerPosition(event.changedTouches[0]);
             var x1 = tmp[0];
@@ -393,7 +398,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
             var rad2_1 = x1*x1 + y1*y1;
             var rad2_2 = x2*x2 + y2*y2;
-            if (rad2_1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  rad2_2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (rad2_1 < viewThreshold2  &&  rad2_2 < viewThreshold2) {
                 if (hyperbolicViewport.options["rotationMode"] == "compass") {
                     hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
                 }
@@ -415,14 +420,17 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     this.canvas.addEventListener("touchmove", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
+        var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
+
         if (hyperbolicViewport.isMouseScrolling  &&  event.targetTouches.length == 1  &&  event.changedTouches.length == 1) {
             var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
             var x = tmp[0];
             var y = tmp[1];
-            if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (x*x + y*y < hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"]) {
                 hyperbolicViewport.updateOffset(x, y);
             }
         }
+
         if (hyperbolicViewport.isTwoFingerTransformation  &&  event.targetTouches.length == 2) {
             var touch1 = null;
             var touch2 = null;
@@ -445,7 +453,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 tmp = hyperbolicViewport.fingerPosition(touch2);
                 var x2 = tmp[0];
                 var y2 = tmp[1];
-                if (x1*x1 + y1*y1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  x2*x2 + y2*y2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                if (x1*x1 + y1*y1 < viewThreshold2  &&  x2*x2 + y2*y2 < viewThreshold2) {
                     hyperbolicViewport.updateTransformation(x1, y1, x2, y2);
                 }
             }
@@ -454,6 +462,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     this.canvas.addEventListener("touchend", function(hyperbolicViewport) { return function(event) {
         event.preventDefault();
+        var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
+
         if (event.targetTouches.length == 0) {
             hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
             hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
@@ -471,7 +481,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             hyperbolicViewport.fingersAngle = null;
             hyperbolicViewport.fingersSeparation = null;
 
-            hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
+            hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.options["downloadThreshold"], true, hyperbolicViewport);
         }
 
         else if (event.targetTouches.length == 1) {
@@ -480,7 +490,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var y = tmp[1];
 
             var rad2 = x*x + y*y;
-            if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+            if (rad2 < viewThreshold2) {
                 hyperbolicViewport.offsetReal = hyperbolicViewport.offsetRealNow;
                 hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
                 hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
@@ -501,7 +511,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 }
 
-HyperbolicViewport.prototype.defaultOptions = {"allowZoom": true, "allowRotate": true, "rotationMode": "parallel-transport", "minZoom": 0.5, "maxZoom": null, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
+HyperbolicViewport.prototype.defaultOptions = {"allowRotate": true, "rotationMode": "parallel-transport", "allowZoom": true, "minZoom": 0.5, "maxZoom": null, "viewThreshold": 0.9, "downloadThreshold": 0.95, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
     var shiftx = this.canvas.width/2.0;
@@ -655,7 +665,7 @@ HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
 
 HyperbolicViewport.prototype.draw = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    var VIEW_THRESHOLD2 = this.VIEW_THRESHOLD*this.VIEW_THRESHOLD;
+    var viewThreshold2 = this.options["viewThreshold"]*this.options["viewThreshold"];
     var MAX_STRAIGHT_LINE_LENGTH2 = this.MAX_STRAIGHT_LINE_LENGTH*this.MAX_STRAIGHT_LINE_LENGTH;
 
     var shiftx = this.canvas.width/2.0;
@@ -699,7 +709,7 @@ HyperbolicViewport.prototype.draw = function() {
     this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
     this.context.fill();
 
-    this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.DOWNLOAD_THRESHOLD);
+    this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.options["downloadThreshold"]);
     var drawable;
     while (drawable = this.service.nextDrawable()) {
         var styleClass = drawable["class"];
@@ -733,8 +743,7 @@ HyperbolicViewport.prototype.draw = function() {
                 var x2 = tmp[0];
                 var y2 = tmp[1];
 
-                if (x1*x1 + y1*y1 < VIEW_THRESHOLD2  ||
-                    x2*x2 + y2*y2 < VIEW_THRESHOLD2) {
+                if (x1*x1 + y1*y1 < viewThreshold2  ||  x2*x2 + y2*y2 < viewThreshold2) {
                     willDraw = true;
                 }
 
@@ -925,7 +934,7 @@ HyperbolicViewport.prototype.draw = function() {
         this.context.fillStyle = this.options["rimFillStyle"];
         this.context.beginPath();
         this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
-        this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+        this.context.arc(shiftx, shifty, this.options["viewThreshold"]*scale, 2.0*Math.PI, 0.0, true);
         this.context.fill();
     }
 
@@ -935,7 +944,7 @@ HyperbolicViewport.prototype.draw = function() {
         this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
         this.context.stroke();
         this.context.beginPath();
-        this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+        this.context.arc(shiftx, shifty, this.options["viewThreshold"]*scale, 2.0*Math.PI, 0.0, true);
         this.context.stroke();
     }
 }
