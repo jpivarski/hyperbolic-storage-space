@@ -1,3 +1,27 @@
+//////////////////////////////////////////// coordinate transformations
+
+function halfPlane_to_hyperShadow(x, y) {
+    var sqrtplus = Math.sqrt(x*x + y*y + 2.0*y + 1.0);
+    var sqrtminus = Math.sqrt(x*x + y*y - 2.0*y + 1.0);
+    var sinheta = Math.sqrt((sqrtplus + sqrtminus)/(sqrtplus - sqrtminus))/2.0 - Math.sqrt((sqrtplus - sqrtminus)/(sqrtminus + sqrtplus))/2.0;
+
+    var denom = Math.sqrt(Math.pow(2.0 * x, 2) + Math.pow(x*x + y*y - 1.0, 2));
+    var cosphi;
+    var sinphi;
+    if (x == 0.0 && y == 1.0) {
+        cosphi = 0.0;
+        sinphi = 1.0;
+    }
+    else {
+        cosphi = (2.0 * x)/denom;
+        sinphi = (x*x + y*y - 1.0)/denom;
+    }
+
+    var px = sinheta * cosphi;
+    var py = sinheta * sinphi;
+    return [px, py];
+}
+
 //////////////////////////////////////////// style classes
 
 function HyperbolicStyleClass(fillStyle, strokeStyle, lineWidth, pointRadius, pointFill, textAlign, textBaseline, font, lineCap, lineJoin, miterLimit) {
@@ -220,6 +244,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.isMouseScrolling = false;
     this.isMouseRotating = false;
     this.isTwoFingerTransformation = false;
+    this.halfPlaneAngle = null;
     this.finger1Id = null;
     this.finger1Real = null;
     this.finger1Imag = null;
@@ -233,6 +258,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
         var tmp = hyperbolicViewport.mousePosition(event);
         var x = tmp[0];
         var y = tmp[1];
+
+        hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
 
         var rad2 = x*x + y*y;
         if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
@@ -274,6 +301,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
         hyperbolicViewport.isMouseScrolling = false;
         hyperbolicViewport.isMouseRotating = false;
+        hyperbolicViewport.halfPlaneAngle = null;
         hyperbolicViewport.finger1Id = null;
         hyperbolicViewport.finger1Real = null;
         hyperbolicViewport.finger1Imag = null;
@@ -293,6 +321,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var tmp = hyperbolicViewport.fingerPosition(event.targetTouches[0]);
             var x = tmp[0];
             var y = tmp[1];
+
+            hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
 
             var rad2 = x*x + y*y;
             if (rad2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
@@ -326,6 +356,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
                 hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
 
+                hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
+
                 hyperbolicViewport.finger1Real = x1/Math.sqrt(1.0 - x1*x1 - y1*y1);
                 hyperbolicViewport.finger1Imag = y1/Math.sqrt(1.0 - x1*x1 - y1*y1);
                 
@@ -351,6 +383,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var rad2_1 = x1*x1 + y1*y1;
             var rad2_2 = x2*x2 + y2*y2;
             if (rad2_1 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD  &&  rad2_2 < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
+                hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
+
                 hyperbolicViewport.finger1Id = event.changedTouches[0].identifier;
                 hyperbolicViewport.finger1Real = x1/Math.sqrt(1.0 - x1*x1 - y1*y1);
                 hyperbolicViewport.finger1Imag = y1/Math.sqrt(1.0 - x1*x1 - y1*y1);
@@ -414,6 +448,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
             hyperbolicViewport.isMouseScrolling = false;
             hyperbolicViewport.isTwoFingerTransformation = false;
+            hyperbolicViewport.halfPlaneAngle = null;
             hyperbolicViewport.finger1Id = null;
             hyperbolicViewport.finger1Real = null;
             hyperbolicViewport.finger1Imag = null;
@@ -437,6 +472,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.offsetImag = hyperbolicViewport.offsetImagNow;
                 hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
                 hyperbolicViewport.rotation = hyperbolicViewport.rotationNow;
+
+                hyperbolicViewport.halfPlaneAngle = hyperbolicViewport.halfPlaneOrientation();
 
                 hyperbolicViewport.finger1Id = event.targetTouches[0].identifier;
                 hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
@@ -484,6 +521,41 @@ HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
     return [this.rotationCosNow*real - this.rotationSinNow*imag, this.rotationCosNow*imag + this.rotationSinNow*real];
 }
 
+HyperbolicViewport.prototype.halfPlaneOrientation = function() {
+    var a = 0.5;
+    var Bone = Math.sqrt(1.0 + this.offsetRealNow*this.offsetRealNow + this.offsetImagNow*this.offsetImagNow);
+    var Br = this.offsetRealNow/Bone;
+    var Bi = this.offsetImagNow/Bone;
+
+    var p1 = Math.atan2((Bi*Bi + 2*Bi - Br*Br + 1), (2*Bi*Br + 2*Br));
+    var d1 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p1) + Bi*Bi - 4*Bi*Br*a*Math.cos(p1) + 2*Bi*a*a - 4*Bi*a*Math.sin(p1) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p1) + Br*Br - 4*Br*a*Math.cos(p1) + a*a - 2*a*Math.sin(p1) + 1;
+    var x1 = (-2*Bi*Bi*a*Math.cos(p1) + 4*Bi*Br*a*Math.sin(p1) + 2*Br*Br*a*Math.cos(p1) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p1))/d1;
+    var y1 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d1;
+
+    var p2 = Math.atan2(-(Bi*Bi + 2*Bi - Br*Br + 1), -(2*Bi*Br + 2*Br));
+    var d2 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p2) + Bi*Bi - 4*Bi*Br*a*Math.cos(p2) + 2*Bi*a*a - 4*Bi*a*Math.sin(p2) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p2) + Br*Br - 4*Br*a*Math.cos(p2) + a*a - 2*a*Math.sin(p2) + 1;
+    var x2 = (-2*Bi*Bi*a*Math.cos(p2) + 4*Bi*Br*a*Math.sin(p2) + 2*Br*Br*a*Math.cos(p2) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p2))/d2;
+    var y2 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d2;
+
+    var tmp = halfPlane_to_hyperShadow(x1, y1);
+    px = tmp[0];
+    py = tmp[1];
+    pc = Math.sqrt(1.0 + px*px + py*py);
+    tmp = this.internalToScreen(px, py, pc);
+    x1 = tmp[0];
+    y1 = tmp[1];
+
+    tmp = halfPlane_to_hyperShadow(x2, y2);
+    px = tmp[0];
+    py = tmp[1];
+    pc = Math.sqrt(1.0 + px*px + py*py);
+    tmp = this.internalToScreen(px, py, pc);
+    x2 = tmp[0];
+    y2 = tmp[1];
+
+    return Math.atan2(y1 - y2, x1 - x2);
+}
+
 HyperbolicViewport.prototype.updateCoordinates = function(Fr, Fi, Pr, Pi, Rr, Ri) {
     var pone = Math.sqrt(Pr*Pr + Pi*Pi + 1.0);
 
@@ -515,7 +587,13 @@ HyperbolicViewport.prototype.updateCoordinates = function(Fr, Fi, Pr, Pi, Rr, Ri
 }
 
 HyperbolicViewport.prototype.updateOffset = function(x, y) {
-    this.updateCoordinates(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag, Math.cos(hyperbolicViewport.rotation), Math.sin(hyperbolicViewport.rotation));
+    var rotationNow = this.rotationNow;
+    this.updateCoordinates(x, y, this.finger1Real, this.finger1Imag, Math.cos(this.rotation), Math.sin(this.rotation));
+
+    if (true) {
+        this.rotationNow = rotationNow - (this.halfPlaneOrientation() - this.halfPlaneAngle);
+    }
+
     this.draw();
 }
 
@@ -606,6 +684,8 @@ HyperbolicViewport.prototype.draw = function() {
     this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
     this.context.fill();
 
+    var tmp_first = true;
+
     this.service.beginDrawableLoop(this.offsetReal, this.offsetImag, this.DOWNLOAD_THRESHOLD);
     var drawable;
     while (drawable = this.service.nextDrawable()) {
@@ -621,6 +701,70 @@ HyperbolicViewport.prototype.draw = function() {
             var filledges = [];
             var drawedges = [];
             var willDraw = false;
+
+            if (tmp_first) {
+                
+                // var px = -this.offsetRealNow;
+                // var py = -this.offsetImagNow;
+                // var pc = Math.sqrt(1.0 + px*px + py*py);
+                // var tmp = this.internalToScreen(px, py, pc);
+                // var x1 = tmp[0];
+                // var y1 = tmp[1];
+                // points.push([x1*scale + shiftx, -y1*scale + shifty]);
+
+                // var br = px;
+                // var bi = py;
+                // var real = 2*(2*Math.pow(bi, 5)*br - 2*Math.pow(bi, 4)*br + 4*Math.pow(bi, 3)*Math.pow(br, 3) - 4*Math.pow(bi, 3)*br - 4*Math.pow(bi, 2)*Math.pow(br, 3) + 4*Math.pow(bi, 2)*br + 2*bi*Math.pow(br, 5) - 4*bi*Math.pow(br, 3) + 2*bi*br - 2*Math.pow(br, 5) + 4*Math.pow(br, 3) - 2*br);
+                // var imag = 2*(Math.pow(bi, 6) - 2*Math.pow(bi, 5) + Math.pow(bi, 4)*Math.pow(br, 2) - Math.pow(bi, 4) - 4*Math.pow(bi, 3)*Math.pow(br, 2) + 4*Math.pow(bi, 3) - Math.pow(bi, 2)*Math.pow(br, 4) + 2*Math.pow(bi, 2)*Math.pow(br, 2) - Math.pow(bi, 2) - 2*bi*Math.pow(br, 4) + 4*bi*Math.pow(br, 2) - 2*bi - Math.pow(br, 6) + 3*Math.pow(br, 4) - 3*Math.pow(br, 2) + 1);
+                // var denom = 4*(Math.pow(bi, 6) - 2*Math.pow(bi, 5) + 3*Math.pow(bi, 4)*Math.pow(br, 2) - Math.pow(bi, 4) - 4*Math.pow(bi, 3)*Math.pow(br, 2) + 4*Math.pow(bi, 3) + 3*Math.pow(bi, 2)*Math.pow(br, 4) - 2*Math.pow(bi, 2)*Math.pow(br, 2) - Math.pow(bi, 2) - 2*bi*Math.pow(br, 4) + 4*bi*Math.pow(br, 2) - 2*bi + Math.pow(br, 6) - Math.pow(br, 4) - Math.pow(br, 2) + 1);
+                // var real = 2*(2*Math.pow(bi, 5)*br + 3*Math.pow(bi, 4)*br + 4*Math.pow(bi, 3)*Math.pow(br, 3) - 6*Math.pow(bi, 3)*br + 6*Math.pow(bi, 2)*Math.pow(br, 3) - 2*Math.pow(bi, 2)*br + 2*bi*Math.pow(br, 5) - 6*bi*Math.pow(br, 3) + 3*Math.pow(br, 5) - 2*Math.pow(br, 3) + 3*br);
+                // var imag = 2*(Math.pow(bi, 6) + 3*Math.pow(bi, 5) + Math.pow(bi, 4)*Math.pow(br, 2) - 3*Math.pow(bi, 4) + 6*Math.pow(bi, 3)*Math.pow(br, 2) - 2*Math.pow(bi, 3) - Math.pow(bi, 2)*Math.pow(br, 4) - 3*Math.pow(bi, 2) + 3*bi*Math.pow(br, 4) - 2*bi*Math.pow(br, 2) + 3*bi - Math.pow(br, 6) + 3*Math.pow(br, 4) - 3*Math.pow(br, 2) + 1);
+                // var denom = 4*(Math.pow(bi, 6) + 3*Math.pow(bi, 4)*Math.pow(br, 2) - 2*Math.pow(bi, 3) + 3*Math.pow(bi, 2)*Math.pow(br, 4) - 2*bi*Math.pow(br, 2) + Math.pow(br, 6) + 1);
+                // var real = (-2*Math.pow(bi, 3)*br + 2*Math.pow(bi, 2)*br - 2*bi*Math.pow(br, 3) + 2*bi*br + 6*Math.pow(br, 3) + 14*br);
+                // var imag = (-Math.pow(bi, 4) + 4*Math.pow(bi, 3) - 2*Math.pow(bi, 2) + 8*bi*Math.pow(br, 2) + 12*bi + Math.pow(br, 4) - 4*Math.pow(br, 2) + 3);
+                // var denom = (Math.pow(bi, 4) + 2*Math.pow(bi, 2)*Math.pow(br, 2) + 6*Math.pow(bi, 2) + Math.pow(br, 4) + 10*Math.pow(br, 2) + 9);
+                // var real = (-2*Math.pow(bi, 3)*br - 2*Math.pow(bi, 2)*br - 2*bi*Math.pow(br, 3) + 10*bi*br + 2*Math.pow(br, 3) - 6*br);
+                // var imag = (-Math.pow(bi, 4) + 6*Math.pow(bi, 2) + 4*bi*Math.pow(br, 2) - 8*bi + Math.pow(br, 4) - 4*Math.pow(br, 2) + 3);
+                // var denom = (Math.pow(bi, 4) + 4*Math.pow(bi, 3) + 2*Math.pow(bi, 2)*Math.pow(br, 2) - 2*Math.pow(bi, 2) + 4*bi*Math.pow(br, 2) - 12*bi + Math.pow(br, 4) - 6*Math.pow(br, 2) + 9);
+                // var real = 3*(2*Math.pow(bi, 5)*br - 2*Math.pow(bi, 4)*br + 4*Math.pow(bi, 3)*Math.pow(br, 3) - 4*Math.pow(bi, 3)*br - 4*Math.pow(bi, 2)*Math.pow(br, 3) + 4*Math.pow(bi, 2)*br + 2*bi*Math.pow(br, 5) - 4*bi*Math.pow(br, 3) + 2*bi*br - 2*Math.pow(br, 5) + 4*Math.pow(br, 3) - 2*br);
+                // var imag = 3*(Math.pow(bi, 6) - 2*Math.pow(bi, 5) + Math.pow(bi, 4)*Math.pow(br, 2) - Math.pow(bi, 4) - 4*Math.pow(bi, 3)*Math.pow(br, 2) + 4*Math.pow(bi, 3) - Math.pow(bi, 2)*Math.pow(br, 4) + 2*Math.pow(bi, 2)*Math.pow(br, 2) - Math.pow(bi, 2) - 2*bi*Math.pow(br, 4) + 4*bi*Math.pow(br, 2) - 2*bi - Math.pow(br, 6) + 3*Math.pow(br, 4) - 3*Math.pow(br, 2) + 1);
+                // var denom = 9*(Math.pow(bi, 6) - 2*Math.pow(bi, 5) + 3*Math.pow(bi, 4)*Math.pow(br, 2) - Math.pow(bi, 4) - 4*Math.pow(bi, 3)*Math.pow(br, 2) + 4*Math.pow(bi, 3) + 3*Math.pow(bi, 2)*Math.pow(br, 4) - 2*Math.pow(bi, 2)*Math.pow(br, 2) - Math.pow(bi, 2) - 2*bi*Math.pow(br, 4) + 4*bi*Math.pow(br, 2) - 2*bi + Math.pow(br, 6) - Math.pow(br, 4) - Math.pow(br, 2) + 1);
+
+                var a = 0.5;
+                var Bone = Math.sqrt(1.0 + this.offsetRealNow*this.offsetRealNow + this.offsetImagNow*this.offsetImagNow);
+                var Br = this.offsetRealNow/Bone;
+                var Bi = this.offsetImagNow/Bone;
+
+                var p1 = Math.atan2((Bi*Bi + 2*Bi - Br*Br + 1), (2*Bi*Br + 2*Br));
+                var d1 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p1) + Bi*Bi - 4*Bi*Br*a*Math.cos(p1) + 2*Bi*a*a - 4*Bi*a*Math.sin(p1) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p1) + Br*Br - 4*Br*a*Math.cos(p1) + a*a - 2*a*Math.sin(p1) + 1;
+                var x1 = (-2*Bi*Bi*a*Math.cos(p1) + 4*Bi*Br*a*Math.sin(p1) + 2*Br*Br*a*Math.cos(p1) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p1))/d1;
+                var y1 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d1;
+
+                var p2 = Math.atan2(-(Bi*Bi + 2*Bi - Br*Br + 1), -(2*Bi*Br + 2*Br));
+                var d2 = Bi*Bi*a*a - 2*Bi*Bi*a*Math.sin(p2) + Bi*Bi - 4*Bi*Br*a*Math.cos(p2) + 2*Bi*a*a - 4*Bi*a*Math.sin(p2) + 2*Bi + Br*Br*a*a + 2*Br*Br*a*Math.sin(p2) + Br*Br - 4*Br*a*Math.cos(p2) + a*a - 2*a*Math.sin(p2) + 1;
+                var x2 = (-2*Bi*Bi*a*Math.cos(p2) + 4*Bi*Br*a*Math.sin(p2) + 2*Br*Br*a*Math.cos(p2) - 2*Br*a*a - 2*Br + 2*a*Math.cos(p2))/d2;
+                var y2 = (Bi*Bi*a*a - Bi*Bi + Br*Br*a*a - Br*Br - a*a + 1)/d2;
+
+                var tmp = halfPlane_to_hyperShadow(x1, y1);
+                px = tmp[0];
+                py = tmp[1];
+                pc = Math.sqrt(1.0 + px*px + py*py);
+                tmp = this.internalToScreen(px, py, pc);
+                x1 = tmp[0];
+                y1 = tmp[1];
+                points.push([x1*scale + shiftx, -y1*scale + shifty]);
+
+                tmp = halfPlane_to_hyperShadow(x2, y2);
+                px = tmp[0];
+                py = tmp[1];
+                pc = Math.sqrt(1.0 + px*px + py*py);
+                tmp = this.internalToScreen(px, py, pc);
+                x2 = tmp[0];
+                y2 = tmp[1];
+                points.push([x2*scale + shiftx, -y2*scale + shifty]);
+
+                tmp_first = false;
+            }
 
             for (var j in drawable["d"]) {
                 var px = drawable["d"][j][0];
