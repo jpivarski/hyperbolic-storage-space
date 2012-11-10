@@ -254,7 +254,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var x = tmp[0];
             var y = tmp[1];
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
-                hyperbolicViewport.updateOffset(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag, Math.cos(hyperbolicViewport.rotation), Math.sin(hyperbolicViewport.rotation));
+                hyperbolicViewport.updateOffset(x, y);
             }
         }
 
@@ -373,7 +373,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             var x = tmp[0];
             var y = tmp[1];
             if (x*x + y*y < hyperbolicViewport.VIEW_THRESHOLD*hyperbolicViewport.VIEW_THRESHOLD) {
-                hyperbolicViewport.updateOffset(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag, Math.cos(hyperbolicViewport.rotation), Math.sin(hyperbolicViewport.rotation));
+                hyperbolicViewport.updateOffset(x, y);
             }
         }
         if (hyperbolicViewport.isTwoFingerTransformation  &&  event.targetTouches.length == 2) {
@@ -484,7 +484,7 @@ HyperbolicViewport.prototype.internalToScreen = function(preal, pimag, pone) {
     return [this.rotationCosNow*real - this.rotationSinNow*imag, this.rotationCosNow*imag + this.rotationSinNow*real];
 }
 
-HyperbolicViewport.prototype.updateOffset = function(Fr, Fi, Pr, Pi, Rr, Ri) {
+HyperbolicViewport.prototype.updateCoordinates = function(Fr, Fi, Pr, Pi, Rr, Ri) {
     var pone = Math.sqrt(Pr*Pr + Pi*Pi + 1.0);
 
     // compute a new offset (dBr,dBi) assuming that the initial offset was zero: this is a change in offset
@@ -512,7 +512,10 @@ HyperbolicViewport.prototype.updateOffset = function(Fr, Fi, Pr, Pi, Rr, Ri) {
     real = -2.0*Bi*Bi*Ri*dBi*dBr + Bi*Bi*Rr*dBi*dBi - Bi*Bi*Rr*dBr*dBr + 2.0*Bi*Br*Ri*dBi*dBi - 2.0*Bi*Br*Ri*dBr*dBr + 4.0*Bi*Br*Rr*dBi*dBr + Bi*Ri*Ri*dBi*Bone*dBone + Bi*Rr*Rr*dBi*Bone*dBone + Bi*dBi*Bone*dBone + 2.0*Br*Br*Ri*dBi*dBr - Br*Br*Rr*dBi*dBi + Br*Br*Rr*dBr*dBr + Br*Ri*Ri*dBr*Bone*dBone + Br*Rr*Rr*dBr*Bone*dBone + Br*dBr*Bone*dBone + Rr*Bone*Bone*dBone*dBone;
     imag = -Bi*Bi*Ri*dBi*dBi + Bi*Bi*Ri*dBr*dBr - 2.0*Bi*Bi*Rr*dBi*dBr - 4.0*Bi*Br*Ri*dBi*dBr + 2.0*Bi*Br*Rr*dBi*dBi - 2.0*Bi*Br*Rr*dBr*dBr - Bi*Ri*Ri*dBr*Bone*dBone - Bi*Rr*Rr*dBr*Bone*dBone - Bi*dBr*Bone*dBone + Br*Br*Ri*dBi*dBi - Br*Br*Ri*dBr*dBr + 2.0*Br*Br*Rr*dBi*dBr + Br*Ri*Ri*dBi*Bone*dBone + Br*Rr*Rr*dBi*Bone*dBone + Br*dBi*Bone*dBone + Ri*Bone*Bone*dBone*dBone;
     this.rotationNow = Math.atan2(imag, real);
+}
 
+HyperbolicViewport.prototype.updateOffset = function(x, y) {
+    this.updateCoordinates(x, y, hyperbolicViewport.finger1Real, hyperbolicViewport.finger1Imag, Math.cos(hyperbolicViewport.rotation), Math.sin(hyperbolicViewport.rotation));
     this.draw();
 }
 
@@ -553,7 +556,8 @@ HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
     var centeryPrime = scale*(Math.sin(angle)*centerx + Math.cos(angle)*centery);
 
     this.zoomNow = scale * this.zoom;
-    this.updateOffset((x1 + x2)/2.0, (y1 + y2)/2.0, centerxPrime, centeryPrime, Math.cos(this.rotation + angle), Math.sin(this.rotation + angle));
+    this.updateCoordinates((x1 + x2)/2.0, (y1 + y2)/2.0, centerxPrime, centeryPrime, Math.cos(this.rotation + angle), Math.sin(this.rotation + angle));
+    this.draw();
 }
 
 HyperbolicViewport.prototype.draw = function() {
