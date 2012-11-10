@@ -780,7 +780,10 @@ HyperbolicViewport.prototype.draw = function() {
                     var edge1 = ["m", x1*scale + shiftx, -y1*scale + shifty];
                     var edge2 = ["l", x2*scale + shiftx, -y2*scale + shifty];
 
-                    filledges.push(edge1);
+                    if (filledges.length == 0) {
+                        filledges.push(edge1);
+                    }
+
                     filledges.push(edge2);
                     if (drawLine) {
                         drawedges.push(edge1);
