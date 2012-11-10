@@ -44,7 +44,7 @@ function HyperbolicStyleClass(fillStyle, strokeStyle, lineWidth, pointRadius, po
     }
 
     if (font == null) {
-        this.font = "10px sans-serif";
+        this.font = "14pt sans-serif";
     } else {
         this.font = font;
     }
@@ -79,7 +79,7 @@ function HyperbolicMapServlet(url) {
 
     this.styles = {"default": new HyperbolicStyleClass(),
                    "grid": new HyperbolicStyleClass("none", "#538bf5"),
-                   "gridText": new HyperbolicStyleClass("#538bf5", "#538bf5")
+                   "gridText": new HyperbolicStyleClass("#538bf5", "none")
                   };
 
     this.drawables = null;
@@ -128,7 +128,7 @@ function HyperbolicMapFromJSON(data) {
 
     this.styles = {"default": new HyperbolicStyleClass(),
                    "grid": new HyperbolicStyleClass("none", "#538bf5"),
-                   "gridText": new HyperbolicStyleClass("#538bf5", "#538bf5")
+                   "gridText": new HyperbolicStyleClass("#538bf5", "none")
                   };
 }
 
@@ -146,18 +146,19 @@ HyperbolicMapFromJSON.prototype.nextDrawable = function() {
 
 function HyperbolicViewport(service, elem, width, height, options) {
     this.MAX_STRAIGHT_LINE_LENGTH = 0.1;
-    this.VIEW_THRESHOLD = 0.9;
-    this.DOWNLOAD_THRESHOLD = 0.95;
-    this.FONT_SCALE = 20.0;
+    this.VIEW_THRESHOLD = 0.95;
+    this.DOWNLOAD_THRESHOLD = 0.97;
+    this.FONT_SCALE = 0.05;
     this.MIN_TEXT_SIZE = 0.5;   // 1.0 for limited browsers
 
-    if (options == null) {
-        this.options = {};
-        for (prop in this.defaultOptions) {
-            this.options[prop] = this.defaultOptions[prop];
+    this.options = {};
+    for (prop in this.defaultOptions) {
+        this.options[prop] = this.defaultOptions[prop];
+    }
+    if (options != null) {
+        for (prop in options) {
+            this.options[prop] = options[prop];
         }
-    } else {
-        this.options = options;
     }
 
     this.offsetReal = 0.0;
@@ -186,18 +187,34 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
     elem.appendChild(this.canvas);
 
-    this.shellImage = new Image();
-    this.shellImage.src = "turtle.png";
+    if (this.options["backgroundImage"] == null) {
+        this.backgroundImage == null;
+    }
+    else if (typeof this.options["backgroundImage"] == "string") {
+        this.backgroundImage = new Image();
+        this.backgroundImage.src = this.options["backgroundImage"];
+    }
+    else {
+        this.backgroundImage = this.options["backgroundImage"];
+    }
 
-    this.backgroundImage = new Image();
-    this.backgroundImage.src = "stars.jpg";
+    if (this.options["shellImage"] == null) {
+        this.shellImage = null;
+    }
+    else if (typeof this.options["shellImage"] == "string") {
+        this.shellImage = new Image();
+        this.shellImage.src = this.options["shellImage"];
+    }
+    else {
+        this.shellImage = this.options["shellImage"];
+    }
 
     this.draw();
-    if (!this.shellImage.complete) {
-        this.shellImage.onload = function(hyperbolicViewport) { return function() { hyperbolicViewport.draw(); } }(this);
-    }
-    if (!this.backgroundImage.complete) {
+    if (this.backgroundImage != null  &&  !this.backgroundImage.complete) {
         this.backgroundImage.onload = function(hyperbolicViewport) { return function() { hyperbolicViewport.draw(); } }(this);
+    }
+    if (this.shellImage != null  &&  !this.shellImage.complete) {
+        this.shellImage.onload = function(hyperbolicViewport) { return function() { hyperbolicViewport.draw(); } }(this);
     }
 
     this.isMouseScrolling = false;
@@ -432,7 +449,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 }
 
-HyperbolicViewport.prototype.defaultOptions = {"lineColor": "#000000", "rimColor": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.6};
+HyperbolicViewport.prototype.defaultOptions = {"allowZoom": true, "allowRotate": true, "minZoom": 0.5, "maxZoom": null, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
     var shiftx = this.canvas.width/2.0;
@@ -512,8 +529,25 @@ HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
     var centerx = (this.finger1Real + this.finger2Real)/2.0;
     var centery = (this.finger1Imag + this.finger2Imag)/2.0;
 
-    var angle = Math.atan2(y1 - y2, x1 - x2) - this.fingersAngle;
-    var scale = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) / this.fingersSeparation;
+    var scale = 1.;
+    var angle = 0.;
+    if (this.options["allowZoom"]) {
+        scale = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) / this.fingersSeparation;
+    }
+    if (this.options["allowRotate"]) {
+        angle = Math.atan2(y1 - y2, x1 - x2) - this.fingersAngle;
+    }
+
+    if (this.options["minZoom"] != null) {
+        if (scale * this.zoom < this.options["minZoom"]) {
+            scale = this.options["minZoom"] / this.zoom;
+        }
+    }
+    if (this.options["maxZoom"] != null) {
+        if (scale * this.zoom > this.options["maxZoom"]) {
+            scale = this.options["maxZoom"] / this.zoom;
+        }
+    }
 
     var centerxPrime = scale*(Math.cos(angle)*centerx - Math.sin(angle)*centery);
     var centeryPrime = scale*(Math.sin(angle)*centerx + Math.cos(angle)*centery);
@@ -534,7 +568,7 @@ HyperbolicViewport.prototype.draw = function() {
     this.rotationCosNow = Math.cos(this.rotationNow);
     this.rotationSinNow = Math.sin(this.rotationNow);
 
-    if (this.backgroundImage.complete  &&  this.shellImage.complete) {
+    if (this.backgroundImage != null  &&  this.backgroundImage.complete) {
         if (2.0*scale < Math.sqrt(this.canvas.width*this.canvas.width + this.canvas.height*this.canvas.height)) {
             var width, height;
             if (this.canvas.width < this.canvas.height) {
@@ -547,9 +581,13 @@ HyperbolicViewport.prototype.draw = function() {
             }
 
             this.context.drawImage(this.backgroundImage, (this.canvas.width - width)/2.0, (this.canvas.height - height)/2.0, width, height);
+        }        
+    }
 
-            width = this.options["shellImageScale"]*this.zoomNow*this.canvas.width;
-            height = this.options["shellImageScale"]*this.zoomNow*this.canvas.width*this.shellImage.height/this.shellImage.width;
+    if (this.shellImage != null  &&  this.shellImage.complete) {
+        if (2.0*scale < Math.sqrt(this.canvas.width*this.canvas.width + this.canvas.height*this.canvas.height)) {
+            var width = this.options["shellImageScale"]*this.zoomNow*this.canvas.width;
+            var height = this.options["shellImageScale"]*this.zoomNow*this.canvas.width*this.shellImage.height/this.shellImage.width;
 
             this.context.translate(this.canvas.width/2.0, this.canvas.height/2.0);
             this.context.rotate(-this.rotationNow);
@@ -757,7 +795,7 @@ HyperbolicViewport.prototype.draw = function() {
             var upx = tmp[0];
             var upy = tmp[1];
 
-            var size = this.zoomNow * this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
+            var size = scale * this.FONT_SCALE * Math.sqrt(Math.pow(upy - ay, 2) + Math.pow(upx - ax, 2));
             if (size > this.MIN_TEXT_SIZE) {
                 var fillStyle = drawable["fillStyle"];
                 if (fillStyle == undefined) { fillStyle = styleClass.fillStyle; }
@@ -786,17 +824,21 @@ HyperbolicViewport.prototype.draw = function() {
     }
 
     // draw the world-circle
-    this.context.fillStyle = this.options["rimColor"];
-    this.context.beginPath();
-    this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
-    this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
-    this.context.fill();
+    if (this.options["rimFillStyle"] != "none") {
+        this.context.fillStyle = this.options["rimFillStyle"];
+        this.context.beginPath();
+        this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
+        this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+        this.context.fill();
+    }
 
-    this.context.strokeStyle = this.options["lineColor"];
-    this.context.beginPath();
-    this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
-    this.context.stroke();
-    this.context.beginPath();
-    this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
-    this.context.stroke();
+    if (this.options["rimStrokeStyle"] != "none") {
+        this.context.strokeStyle = this.options["rimStrokeStyle"];
+        this.context.beginPath();
+        this.context.arc(shiftx, shifty, scale, 0.0, 2.0*Math.PI);
+        this.context.stroke();
+        this.context.beginPath();
+        this.context.arc(shiftx, shifty, this.VIEW_THRESHOLD*scale, 2.0*Math.PI, 0.0, true);
+        this.context.stroke();
+    }
 }
