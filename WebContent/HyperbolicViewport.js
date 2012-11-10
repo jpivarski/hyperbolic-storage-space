@@ -142,27 +142,24 @@ HyperbolicMapServlet.prototype.nextDrawable = function() {
     return this.drawables[this.i++];
 }
 
-//////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapFromJSON
+//////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapStatic
 
-function HyperbolicMapFromJSON(data) {
+function HyperbolicMapStatic(data) {
     data = JSON.parse(data);
 
     this.drawables = data["drawables"];
     if (this.drawables == undefined) { this.drawables = []; }
 
-    this.styles = {"default": new HyperbolicStyleClass(),
-                   "grid": new HyperbolicStyleClass("none", "#538bf5"),
-                   "gridText": new HyperbolicStyleClass("#538bf5", "none")
-                  };
+    this.styles = {"default": new HyperbolicStyleClass()};
 }
 
-HyperbolicMapFromJSON.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
+HyperbolicMapStatic.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
 
-HyperbolicMapFromJSON.prototype.beginDrawableLoop = function(offsetx, offsety, radius) {
+HyperbolicMapStatic.prototype.beginDrawableLoop = function(offsetx, offsety, radius) {
     this.i = 0;
 }
 
-HyperbolicMapFromJSON.prototype.nextDrawable = function() {
+HyperbolicMapStatic.prototype.nextDrawable = function() {
     return this.drawables[this.i++];
 }
 
