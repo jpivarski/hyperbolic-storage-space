@@ -25,4 +25,6 @@ try:
 except ImportError:
     import xml.etree.ElementTree as ElementTree
 
+from hypertrans import *
+
 
