@@ -37,16 +37,16 @@ def drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"):
     for elem in document.getroot().getchildren():
         if elem.tag == "{http://www.w3.org/2000/svg}rect" and elem.attrib["id"] == "UnitRectangle":
             originx = float(elem.attrib["x"])
-            originy = float(elem.attrib["y"])
+            originy = float(elem.attrib["y"]) + float(elem.attrib["height"])
             unitx = float(elem.attrib["width"])
             unity = float(elem.attrib["height"])
 
     if coordinateSystem == "hyperbolicShadow":
         def transform(x, y):
-            return (x - originx)/unitx, (y - originy)/unity
+            return (x - originx)/unitx, (originy - y)/unity
     else:
         def transform(x, y):
-            return (x - originx)/unitx, math.pow(2, (y - originy)/unity)
+            return (x - originx)/unitx, math.pow(2, (originy - y)/unity)
 
     # note: no recursive searching for paths: they must not be in groups (<g/> elements)
     drawables = []
@@ -110,7 +110,7 @@ def drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"):
 
                 drawables.append(drawable)
 
-    return drawables
+    return {"drawables": drawables}
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -118,4 +118,9 @@ if __name__ == "__main__":
     else:
         document = ElementTree.fromstring(sys.stdin.read())
     
-    print json.dumps(drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"))
+    doubleJSON = True
+
+    if doubleJSON:
+        print json.dumps(json.dumps(drawablesFromSVG(document, coordinateSystem="hyperbolicShadow")))
+    else:
+        print json.dumps(drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"))

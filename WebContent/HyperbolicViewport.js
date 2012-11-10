@@ -145,8 +145,6 @@ HyperbolicMapServlet.prototype.nextDrawable = function() {
 //////////////////////////////////////////// HyperbolicMapService -> HyperbolicMapStatic
 
 function HyperbolicMapStatic(data) {
-    data = JSON.parse(data);
-
     this.drawables = data["drawables"];
     if (this.drawables == undefined) { this.drawables = []; }
 

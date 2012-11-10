@@ -8,7 +8,12 @@ var hyperbolicMapService;
 var hyperbolicViewport;
 
 function init() {
-    hyperbolicMapService = new HyperbolicMapServlet();
+    // hyperbolicMapService = new HyperbolicMapServlet();
+
+    data = JSON.parse("{\"drawables\": [{\"d\": [[0.13749339294434001, -0.04300909423828, \"L\"], [0.13749339294434001, 0.124990905761718, \"L\"], [0.11649339294434, 0.124990905761718, \"L\"], [0.11649339294434, 0.08299090576172, \"L\"], [-0.09350660705566, 0.08299090576172, \"L\"], [-0.09350660705566, 0.124990905761718, \"L\"], [-0.114506607055662, 0.124990905761718, \"L\"], [-0.114506607055662, 0.04099090576172, \"L\"], [-0.09350660705566, 0.04099090576172, \"L\"], [-0.09350660705566, 0.01999090576172, \"L\"], [-0.05150660705566, 0.01999090576172, \"L\"], [-0.05150660705566, -0.12700909423828, \"L\"], [-0.114506607055662, -0.12700909423828, \"L\"], [-0.114506607055662, -0.14800909423828, \"L\"], [-0.009506607055659998, -0.14800909423828, \"L\"], [-0.009506607055659998, -0.12700909423828, \"L\"], [0.011493392944340002, -0.12700909423828, \"L\"], [0.011493392944340002, -0.04300909423828, \"L\"]], \"lineWidth\": 2.0, \"type\": \"polygon\", \"fillStyle\": \"#ff9933\"}]}");
+
+    hyperbolicMapService = new HyperbolicMapStatic(data);
+
     hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 800, 800, {"rotationMode": "compass", "backgroundImage": "stars.jpg", "shellImage": "turtle.png", "shellImageScale": 1.6});
 }
 
