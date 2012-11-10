@@ -209,6 +209,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.finger2Id = null;
     this.finger2Real = null;
     this.finger2Imag = null;
+    this.fingersAngle = null;
+    this.fingersSeparation = null;
 
     this.canvas.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
         var tmp = hyperbolicViewport.mousePosition(event);
@@ -261,6 +263,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.finger2Id = null;
         hyperbolicViewport.finger2Real = null;
         hyperbolicViewport.finger2Imag = null;
+        hyperbolicViewport.fingersAngle = null;
+        hyperbolicViewport.fingersSeparation = null;
 
         hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
 
@@ -311,6 +315,10 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger2Id = event.changedTouches[0].identifier;
                 hyperbolicViewport.finger2Real = x2/Math.sqrt(1.0 - x2*x2 - y2*y2);
                 hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+
+                hyperbolicViewport.fingersAngle = Math.atan2(y1 - y2, x1 - x2);
+                hyperbolicViewport.fingersSeparation = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
                 hyperbolicViewport.isMouseScrolling = false;
                 hyperbolicViewport.isTwoFingerTransformation = true;
             }
@@ -332,6 +340,10 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger2Id = event.changedTouches[1].identifier;
                 hyperbolicViewport.finger2Real = x2/Math.sqrt(1.0 - x2*x2 - y2*y2);
                 hyperbolicViewport.finger2Imag = y2/Math.sqrt(1.0 - x2*x2 - y2*y2);
+
+                hyperbolicViewport.fingersAngle = Math.atan2(y1 - y2, x1 - x2);
+                hyperbolicViewport.fingersSeparation = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
                 hyperbolicViewport.isTwoFingerTransformation = true;
             }
         }
@@ -391,6 +403,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
             hyperbolicViewport.finger2Id = null;
             hyperbolicViewport.finger2Real = null;
             hyperbolicViewport.finger2Imag = null;
+            hyperbolicViewport.fingersAngle = null;
+            hyperbolicViewport.fingersSeparation = null;
 
             hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.DOWNLOAD_THRESHOLD, true, hyperbolicViewport);
         }
@@ -498,18 +512,13 @@ HyperbolicViewport.prototype.updateTransformation = function(x1, y1, x2, y2) {
     var centerx = (this.finger1Real + this.finger2Real)/2.0;
     var centery = (this.finger1Imag + this.finger2Imag)/2.0;
 
-    var oldphi = Math.atan2(this.finger1Imag - this.finger2Imag, this.finger1Real - this.finger2Real);
-    var newphi = Math.atan2(y1 - y2, x1 - x2);
-    var angle = newphi - oldphi;
-
-    var oldlength = Math.sqrt(Math.pow(this.finger1Real - this.finger2Real, 2) + Math.pow(this.finger1Imag - this.finger2Imag, 2));
-    var newlength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-    var scale = newlength / oldlength;
-    this.zoomNow = scale * this.zoom;
+    var angle = Math.atan2(y1 - y2, x1 - x2) - this.fingersAngle;
+    var scale = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) / this.fingersSeparation;
 
     var centerxPrime = scale*(Math.cos(angle)*centerx - Math.sin(angle)*centery);
     var centeryPrime = scale*(Math.sin(angle)*centerx + Math.cos(angle)*centery);
 
+    this.zoomNow = scale * this.zoom;
     this.updateOffset((x1 + x2)/2.0, (y1 + y2)/2.0, centerxPrime, centeryPrime, Math.cos(this.rotation + angle), Math.sin(this.rotation + angle));
 }
 
