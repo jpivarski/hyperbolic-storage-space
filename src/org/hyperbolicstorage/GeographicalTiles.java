@@ -115,10 +115,10 @@ public class GeographicalTiles {
         }
 
         if (options == null) {
-            stream.write(String.format("[%g,%g]", p.x, p.y).getBytes());
+            stream.write(String.format("[%.18e,%.18e]", p.x, p.y).getBytes());
         }
         else {
-            stream.write(String.format("[%g,%g,\"%s\"]", p.x, p.y, options).getBytes());
+            stream.write(String.format("[%.18e,%.18e,\"%s\"]", p.x, p.y, options).getBytes());
         }
 
         return comma;

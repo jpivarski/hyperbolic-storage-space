@@ -86,7 +86,7 @@ function HyperbolicStyleClass(fillStyle, strokeStyle, lineWidth, pointRadius, po
     }
 
     if (miterLimit == null) {
-        this.miterLimit = 10.0;
+        this.miterLimit = 4.0;
     } else {
         this.miterLimit = miterLimit;
     }
