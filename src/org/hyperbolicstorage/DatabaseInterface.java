@@ -1,9 +1,12 @@
 package org.hyperbolicstorage;
 
 import java.nio.ByteBuffer;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.Collections;
 import java.io.IOException;
 import java.lang.InterruptedException;
 
@@ -60,17 +63,22 @@ public class DatabaseInterface {
         }
     }
 
-    protected byte[] getKey(long latitude, long longitude, long id) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(24);
-        byteBuffer.putLong(latitude);
+    protected byte[] getKey(int latitude, long longitude, long id) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(20);
+        byteBuffer.putInt(latitude);
         byteBuffer.putLong(longitude);
         byteBuffer.putLong(id);
         return byteBuffer.array();
     }
 
-    public void insert(long latitude, long longitude, long id, String drawable) throws IOException {
+    public void insert(int latitude, long longitude, long id, double depth, String drawable) throws IOException {
+        byte[] drawableBytes = drawable.getBytes();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(8 + drawableBytes.length);
+        byteBuffer.putDouble(depth);
+        byteBuffer.put(drawableBytes);
+
         DatabaseRequestResult<Object> result;
-        result = geoTiles.singleInsert(0, getKey(latitude, longitude, id), drawable.getBytes(), null);
+        result = geoTiles.singleInsert(0, getKey(latitude, longitude, id), byteBuffer.array(), null);
         try {
             result.get();
         }
@@ -79,7 +87,7 @@ public class DatabaseInterface {
         }
     }
 
-    public void delete(long latitude, long longitude, long id) throws IOException {
+    public void delete(int latitude, long longitude, long id) throws IOException {
         DatabaseRequestResult<Object> result;
         result = geoTiles.singleInsert(0, getKey(latitude, longitude, id), null, null);
         try {
@@ -90,14 +98,18 @@ public class DatabaseInterface {
         }
     }
 
-    public String getOne(long latitude, long longitude, long id) throws IOException {
+    public void clearAll() throws IOException {
+        // FIXME
+    }
+
+    public String getOne(int latitude, long longitude, long id) throws IOException {
         DatabaseRequestResult<byte[]> result = geoTiles.lookup(0, getKey(latitude, longitude, id), null);
         try {
             byte[] byteResult = result.get();
             if (byteResult == null) {
                 return null;
             } else {
-                return new String(byteResult);
+                return new String(Arrays.copyOfRange(byteResult, 8, byteResult.length));
             }
         }
         catch (BabuDBException exception) {
@@ -105,37 +117,65 @@ public class DatabaseInterface {
         }
     }
 
-    public int getRange(long latitude, long minLongitude, long maxLongitude, Set<String> output) throws IOException {
+    class DepthDrawable implements Comparable {
+        public double depth;
+        public String drawable;
+
+        public DepthDrawable(double depth_, String drawable_) {
+            depth = depth_;
+            drawable = drawable_;
+        }
+
+        public int compareTo(Object o) {
+            DepthDrawable other = (DepthDrawable)o;
+            double comparison = this.depth - other.depth;
+            if (comparison > 0.0) { return 1; }
+            else if (comparison < 0.0) { return -1; }
+            else { return 0; }
+        }
+    }
+
+    public int getRange(int latitude, long minLongitude, long maxLongitude, List<String> output) throws IOException {
         byte[] emptyId = {-128, -128, -128, -128, -128, -128, -128, -128};
 
         // inclusive
-        ByteBuffer from = ByteBuffer.allocate(24);
-        from.putLong(latitude);
+        ByteBuffer from = ByteBuffer.allocate(22);
+        from.putInt(latitude);
         from.putLong(minLongitude);
         from.put(emptyId);
 
         // exclusive
-        ByteBuffer to = ByteBuffer.allocate(24);
-        to.putLong(latitude);
+        ByteBuffer to = ByteBuffer.allocate(22);
+        to.putInt(latitude);
         to.putLong(maxLongitude);
         to.put(emptyId);
 
         DatabaseRequestResult<ResultSet<byte[], byte[]>> result;
         result = geoTiles.rangeLookup(0, from.array(), to.array(), null);
 
+        List<DepthDrawable> depthDrawables = new ArrayList<DepthDrawable>();
+
         try {
-            int count = 0;
             Iterator<Entry<byte[], byte[]>> iterator = result.get();
             while (iterator.hasNext()) {
                 Entry<byte[], byte[]> keyValuePair = iterator.next();
-                output.add(new String(keyValuePair.getValue()));
-                count++;
+                
+                byte[] value = keyValuePair.getValue();
+                double depth = ByteBuffer.wrap(value).getDouble();
+                String drawable = new String(Arrays.copyOfRange(value, 8, value.length));
+
+                depthDrawables.add(new DepthDrawable(depth, drawable));
             }
-            return count;
         }
         catch (BabuDBException exception) {
             throw new IOException("BabuDBException during lookup: " + exception.getMessage());
         }
+
+        Collections.sort(depthDrawables);
+        for (DepthDrawable depthDrawable : depthDrawables) {
+            output.add(depthDrawable.drawable);
+        }
+        return depthDrawables.size();
     }
 
 }

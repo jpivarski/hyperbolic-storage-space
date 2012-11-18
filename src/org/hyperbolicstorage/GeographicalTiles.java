@@ -14,6 +14,10 @@ public class GeographicalTiles {
         long min;
         long max;
     }
+    protected static class IndexPair {
+        int latitude;
+        long longitude;
+    }
 
     protected static class Circle {
         double centerx;
@@ -43,7 +47,7 @@ public class GeographicalTiles {
         double denom = Math.sqrt(Math.pow(2.0 * p.x, 2) + Math.pow(p.x*p.x + p.y*p.y - 1.0, 2));
         double cosphi;
         double sinphi;
-        if (p.x == 0.0 && p.y == 1.0) {
+        if (p.x == 0.0  &&  p.y == 1.0) {
             cosphi = 0.0;
             sinphi = 1.0;
         }
@@ -56,6 +60,21 @@ public class GeographicalTiles {
         double py = sinheta * sinphi;
 
         return new Point2D(px, py);
+    }
+
+    protected static Point2D hyperShadow_to_halfPlane(Point2D p) {
+        double pone = Math.sqrt(p.x*p.x + p.y*p.y + 1.0);
+        double denom = 2.0*(p.x*p.x + p.y*p.y) + 1.0 - 2.0*p.y*pone;
+        double numerx = 2.0*p.x*pone;
+        double numery = 1.0;
+        return new Point2D(numerx/denom, numery/denom);
+    }
+
+    protected static IndexPair tileIndex(Point2D halfPlane) {
+        IndexPair output = new IndexPair();
+        output.latitude = (int)Math.floor(Math.log(halfPlane.y)/LOG2);
+        output.longitude = (long)Math.floor(halfPlane.x * Math.pow(2, -output.latitude));
+        return output;
     }
 
     protected static Circle centralCircle(double offsetx, double offsety, double a) {

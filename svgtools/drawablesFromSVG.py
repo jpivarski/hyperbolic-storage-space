@@ -10,7 +10,7 @@
 # and save as "Plain SVG".
 
 # Make sure to include a <rect/> with id="UnitRectangle" (name it in Inkscape's XML Editor).
-# This will be mapped to a rectangle from (0, 0) to (1, 1) in the hyperbolicShadow or
+# This will be mapped to a rectangle from (0, 0) to (1, 1) in the hyperShadow or
 #                                         (0, log2(0)) to (1, log2(1)) in the halfPlane, with log-base-2 y axis.
 # The UnitRectangle will not be drawn.
 
@@ -29,7 +29,7 @@ except ImportError:
 
 from hypertrans import *
 
-def drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"):
+def drawablesFromSVG(document, coordinateSystem="hyperShadow"):
     originx = 0.0
     originy = 0.0
     unitx = 1.0
@@ -41,7 +41,7 @@ def drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"):
             unitx = float(elem.attrib["width"])
             unity = float(elem.attrib["height"])
 
-    if coordinateSystem == "hyperbolicShadow":
+    if coordinateSystem == "hyperShadow":
         def transform(x, y):
             return (x - originx)/unitx, (originy - y)/unity
     else:
@@ -121,6 +121,6 @@ if __name__ == "__main__":
     doubleJSON = True
 
     if doubleJSON:
-        print json.dumps(json.dumps(drawablesFromSVG(document, coordinateSystem="hyperbolicShadow")))
+        print json.dumps(json.dumps(drawablesFromSVG(document, coordinateSystem="hyperShadow")))
     else:
-        print json.dumps(drawablesFromSVG(document, coordinateSystem="hyperbolicShadow"))
+        print json.dumps(drawablesFromSVG(document, coordinateSystem="hyperShadow"))
