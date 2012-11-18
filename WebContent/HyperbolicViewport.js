@@ -251,6 +251,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     this.finger2Imag = null;
     this.fingersAngle = null;
     this.fingersSeparation = null;
+    this.logarithmicScale = 0;
 
     this.canvas.addEventListener("mousedown", function(hyperbolicViewport) { return function(event) {
         var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
@@ -313,9 +314,32 @@ function HyperbolicViewport(service, elem, width, height, options) {
         hyperbolicViewport.finger2Imag = null;
         hyperbolicViewport.fingersAngle = null;
         hyperbolicViewport.fingersSeparation = null;
+        hyperbolicViewport.logarithmicScale = 0;
 
         hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.options["downloadThreshold"], true, hyperbolicViewport);
 
+    }; }(this));
+
+    var mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
+    this.canvas.addEventListener(mousewheelevt, function(hyperbolicViewport) { return function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.cancelBubble = false;
+
+        var viewThreshold2 = hyperbolicViewport.options["viewThreshold"]*hyperbolicViewport.options["viewThreshold"];
+        var tmp = hyperbolicViewport.mousePosition(event);
+        var x = tmp[0];
+        var y = tmp[1];
+
+        var rad2 = x*x + y*y;
+        if (rad2 < viewThreshold2) {
+            var delta = event.detail ? event.detail*(-120) : event.wheelDelta;
+            hyperbolicViewport.updateZoom(delta);
+            if (!hyperbolicViewport.isMouseScrolling) {
+                hyperbolicViewport.zoom = hyperbolicViewport.zoomNow;
+                hyperbolicViewport.logarithmicScale = 0;
+            }
+        }
     }; }(this));
 
     this.canvas.addEventListener("touchstart", function(hyperbolicViewport) { return function(event) {
@@ -377,6 +401,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
 
                 hyperbolicViewport.fingersAngle = Math.atan2(y1 - y2, x1 - x2);
                 hyperbolicViewport.fingersSeparation = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+                hyperbolicViewport.logarithmicScale = 0;
 
                 hyperbolicViewport.isMouseScrolling = false;
                 hyperbolicViewport.isTwoFingerTransformation = true;
@@ -475,6 +500,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
             hyperbolicViewport.finger2Imag = null;
             hyperbolicViewport.fingersAngle = null;
             hyperbolicViewport.fingersSeparation = null;
+            hyperbolicViewport.logarithmicScale = 0;
 
             hyperbolicViewport.service.downloadDrawables(hyperbolicViewport.offsetReal, hyperbolicViewport.offsetImag, hyperbolicViewport.options["downloadThreshold"], true, hyperbolicViewport);
         }
@@ -499,6 +525,8 @@ function HyperbolicViewport(service, elem, width, height, options) {
                 hyperbolicViewport.finger1Real = x/Math.sqrt(1.0 - x*x - y*y);
                 hyperbolicViewport.finger1Imag = y/Math.sqrt(1.0 - x*x - y*y);
 
+                hyperbolicViewport.logarithmicScale = 0;
+
                 hyperbolicViewport.isMouseScrolling = true;
                 hyperbolicViewport.isTwoFingerTransformation = false;
             }
@@ -506,7 +534,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 }
 
-HyperbolicViewport.prototype.defaultOptions = {"allowRotate": true, "rotationMode": "parallel-transport", "allowZoom": true, "minZoom": 0.5, "maxZoom": null, "viewThreshold": 0.9, "downloadThreshold": 0.95, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
+HyperbolicViewport.prototype.defaultOptions = {"allowRotate": true, "rotationMode": "parallel-transport", "allowZoom": true, "zoomMouseWheel": 1.10, "minZoom": 0.5, "maxZoom": null, "viewThreshold": 0.9, "downloadThreshold": 0.95, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
     var shiftx = this.canvas.width/2.0;
@@ -622,7 +650,28 @@ HyperbolicViewport.prototype.updateRotation = function(x, y) {
     var newphi = Math.atan2(y, x);
 
     this.rotationNow = (newphi - oldphi) + this.rotation;
+    this.draw();
+}
 
+HyperbolicViewport.prototype.updateZoom = function(delta) {
+    var logarithmicScale = this.logarithmicScale + (delta/360);
+    var zoomNow = Math.pow(this.options["zoomMouseWheel"], logarithmicScale) * this.zoom;
+
+    if (this.options["minZoom"] != null) {
+        if (zoomNow < this.options["minZoom"]) {
+            zoomNow = this.options["minZoom"];
+            logarithmicScale = (Math.log(this.options["minZoom"]) - Math.log(this.zoom))/Math.log(this.options["zoomMouseWheel"]);
+        }
+    }
+    if (this.options["maxZoom"] != null) {
+        if (zoomNow > this.options["maxZoom"]) {
+            zoomNow = this.options["maxZoom"];
+            logarithmicScale = (Math.log(this.options["maxZoom"]) - Math.log(this.zoom))/Math.log(this.options["zoomMouseWheel"]);
+        }
+    }
+
+    this.zoomNow = zoomNow;
+    this.logarithmicScale = logarithmicScale;
     this.draw();
 }
 
