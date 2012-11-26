@@ -110,7 +110,7 @@ def drawablesFromSVG(document, coordinateSystem="hyperShadow"):
 
                 drawables.append(drawable)
 
-    return {"drawables": drawables}
+    return drawables
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -118,9 +118,10 @@ if __name__ == "__main__":
     else:
         document = ElementTree.fromstring(sys.stdin.read())
     
-    doubleJSON = True
+    doubleJSON = False
 
-    if doubleJSON:
-        print json.dumps(json.dumps(drawablesFromSVG(document, coordinateSystem="hyperShadow")))
-    else:
-        print json.dumps(drawablesFromSVG(document, coordinateSystem="hyperShadow"))
+    for drawable in drawablesFromSVG(document, coordinateSystem="hyperShadow"):
+        if doubleJSON:
+            print json.dumps(json.dumps(drawable))
+        else:
+            print json.dumps(drawable)

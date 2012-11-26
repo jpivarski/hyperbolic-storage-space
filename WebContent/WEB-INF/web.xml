@@ -7,27 +7,27 @@
     <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
     <init-param>
       <param-name>dbPath</param-name>
-      <param-value>/tmp/babudb</param-value>
+      <param-value>/var/www/babudb</param-value>
     </init-param>
   </servlet>
   
-  <servlet>
-    <servlet-name>HyperbolicMapLoader</servlet-name>
-    <servlet-class>org.hyperbolicstorage.HyperbolicMapLoader</servlet-class>
-    <init-param>
-      <param-name>dbPath</param-name>
-      <param-value>/tmp/babudb</param-value>
-    </init-param>
-  </servlet>
+  <!-- <servlet> -->
+  <!--   <servlet-name>HyperbolicMapLoader</servlet-name> -->
+  <!--   <servlet-class>org.hyperbolicstorage.HyperbolicMapLoader</servlet-class> -->
+  <!--   <init-param> -->
+  <!--     <param-name>dbPath</param-name> -->
+  <!--     <param-value>/tmp/babudb</param-value> -->
+  <!--   </init-param> -->
+  <!-- </servlet> -->
   
   <servlet-mapping>
     <servlet-name>HyperbolicMapServlet</servlet-name>
     <url-pattern>/get</url-pattern>
   </servlet-mapping>
 
-  <servlet-mapping>
-    <servlet-name>HyperbolicMapLoader</servlet-name>
-    <url-pattern>/load</url-pattern>
-  </servlet-mapping>
+  <!-- <servlet-mapping> -->
+  <!--   <servlet-name>HyperbolicMapLoader</servlet-name> -->
+  <!--   <url-pattern>/load</url-pattern> -->
+  <!-- </servlet-mapping> -->
 
 </web-app>

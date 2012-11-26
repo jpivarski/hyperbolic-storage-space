@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Arrays;
-import java.util.Collections;
 import java.io.IOException;
 import java.lang.InterruptedException;
 
@@ -117,7 +116,7 @@ public class DatabaseInterface {
         }
     }
 
-    class DepthDrawable implements Comparable {
+    public class DepthDrawable implements Comparable {
         public double depth;
         public String drawable;
 
@@ -135,7 +134,7 @@ public class DatabaseInterface {
         }
     }
 
-    public int getRange(int latitude, long minLongitude, long maxLongitude, List<String> output) throws IOException {
+    public List<DepthDrawable> getRange(int latitude, long minLongitude, long maxLongitude) throws IOException {
         byte[] emptyId = {-128, -128, -128, -128, -128, -128, -128, -128};
 
         // inclusive
@@ -157,6 +156,7 @@ public class DatabaseInterface {
 
         try {
             Iterator<Entry<byte[], byte[]>> iterator = result.get();
+
             while (iterator.hasNext()) {
                 Entry<byte[], byte[]> keyValuePair = iterator.next();
                 
@@ -171,11 +171,7 @@ public class DatabaseInterface {
             throw new IOException("BabuDBException during lookup: " + exception.getMessage());
         }
 
-        Collections.sort(depthDrawables);
-        for (DepthDrawable depthDrawable : depthDrawables) {
-            output.add(depthDrawable.drawable);
-        }
-        return depthDrawables.size();
+        return depthDrawables;
     }
 
 }

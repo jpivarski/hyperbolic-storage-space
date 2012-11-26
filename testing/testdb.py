@@ -1,20 +1,20 @@
 import sys
 import jpype
 
-libjvm = "/usr/lib/jvm/java-6-openjdk-amd64/jre/lib/amd64/server/libjvm.so"
+libjvm = "/usr/lib/jvm/java-6-sun/jre/lib/amd64/server/libjvm.so"
 classpath = "/home/pivarski/fun/projects/hyperbolic-storage-space/HyperbolicStorage.jar"
 
 jpype.startJVM(libjvm, "-Djava.class.path=%s" % classpath)
 
 try:
     DatabaseInterface = jpype.JClass("org.hyperbolicstorage.DatabaseInterface")
-    databaseInterface = DatabaseInterface("babudb")
+    databaseInterface = DatabaseInterface("/var/www/babudb")
 
-    databaseInterface.insert(10, 8, -22, "one")
-    databaseInterface.insert(10, 6, -3, "two")
-    databaseInterface.insert(-4, 5, 7, "three")
-    databaseInterface.insert(10, 8, 99, "four")
-    databaseInterface.insert(10, 5, 0, "five")
+    databaseInterface.insert(10, 8, -22, 1.0, "one")
+    databaseInterface.insert(10, 6, -3, 2.0, "two")
+    databaseInterface.insert(-4, 5, 7, 3.3, "three")
+    databaseInterface.insert(10, 8, 99, 4.4, "four")
+    databaseInterface.insert(10, 5, 0, 5.0, "five")
 
     print databaseInterface.getOne(10, 8, -22)
     print databaseInterface.getOne(10, 6, -3)

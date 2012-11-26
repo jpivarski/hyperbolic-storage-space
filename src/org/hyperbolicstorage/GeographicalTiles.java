@@ -1,25 +1,29 @@
 package org.hyperbolicstorage;
 
-import java.lang.Math;
+import org.hyperbolicstorage.DatabaseInterface;
 
+import java.lang.Math;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.io.OutputStream;
 import java.io.IOException;
 
 public class GeographicalTiles {
-    protected static class IndexRange {
+    public static class IndexRange {
         int min;
         int max;
     }
-    protected static class IndexRangeL {
+    public static class IndexRangeL {
         long min;
         long max;
     }
-    protected static class IndexPair {
+    public static class IndexPair {
         int latitude;
         long longitude;
     }
 
-    protected static class Circle {
+    public static class Circle {
         double centerx;
         double centery;
         double radius;
@@ -62,7 +66,7 @@ public class GeographicalTiles {
         return new Point2D(px, py);
     }
 
-    protected static Point2D hyperShadow_to_halfPlane(Point2D p) {
+    public static Point2D hyperShadow_to_halfPlane(Point2D p) {
         double pone = Math.sqrt(p.x*p.x + p.y*p.y + 1.0);
         double denom = 2.0*(p.x*p.x + p.y*p.y) + 1.0 - 2.0*p.y*pone;
         double numerx = 2.0*p.x*pone;
@@ -70,14 +74,14 @@ public class GeographicalTiles {
         return new Point2D(numerx/denom, numery/denom);
     }
 
-    protected static IndexPair tileIndex(Point2D halfPlane) {
+    public static IndexPair tileIndex(Point2D halfPlane) {
         IndexPair output = new IndexPair();
         output.latitude = (int)Math.floor(Math.log(halfPlane.y)/LOG2);
         output.longitude = (long)Math.floor(halfPlane.x * Math.pow(2, -output.latitude));
         return output;
     }
 
-    protected static Circle centralCircle(double offsetx, double offsety, double a) {
+    public static Circle centralCircle(double offsetx, double offsety, double a) {
         // NOTE: loss of precision for large |(offset.x,offset.y)| values
 
         double Bone = Math.sqrt(1.0 + offsetx*offsetx + offsety*offsety);
@@ -101,7 +105,7 @@ public class GeographicalTiles {
         return output;
     }
 
-    protected static IndexRange latitudeRange(Circle visible) {
+    public static IndexRange latitudeRange(Circle visible) {
         double ymin = visible.centery - visible.radius;
         double ymax = visible.centery + visible.radius;
 
@@ -111,7 +115,7 @@ public class GeographicalTiles {
         return output;
     }
 
-    protected static IndexRangeL longitudeRange(Circle visible, long latitude) {
+    public static IndexRangeL longitudeRange(Circle visible, long latitude) {
         double y = Math.pow(2, latitude);
         double discr = Math.pow(visible.radius, 2) - Math.pow(y - visible.centery, 2);
         if (discr <= 0) { return null; }
@@ -178,6 +182,33 @@ public class GeographicalTiles {
             }
         }
 
+        return comma;
+    }
+
+    public static boolean writeDrawables(OutputStream stream, boolean comma, double offsetx, double offsety, double radius, DatabaseInterface databaseInterface) throws IOException {
+        Circle visible = centralCircle(offsetx, offsety, radius);
+        IndexRange latitudes = latitudeRange(visible);
+
+        List<DatabaseInterface.DepthDrawable> depthDrawables = new ArrayList<DatabaseInterface.DepthDrawable>();
+
+        for (int latitude = latitudes.min;  latitude <= latitudes.max;  latitude++) {
+            IndexRangeL longitudes = longitudeRange(visible, latitude);
+            if (longitudes == null) { continue; }
+
+            depthDrawables.addAll(databaseInterface.getRange(latitude, longitudes.min, longitudes.max));
+        }
+
+        Collections.sort(depthDrawables);
+
+        for (DatabaseInterface.DepthDrawable depthDrawable : depthDrawables) {
+            if (!comma) {
+                comma = true;
+            } else {
+                stream.write(",".getBytes());
+            }
+
+            stream.write(depthDrawable.drawable.getBytes());
+        }
         return comma;
     }
 }
