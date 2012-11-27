@@ -224,14 +224,17 @@ public class GeographicalTiles {
                     circles.put(depthDrawable.minRadius, thisCircle);
                 }
 
+                // if this drawable is within the radius, DON'T draw it (this is the minRadius threshold)
+                boolean good = true;
                 IndexRange thisLatitudes = latitudeRange(thisCircle);
-                IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
-
-                if (thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max  &&
-                    thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max) {
-                    // if this point is within a circle of the center, DON'T draw it
-                    continue;
+                if (thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max) {
+                    IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
+                    if (thisLongitudes != null  &&  thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max) {
+                        good = false;
+                    }
                 }
+
+                if (!good) { continue; }
             }
 
             if (depthDrawable.maxRadius != 1.0) {
@@ -244,14 +247,17 @@ public class GeographicalTiles {
                     circles.put(depthDrawable.maxRadius, thisCircle);
                 }
 
+                // if this drawable isn't within the radius, don't draw it (it's too far away, exceeds maxRadius)
+                boolean good = false;
                 IndexRange thisLatitudes = latitudeRange(thisCircle);
-                IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
-
-                if (!(thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max  &&
-                      thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max)) {
-                    // only draw this point if it's within a circle of the center
-                    continue;
+                if (thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max) {
+                    IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
+                    if (thisLongitudes != null  &&  thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max) {
+                        good = true;
+                    }
                 }
+
+                if (!good) { continue; }
             }
 
             if (!comma) {
