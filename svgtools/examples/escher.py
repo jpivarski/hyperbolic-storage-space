@@ -12,6 +12,11 @@ except ImportError:
 # from hypertrans import *
 execfile("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/hypertrans.py")
 
+hideStrokes = ("--hideStrokes" in sys.argv)
+onlyStrokes = ("--onlyStrokes" in sys.argv)
+hideCircle = ("--hideCircle" in sys.argv)
+hyperShadow = ("--hyperShadow" in sys.argv)
+
 document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/escher_circle_limit_3_step2.svg")
 
 originx = 0.0
@@ -61,7 +66,10 @@ class Path(object):
         for command in self.commands:
             if isinstance(command, list):
                 x, y = command[0:2]
-                d.append("%s %.18e,%.18e" % tuple([command[2]] + list(transformBack(x, y))))
+                if hyperShadow:
+                    d.append("%s %.18e,%.18e" % tuple([command[2]] + list(transformBack(*poincareDisk_to_hyperShadow(x, y)))))
+                else:
+                    d.append("%s %.18e,%.18e" % tuple([command[2]] + list(transformBack(x, y))))
             else:
                 d.append("Z")
         d = " ".join(d)
@@ -75,38 +83,30 @@ class Path(object):
         return "<path d=\"%s\" style=\"%s\" />" % (d, style)
 
 paths = []
-for elem in document.getroot().getchildren():
-    if elem.tag == "{http://www.w3.org/2000/svg}path":
-        style = dict(x.strip().split(":") for x in elem.attrib["style"].split(";"))
-        # skip this path if it is not visible
-        if style.get("visibility", "visible") == "visible" and style.get("display", "inline") != "none":
-            d = re.split("[\s,]+", elem.attrib["d"].strip())
-            commands = []
-            i = 0
-            while i < len(d):
-                if d[i].upper() in ("M", "L"):
-                    x, y = float(d[i+1]), float(d[i+2])
-                    commands.append(list(transform(x, y)) + [d[i].upper()])
-                    i += 2
+for g in document.getroot().getchildren():
+    if g.tag == "{http://www.w3.org/2000/svg}g":
+        for elem in g.getchildren():
+            if elem.tag == "{http://www.w3.org/2000/svg}path":
+                style = dict(x.strip().split(":") for x in elem.attrib["style"].split(";"))
+                # skip this path if it is not visible
+                if style.get("visibility", "visible") == "visible" and style.get("display", "inline") != "none":
+                    d = re.split("[\s,]+", elem.attrib["d"].strip())
+                    commands = []
+                    i = 0
+                    while i < len(d):
+                        if d[i].upper() in ("M", "L"):
+                            x, y = float(d[i+1]), float(d[i+2])
+                            commands.append(list(transform(x, y)) + [d[i].upper()])
+                            i += 2
 
-                elif d[i].upper() == "Z":
-                    commands.append("Z")
+                        elif d[i].upper() == "Z":
+                            commands.append("Z")
 
-                i += 1
+                        i += 1
 
-            paths.append(Path(commands, style))
+                    paths.append(Path(commands, style))
 
-# pathsN = []
-# style = dict(paths[0].style)
-# style["stroke"] = "black"
-# style["fill"] = "none"
-# commands = []
-# for n in range(10):
-#     x, y = hyperShadow_to_poincareDisk(0.54*cos(n*2.0*pi/9.0), 0.54*sin(n*2.0*pi/9.0))
-#     commands.append([x, y, "L"])
-# commands[0][2] = "M"
-# pathsN.append(Path(commands, style))
-
+# I changed my mind about some colors
 for p in paths:
     if p.style["fill"] == "#517179":
         p.style["fill"] = "#218ba6"
@@ -116,11 +116,17 @@ for p in paths:
         p.style["fill"] = "#79bd68"
     if p.style["stroke"] == "#676767":
         p.style["stroke"] = "#6e5638"
+    p.style["stroke-width"] = "1.0"
 
+# needed for brevity in color-mappings
 Y = "#e1ba62"
 B = "#218ba6"
 R = "#ed6b51"
 G = "#79bd68"
+
+# The following transformations are approximate; some fish don't line up in orientation or color.
+# It turns out that this Escher painting is more mathematically complicated than I had thought!
+# (But I'm not going to spend a lot of time figuring it out...)
 
 pathsA0 = []
 Br, Bi, angle = 1.07*cos(15.0*pi/9.0), 1.07*sin(15.0*pi/9.0), 15.0*pi/9.0 - 2.0*pi/9.0
@@ -266,36 +272,50 @@ Br, Bi, angle = 1.07*cos(17.0*pi/9.0), 1.07*sin(17.0*pi/9.0), 17.0*pi/9.0
 for p in pathsB6 + pathsB7 + pathsB8 + pathsB0 + pathsB1:
     pathsC8.append(p.transformation(Br, Bi, angle, opacity=1))
 
-f = open("/tmp/test.svg", "w")
-f.write("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"602\">\n")
-f.write("\n".join([p.svg() for p in paths]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA0]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA1]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA2]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA3]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA4]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA5]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA6]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA7]) + "\n")
-f.write("\n".join([p.svg() for p in pathsA8]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB0]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB1]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB2]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB3]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB4]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB5]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB6]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB7]) + "\n")
-f.write("\n".join([p.svg() for p in pathsB8]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC0]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC1]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC2]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC3]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC4]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC5]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC6]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC7]) + "\n")
-f.write("\n".join([p.svg() for p in pathsC8]) + "\n")
-f.write(ElementTree.tostring(circle))
-f.write("</svg>\n")
-f.close()
+sys.stdout.write("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"602\">\n")
+
+def draw(somePaths):
+    for p in somePaths:
+        if hideStrokes and p.style["stroke"] != "none": continue
+        if onlyStrokes and p.style["stroke"] == "none": continue
+        sys.stdout.write(p.svg())
+        sys.stdout.write("\n")
+
+draw(paths)
+draw(pathsA0)
+draw(pathsA1)
+draw(pathsA2)
+draw(pathsA3)
+draw(pathsA4)
+draw(pathsA5)
+draw(pathsA6)
+draw(pathsA7)
+draw(pathsA8)
+draw(pathsB0)
+draw(pathsB1)
+draw(pathsB2)
+draw(pathsB3)
+draw(pathsB4)
+draw(pathsB5)
+draw(pathsB6)
+draw(pathsB7)
+draw(pathsB8)
+draw(pathsC0)
+draw(pathsC1)
+draw(pathsC2)
+draw(pathsC3)
+draw(pathsC4)
+draw(pathsC5)
+draw(pathsC6)
+draw(pathsC7)
+draw(pathsC8)
+
+if not hideCircle:
+    sys.stdout.write(ElementTree.tostring(circle))
+
+if hyperShadow:
+    x1, y1 = transformBack(0, 0)
+    x2, y2 = transformBack(1, 1)
+    sys.stdout.write("<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" id=\"UnitRectangle\" stroke=\"black\" fill=\"none\"/>\n" % (x1, y1 - abs(y2 - y1), abs(x2 - x1), abs(y2 - y1)))
+
+sys.stdout.write("</svg>\n")

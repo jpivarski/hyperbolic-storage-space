@@ -10,20 +10,40 @@ classpath = "/home/pivarski/fun/projects/hyperbolic-storage-space/HyperbolicStor
 jpype.startJVM(libjvm, "-Djava.class.path=%s" % classpath)
 
 depth = 0.0
-if len(sys.argv) == 3:
-    minRadius, maxRadius = sys.argv[1], sys.argv[2]
-else:
+if len(sys.argv) == 4:
+    dbLocation = sys.argv[1]
+    minRadius, maxRadius = float(sys.argv[2]), float(sys.argv[3])
+elif len(sys.argv) == 2:
+    dbLocation = sys.argv[1]
     minRadius, maxRadius = 0.0, 1.0
+else:
+    raise NotImplementedError("arguments are: dbLocation [minRadius maxRadius]")
+
+def hashable(d):
+    if isinstance(d, dict):
+        output = []
+        for key in sorted(d.keys()):
+            output.append((key, hashable(d[key])))
+        return tuple(output)
+
+    elif isinstance(d, list):
+        output = []
+        for item in d:
+            output.append(hashable(item))
+        return tuple(output)
+
+    else:
+        return d
 
 try:
     DatabaseInterface = jpype.JClass("org.hyperbolicstorage.DatabaseInterface")
-    databaseInterface = DatabaseInterface("/var/www/babudb")
+    databaseInterface = DatabaseInterface(dbLocation)
 
     GeographicalTiles = jpype.JClass("org.hyperbolicstorage.GeographicalTiles")
     Point2D = jpype.JClass("org.hyperbolicstorage.GeographicalTiles$Point2D")
     IndexPair = jpype.JClass("org.hyperbolicstorage.GeographicalTiles$IndexPair")
 
-    for drawableString in sys.stdin.xreadlines():
+    for lineNumber, drawableString in enumerate(sys.stdin.xreadlines()):
         drawableString = drawableString.strip()
         drawable = json.loads(drawableString)
 
@@ -43,10 +63,13 @@ try:
             y = drawable["ay"]
         
         tileIndex = GeographicalTiles.tileIndex(GeographicalTiles.hyperShadow_to_halfPlane(Point2D(x, y)))
-        identifier = drawable.get("id", hash(frozenset(drawable.iteritems())))
+        identifier = drawable.get("id", hash(hashable(drawable)))
 
         databaseInterface.insert(tileIndex.latitude, tileIndex.longitude, identifier, depth, minRadius, maxRadius, drawableString)
         depth += 1.0
+
+        if lineNumber % 100 == 0:
+            print "Filling line %d: %g %g %d %d %d %g %g %g %s" % (lineNumber, x, y, tileIndex.latitude, tileIndex.longitude, identifier, depth, minRadius, maxRadius, drawableString[:100])
 
     databaseInterface.close()
 

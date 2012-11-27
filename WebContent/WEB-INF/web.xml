@@ -3,11 +3,11 @@
   <display-name>Hyperbolic Storage Space</display-name>
   
   <servlet>
-    <servlet-name>HyperbolicMapServlet</servlet-name>
+    <servlet-name>HyperbolicMapServletEscher</servlet-name>
     <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
     <init-param>
       <param-name>dbPath</param-name>
-      <param-value>/var/www/babudb</param-value>
+      <param-value>/var/www/babudb_escher</param-value>
     </init-param>
   </servlet>
   
@@ -21,8 +21,8 @@
   <!-- </servlet> -->
   
   <servlet-mapping>
-    <servlet-name>HyperbolicMapServlet</servlet-name>
-    <url-pattern>/get</url-pattern>
+    <servlet-name>HyperbolicMapServletEscher</servlet-name>
+    <url-pattern>/get_escher</url-pattern>
   </servlet-mapping>
 
   <!-- <servlet-mapping> -->

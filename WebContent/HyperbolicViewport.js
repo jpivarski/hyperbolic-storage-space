@@ -183,10 +183,10 @@ function HyperbolicViewport(service, elem, width, height, options) {
         alert("options[\"rotationMode\"] can only be \"parallel-transport\" or \"compass\".");
     }
 
-    this.offsetReal = 0.0;
-    this.offsetImag = 0.0;
-    this.zoom = 0.95;
-    this.rotation = 0.0;
+    this.offsetReal = this.options["initialOffsetX"];
+    this.offsetImag = this.options["initialOffsetY"];
+    this.zoom = this.options["initialZoom"];
+    this.rotation = this.options["initialRotation"];
 
     this.offsetRealNow = this.offsetReal;
     this.offsetImagNow = this.offsetImag;
@@ -534,7 +534,7 @@ function HyperbolicViewport(service, elem, width, height, options) {
     }; }(this));
 }
 
-HyperbolicViewport.prototype.defaultOptions = {"allowRotate": true, "rotationMode": "parallel-transport", "allowZoom": true, "zoomMouseWheel": 1.10, "minZoom": 0.5, "maxZoom": null, "viewThreshold": 0.9, "downloadThreshold": 0.95, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
+HyperbolicViewport.prototype.defaultOptions = {"initialOffsetX": 0.0, "initialOffsetY": 0.0, "initialZoom": 0.95, "initialRotation": 0.0, "allowRotate": true, "rotationMode": "parallel-transport", "allowZoom": true, "zoomMouseWheel": 1.10, "minZoom": 0.5, "maxZoom": null, "viewThreshold": 0.9, "downloadThreshold": 0.95, "rimStrokeStyle": "#000000", "rimFillStyle": "#f5d6ab", "backgroundColor": "#ffffff", "backgroundImage": null, "shellImage": null, "shellImageScale": 1.0};
 
 HyperbolicViewport.prototype.mousePosition = function(event) {
     var shiftx = this.canvas.width/2.0;

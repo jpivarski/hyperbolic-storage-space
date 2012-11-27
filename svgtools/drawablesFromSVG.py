@@ -29,12 +29,12 @@ except ImportError:
 
 from hypertrans import *
 
-def drawablesFromSVG(document, coordinateSystem="hyperShadow"):
+def drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
     originx = 0.0
     originy = 0.0
     unitx = 1.0
     unity = 1.0
-    for elem in document.getroot().getchildren():
+    for elem in documentRoot.getchildren():
         if elem.tag == "{http://www.w3.org/2000/svg}rect" and elem.attrib["id"] == "UnitRectangle":
             originx = float(elem.attrib["x"])
             originy = float(elem.attrib["y"]) + float(elem.attrib["height"])
@@ -50,7 +50,7 @@ def drawablesFromSVG(document, coordinateSystem="hyperShadow"):
 
     # note: no recursive searching for paths: they must not be in groups (<g/> elements)
     drawables = []
-    for elem in document.getroot().getchildren():
+    for elem in documentRoot.getchildren():
         if elem.tag == "{http://www.w3.org/2000/svg}path":
             style = dict(x.strip().split(":") for x in elem.attrib["style"].split(";"))
             # skip this path if it is not visible
@@ -114,13 +114,13 @@ def drawablesFromSVG(document, coordinateSystem="hyperShadow"):
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        document = ElementTree.parse(sys.argv[1])
+        documentRoot = ElementTree.parse(sys.argv[1]).getroot()
     else:
-        document = ElementTree.fromstring(sys.stdin.read())
+        documentRoot = ElementTree.fromstring(sys.stdin.read())
     
     doubleJSON = False
 
-    for drawable in drawablesFromSVG(document, coordinateSystem="hyperShadow"):
+    for drawable in drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
         if doubleJSON:
             print json.dumps(json.dumps(drawable))
         else:
