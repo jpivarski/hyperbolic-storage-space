@@ -3,8 +3,14 @@ package org.hyperbolicstorage;
 import org.hyperbolicstorage.DatabaseInterface;
 
 import java.lang.Math;
+import java.lang.Double;
+import java.lang.Long;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Collections;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -200,13 +206,59 @@ public class GeographicalTiles {
 
         Collections.sort(depthDrawables);
 
+        Set<Long> idsSeen = new HashSet<Long>();
+        Map<Double,Circle> circles = new HashMap<Double,Circle>();   // drawings tend to reuse limits; cache them
+
         for (DatabaseInterface.DepthDrawable depthDrawable : depthDrawables) {
+            // ids to draw must be unique (DB doesn't guarantee that because it's geographically distributed)
+            if (idsSeen.contains(depthDrawable.id)) { continue; }   // only draw the deepest one
+            idsSeen.add(depthDrawable.id);
+
+            if (depthDrawable.minRadius != 0.0) {
+                Circle thisCircle;
+                if (circles.containsKey(depthDrawable.minRadius)) {
+                    thisCircle = circles.get(depthDrawable.minRadius);
+                }
+                else {
+                    thisCircle = centralCircle(offsetx, offsety, depthDrawable.minRadius);
+                    circles.put(depthDrawable.minRadius, thisCircle);
+                }
+
+                IndexRange thisLatitudes = latitudeRange(thisCircle);
+                IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
+
+                if (thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max  &&
+                    thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max) {
+                    // if this point is within a circle of the center, DON'T draw it
+                    continue;
+                }
+            }
+
+            if (depthDrawable.maxRadius != 1.0) {
+                Circle thisCircle;
+                if (circles.containsKey(depthDrawable.maxRadius)) {
+                    thisCircle = circles.get(depthDrawable.maxRadius);
+                }
+                else {
+                    thisCircle = centralCircle(offsetx, offsety, depthDrawable.maxRadius);
+                    circles.put(depthDrawable.maxRadius, thisCircle);
+                }
+
+                IndexRange thisLatitudes = latitudeRange(thisCircle);
+                IndexRangeL thisLongitudes = longitudeRange(thisCircle, depthDrawable.latitude);
+
+                if (!(thisLatitudes.min <= depthDrawable.latitude  &&  depthDrawable.latitude <= thisLatitudes.max  &&
+                      thisLongitudes.min <= depthDrawable.longitude  &&  depthDrawable.longitude <= thisLongitudes.max)) {
+                    // only draw this point if it's within a circle of the center
+                    continue;
+                }
+            }
+
             if (!comma) {
                 comma = true;
             } else {
                 stream.write(",".getBytes());
             }
-
             stream.write(depthDrawable.drawable.getBytes());
         }
         return comma;

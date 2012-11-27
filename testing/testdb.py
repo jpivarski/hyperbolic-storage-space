@@ -10,11 +10,11 @@ try:
     DatabaseInterface = jpype.JClass("org.hyperbolicstorage.DatabaseInterface")
     databaseInterface = DatabaseInterface("/var/www/babudb")
 
-    databaseInterface.insert(10, 8, -22, 1.0, "one")
-    databaseInterface.insert(10, 6, -3, 2.0, "two")
-    databaseInterface.insert(-4, 5, 7, 3.3, "three")
-    databaseInterface.insert(10, 8, 99, 4.4, "four")
-    databaseInterface.insert(10, 5, 0, 5.0, "five")
+    databaseInterface.insert(10, 8, -22, 1.0, 0.0, 1.0, "one")
+    databaseInterface.insert(10, 6, -3, 2.0, 0.0, 1.0, "two")
+    databaseInterface.insert(-4, 5, 7, 3.3, 0.0, 1.0, "three")
+    databaseInterface.insert(10, 8, 99, 4.4, 0.0, 1.0, "four")
+    databaseInterface.insert(10, 5, 0, 5.0, 0.0, 1.0, "five")
 
     print databaseInterface.getOne(10, 8, -22)
     print databaseInterface.getOne(10, 6, -3)

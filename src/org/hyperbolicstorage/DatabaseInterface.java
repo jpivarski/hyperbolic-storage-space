@@ -70,10 +70,12 @@ public class DatabaseInterface {
         return byteBuffer.array();
     }
 
-    public void insert(int latitude, long longitude, long id, double depth, String drawable) throws IOException {
+    public void insert(int latitude, long longitude, long id, double depth, double minRadius, double maxRadius, String drawable) throws IOException {
         byte[] drawableBytes = drawable.getBytes();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(8 + drawableBytes.length);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(3*8 + drawableBytes.length);
         byteBuffer.putDouble(depth);
+        byteBuffer.putDouble(minRadius);
+        byteBuffer.putDouble(maxRadius);
         byteBuffer.put(drawableBytes);
 
         DatabaseRequestResult<Object> result;
@@ -108,7 +110,7 @@ public class DatabaseInterface {
             if (byteResult == null) {
                 return null;
             } else {
-                return new String(Arrays.copyOfRange(byteResult, 8, byteResult.length));
+                return new String(Arrays.copyOfRange(byteResult, 3*8, byteResult.length));
             }
         }
         catch (BabuDBException exception) {
@@ -117,11 +119,21 @@ public class DatabaseInterface {
     }
 
     public class DepthDrawable implements Comparable {
+        public int latitude;
+        public long longitude;
+        public long id;
         public double depth;
+        public double minRadius;
+        public double maxRadius;
         public String drawable;
 
-        public DepthDrawable(double depth_, String drawable_) {
+        public DepthDrawable(int latitude_, long longitude_, long id_, double depth_, double minRadius_, double maxRadius_, String drawable_) {
+            latitude = latitude_;
+            longitude = longitude_;
+            id = id_;
             depth = depth_;
+            minRadius = minRadius_;
+            maxRadius = maxRadius_;
             drawable = drawable_;
         }
 
@@ -160,11 +172,20 @@ public class DatabaseInterface {
             while (iterator.hasNext()) {
                 Entry<byte[], byte[]> keyValuePair = iterator.next();
                 
-                byte[] value = keyValuePair.getValue();
-                double depth = ByteBuffer.wrap(value).getDouble();
-                String drawable = new String(Arrays.copyOfRange(value, 8, value.length));
+                byte[] key = keyValuePair.getKey();
+                ByteBuffer byteBufferKey = ByteBuffer.wrap(key);
+                int latitude_ = byteBufferKey.getInt();
+                long longitude_ = byteBufferKey.getLong();
+                long id_ = byteBufferKey.getLong();
 
-                depthDrawables.add(new DepthDrawable(depth, drawable));
+                byte[] value = keyValuePair.getValue();
+                ByteBuffer byteBufferValue = ByteBuffer.wrap(value);
+                double depth = byteBufferValue.getDouble();
+                double minRadius = byteBufferValue.getDouble();
+                double maxRadius = byteBufferValue.getDouble();
+                String drawable = new String(Arrays.copyOfRange(value, 3*8, value.length));
+
+                depthDrawables.add(new DepthDrawable(latitude_, longitude_, id_, depth, minRadius, maxRadius, drawable));
             }
         }
         catch (BabuDBException exception) {

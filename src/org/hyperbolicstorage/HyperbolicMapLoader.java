@@ -58,6 +58,8 @@ public class HyperbolicMapLoader extends HttpServlet {
         String x_ = request.getParameter("x");
         String y_ = request.getParameter("y");
         String z_ = request.getParameter("z");
+        String mind_ = request.getParameter("mind");
+        String maxd_ = request.getParameter("maxd");
         String id_ = request.getParameter("id");
         String drawable = request.getParameter("drawable");
 
@@ -73,6 +75,12 @@ public class HyperbolicMapLoader extends HttpServlet {
             output.println("<MissingArgument argument=\"z\" />");
             return;
         }
+        if (mind_ == null) {
+            mind_ = "0.0";
+        }
+        if (maxd_ == null) {
+            maxd_ = "1.0";
+        }
         if (id_ == null) {
             output.println("<MissingArgument argument=\"id\" />");
             return;
@@ -85,13 +93,15 @@ public class HyperbolicMapLoader extends HttpServlet {
         double x = Float.parseFloat(x_);
         double y = Float.parseFloat(y_);
         double z = Float.parseFloat(z_);
+        double mind = Float.parseFloat(mind_);
+        double maxd = Float.parseFloat(maxd_);
         long id = Long.parseLong(id_);
         
         GeographicalTiles.Point2D hyperShadow = new GeographicalTiles.Point2D(x, y);
         GeographicalTiles.Point2D halfPlane = GeographicalTiles.hyperShadow_to_halfPlane(hyperShadow);
         GeographicalTiles.IndexPair tileIndex = GeographicalTiles.tileIndex(halfPlane);
 
-        databaseInterface.insert(tileIndex.latitude, tileIndex.longitude, id, z, drawable);
+        databaseInterface.insert(tileIndex.latitude, tileIndex.longitude, id, z, mind, maxd, drawable);
 
         output.println(String.format("<Inserted halfPlane=\"%g,%g\" latitude=\"%d\" longitude=\"%d\" />", halfPlane.x, halfPlane.y, tileIndex.latitude, tileIndex.longitude));
     }

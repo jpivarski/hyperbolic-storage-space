@@ -10,6 +10,10 @@ classpath = "/home/pivarski/fun/projects/hyperbolic-storage-space/HyperbolicStor
 jpype.startJVM(libjvm, "-Djava.class.path=%s" % classpath)
 
 depth = 0.0
+if len(sys.argv) == 3:
+    minRadius, maxRadius = sys.argv[1], sys.argv[2]
+else:
+    minRadius, maxRadius = 0.0, 1.0
 
 try:
     DatabaseInterface = jpype.JClass("org.hyperbolicstorage.DatabaseInterface")
@@ -39,8 +43,9 @@ try:
             y = drawable["ay"]
         
         tileIndex = GeographicalTiles.tileIndex(GeographicalTiles.hyperShadow_to_halfPlane(Point2D(x, y)))
-        
-        databaseInterface.insert(tileIndex.latitude, tileIndex.longitude, hash(drawableString), depth, drawableString)
+        identifier = drawable.get("id", hash(frozenset(drawable.iteritems())))
+
+        databaseInterface.insert(tileIndex.latitude, tileIndex.longitude, identifier, depth, minRadius, maxRadius, drawableString)
         depth += 1.0
 
     databaseInterface.close()
