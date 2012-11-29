@@ -7,7 +7,7 @@
       <cc:Work rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -31,5 +31,5 @@
   <path style="color:#000000;fill:#663300;fill-opacity:1;stroke:#000000;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" d="M 284.05520629883,273.57092285156 L 284.05520629883,252.57092285156 L 242.05520629883,252.57092285156 L 242.05520629883,231.57092285156 L 200.05520629883,231.57092285156 L 200.05520629883,252.57092285156 L 221.05520629883,252.57092285156 L 221.05520629883,273.57092285156 L 200.05520629883,273.57092285156 L 200.05520629883,294.57092285156 L 242.05520629883,294.57092285156 L 242.05520629883,273.57092285156 z" id="path3073" inkscape:connector-curvature="0" />
   <path style="color:#000000;fill:#663300;fill-opacity:1;stroke:#000000;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" d="M 284.05520629883,357.57092285156 L 284.05520629883,294.57092285156 L 263.05520629883,294.57092285156 L 263.05520629883,315.57092285156 L 221.05520629883,315.57092285156 L 221.05520629883,357.57092285156 z" id="path3075" inkscape:connector-curvature="0" />
   <path style="color:#000000;fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" d="M 95.05520629883,210.57092285156 L 95.05520629883,231.57092285156 L 74.055206298828,231.57092285156 L 74.055206298828,252.57092285156 L 95.05520629883,252.57092285156 L 95.05520629883,294.57092285156 L 116.05520629883,294.57092285156 L 116.05520629883,252.57092285156 L 137.05520629883,252.57092285156 L 137.05520629883,231.57092285156 L 116.05520629883,231.57092285156 L 116.05520629883,210.57092285156 z" id="path3849" inkscape:connector-curvature="0" />
-  <rect style="color:#000000;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" id="UnitRectangle" width="300" height="300" x="188.56181335449" y="-111.43818664551" />
+  <rect style="color:#000000;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" id="UnitRectangle" width="600" height="600" x="188.56181335449" y="-411.4382019043" />
 </svg>

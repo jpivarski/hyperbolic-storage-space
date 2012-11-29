@@ -10,8 +10,7 @@
 # and save as "Plain SVG".
 
 # Make sure to include a <rect/> with id="UnitRectangle" (name it in Inkscape's XML Editor).
-# This will be mapped to a rectangle from (0, 0) to (1, 1) in the hyperShadow or
-#                                         (0, log2(0)) to (1, log2(1)) in the halfPlane, with log-base-2 y axis.
+# This will be mapped to a rectangle from (0, 0) to (1, 1).
 # The UnitRectangle will not be drawn.
 
 # Make sure that none of the elements have a transform attribute.  (Maybe we can loosen that restriction in the future.)
@@ -44,9 +43,6 @@ def drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
     if coordinateSystem == "hyperShadow":
         def transform(x, y):
             return (x - originx)/unitx, (originy - y)/unity
-    else:
-        def transform(x, y):
-            return (x - originx)/unitx, math.pow(2, (originy - y)/unity)
 
     # note: no recursive searching for paths: they must not be in groups (<g/> elements)
     drawables = []
