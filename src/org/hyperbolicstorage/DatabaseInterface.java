@@ -154,12 +154,18 @@ public class DatabaseInterface {
         from.putInt(latitude);
         from.putLong(minLongitude);
         from.put(emptyId);
+        from.position(0);
 
         // exclusive
         ByteBuffer to = ByteBuffer.allocate(22);
         to.putInt(latitude);
         to.putLong(maxLongitude);
         to.put(emptyId);
+        to.position(0);
+
+        if (from.compareTo(to) > 0) {
+            return new ArrayList<DepthDrawable>();
+        }
 
         DatabaseRequestResult<ResultSet<byte[], byte[]>> result;
         result = geoTiles.rangeLookup(0, from.array(), to.array(), null);
