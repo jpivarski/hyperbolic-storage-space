@@ -116,8 +116,36 @@ if __name__ == "__main__":
     
     doubleJSON = False
 
+    print """
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<script type="text/javascript" src="HyperbolicViewport.js"></script>
+<script type="text/javascript">
+
+var hyperbolicMapService;
+var hyperbolicViewport;
+
+function init() {
+    var drawables = [];"""
+
     for drawable in drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
+        print "    drawables.push(",
+
         if doubleJSON:
-            print json.dumps(json.dumps(drawable))
+            print json.dumps(json.dumps(drawable)),
         else:
-            print json.dumps(drawable)
+            print json.dumps(drawable),
+
+        print ");"
+
+    print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "rotationMode": "compass"});
+}
+
+</script>
+<body onload="init();">
+<div id="hyperbolicViewport" style="margin: 20px;"></div>
+</body>
+</html>
+"""
