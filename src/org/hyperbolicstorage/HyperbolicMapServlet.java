@@ -16,7 +16,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletException;
 
 public class HyperbolicMapServlet extends HttpServlet {
-    static DatabaseInterface databaseInterface = null;
+    DatabaseInterface databaseInterface = null;
 
     public void init() throws ServletException {
         try {

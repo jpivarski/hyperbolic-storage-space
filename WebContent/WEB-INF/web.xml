@@ -7,7 +7,7 @@
     <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
     <init-param>
       <param-name>dbPath</param-name>
-      <param-value>/var/www/babudb_escher</param-value>
+      <param-value>/var/www/hyperbolicdb/escher</param-value>
     </init-param>
   </servlet>
   
@@ -16,7 +16,7 @@
     <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
     <init-param>
       <param-name>dbPath</param-name>
-      <param-value>/var/www/babudb_relativity</param-value>
+      <param-value>/var/www/hyperbolicdb/relativity</param-value>
     </init-param>
   </servlet>
   
