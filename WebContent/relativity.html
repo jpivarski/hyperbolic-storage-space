@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<script type="text/javascript" src="HyperbolicViewport.js"></script>
+<script type="text/javascript">
+
+var hyperbolicMapService;
+var hyperbolicViewport;
+
+function init() {
+    hyperbolicMapService = new HyperbolicMapServlet("get_relativity");
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "initialOffsetX": 0.39343765505449557, "initialOffsetY": -1.6944713725350748, "initialRotation": 1.800587227851628, "rotationMode": "compass"});
+}
+
+</script>
+<body onload="init();">
+<div id="hyperbolicViewport" style="margin: 20px;"></div>
+</body>
+</html>

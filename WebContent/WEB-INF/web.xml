@@ -11,6 +11,15 @@
     </init-param>
   </servlet>
   
+  <servlet>
+    <servlet-name>HyperbolicMapServletRelativity</servlet-name>
+    <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
+    <init-param>
+      <param-name>dbPath</param-name>
+      <param-value>/var/www/babudb_relativity</param-value>
+    </init-param>
+  </servlet>
+  
   <!-- <servlet> -->
   <!--   <servlet-name>HyperbolicMapLoader</servlet-name> -->
   <!--   <servlet-class>org.hyperbolicstorage.HyperbolicMapLoader</servlet-class> -->
@@ -23,6 +32,11 @@
   <servlet-mapping>
     <servlet-name>HyperbolicMapServletEscher</servlet-name>
     <url-pattern>/get_escher</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>HyperbolicMapServletRelativity</servlet-name>
+    <url-pattern>/get_relativity</url-pattern>
   </servlet-mapping>
 
   <!-- <servlet-mapping> -->

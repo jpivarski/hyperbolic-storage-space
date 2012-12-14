@@ -882,36 +882,39 @@ HyperbolicViewport.prototype.draw = function() {
 
                 var strokeStyle = drawable["strokeStyle"];
                 if (strokeStyle == undefined) { strokeStyle = styleClass.strokeStyle; }
-                this.context.strokeStyle = strokeStyle;
 
-                var lineWidth = drawable["lineWidth"];
-                if (lineWidth == undefined) { lineWidth = styleClass.lineWidth; }
-                this.context.lineWidth = lineWidth;
+                if (strokeStyle != "none") {
+                    this.context.strokeStyle = strokeStyle;
 
-                var lineCap = drawable["lineCap"];
-                if (lineCap == undefined) { lineCap = styleClass.lineCap; }
-                this.context.lineCap = lineCap;
+                    var lineWidth = drawable["lineWidth"];
+                    if (lineWidth == undefined) { lineWidth = styleClass.lineWidth; }
+                    this.context.lineWidth = lineWidth;
 
-                var lineJoin = drawable["lineJoin"];
-                if (lineJoin == undefined) { lineJoin = styleClass.lineJoin; }
-                this.context.lineJoin = lineJoin;
+                    var lineCap = drawable["lineCap"];
+                    if (lineCap == undefined) { lineCap = styleClass.lineCap; }
+                    this.context.lineCap = lineCap;
 
-                var miterLimit = drawable["miterLimit"];
-                if (miterLimit == undefined) { miterLimit = styleClass.miterLimit; }
-                this.context.miterLimit = miterLimit;
+                    var lineJoin = drawable["lineJoin"];
+                    if (lineJoin == undefined) { lineJoin = styleClass.lineJoin; }
+                    this.context.lineJoin = lineJoin;
 
-                this.context.beginPath();
-                for (var j in drawedges) {
-                    if (drawedges[j][0] == "a") {
-                        this.context.arc(drawedges[j][1], drawedges[j][2], drawedges[j][3], drawedges[j][4], drawedges[j][5], drawedges[j][6]);
-                    } else if (drawedges[j][0] == "l") {
-                        this.context.lineTo(drawedges[j][1], drawedges[j][2]);
-                    } else if (drawedges[j][0] == "m") {
-                        this.context.moveTo(drawedges[j][1], drawedges[j][2]);
+                    var miterLimit = drawable["miterLimit"];
+                    if (miterLimit == undefined) { miterLimit = styleClass.miterLimit; }
+                    this.context.miterLimit = miterLimit;
+
+                    this.context.beginPath();
+                    for (var j in drawedges) {
+                        if (drawedges[j][0] == "a") {
+                            this.context.arc(drawedges[j][1], drawedges[j][2], drawedges[j][3], drawedges[j][4], drawedges[j][5], drawedges[j][6]);
+                        } else if (drawedges[j][0] == "l") {
+                            this.context.lineTo(drawedges[j][1], drawedges[j][2]);
+                        } else if (drawedges[j][0] == "m") {
+                            this.context.moveTo(drawedges[j][1], drawedges[j][2]);
+                        }
                     }
+                    this.context.stroke();
+                    this.context.restore();
                 }
-                this.context.stroke();
-                this.context.restore();
 
                 // draw the points
                 this.context.save();

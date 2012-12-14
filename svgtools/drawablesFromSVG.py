@@ -144,8 +144,10 @@ if __name__ == "__main__":
         documentRoot = ElementTree.fromstring(sys.stdin.read())
     
     doubleJSON = False
+    makeTestPage = False
 
-    print """
+    if makeTestPage:
+        print """
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -159,16 +161,21 @@ function init() {
     var drawables = [];"""
 
     for drawable in drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
-        print "    drawables.push(",
+        if makeTestPage:
+            print "    drawables.push(",
 
         if doubleJSON:
             print json.dumps(json.dumps(drawable)),
         else:
             print json.dumps(drawable),
 
-        print ");"
+        if makeTestPage:
+            print ");"
+        else:
+            print
 
-    print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
+    if makeTestPage:
+        print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
     hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "initialOffsetX": 0.39343765505449557, "initialOffsetY": -1.6944713725350748, "initialRotation": 1.800587227851628, "rotationMode": "compass"});
 }
 
