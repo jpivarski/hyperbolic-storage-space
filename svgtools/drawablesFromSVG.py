@@ -47,7 +47,36 @@ def drawablesFromSVG(documentRoot, coordinateSystem="hyperShadow"):
     # note: no recursive searching for paths: they must not be in groups (<g/> elements)
     drawables = []
     for elem in documentRoot.getchildren():
-        if elem.tag == "{http://www.w3.org/2000/svg}path":
+        if elem.tag == "{http://www.w3.org/2000/svg}text":
+            style = dict(x.strip().split(":") for x in elem.attrib["style"].split(";"))
+            x1 = float(elem.attrib["x"])
+            y1 = float(elem.attrib["y"])
+            position1 = list(transform(x1, y1))
+
+            if "hackX2" in style and "hackY2" in style:
+                x2, y2 = float(style["hackX2"]), float(style["hackY2"])
+
+            else:
+                fontSize = float(style["font-size"].replace("px", ""))
+                a, b, c, d, e, f = map(float, elem.attrib.get("transform", "matrix(1,0,0,1,0,0)").replace("matrix(", "").replace(")", "").split(","))
+                x2 = x1
+                y2 = y1 - fontSize
+                x2, y2 = (a*x2 + c*y2 + e), (b*x2 + d*y2 + f)
+
+            position2 = list(transform(x2, y2))
+
+            content = [elem.text.strip() if elem.text is not None else "",
+                       elem.tail.strip() if elem.tail is not None else ""]
+            for e in elem.getchildren():
+                if e.tag == "{http://www.w3.org/2000/svg}tspan":
+                    content.append(e.text.strip() if e.text is not None else "")
+                    content.append(e.tail.strip() if e.tail is not None else "")
+
+            drawable = {"type": "text", "textBaseline": "alphabetic", "d": "".join(content), "ax": position1[0], "ay": position1[1], "upx": position2[0], "upy": position2[1], "fillStyle": style["fill"], "textAlign": style["text-align"]}
+
+            drawables.append(drawable)
+            
+        elif elem.tag == "{http://www.w3.org/2000/svg}path":
             style = dict(x.strip().split(":") for x in elem.attrib["style"].split(";"))
             # skip this path if it is not visible
             if style.get("visibility", "visible") == "visible" and style.get("display", "inline") != "none":
@@ -140,7 +169,7 @@ function init() {
         print ");"
 
     print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
-    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "rotationMode": "compass"});
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "initialOffsetX": 0.39343765505449557, "initialOffsetY": -1.6944713725350748, "initialRotation": 1.800587227851628, "rotationMode": "compass"});
 }
 
 </script>
