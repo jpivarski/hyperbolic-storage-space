@@ -13,13 +13,15 @@ class Path(object):
                 except ZeroDivisionError:
                     pass
 
-    def naivemove(self, dx, dy, sx=1., sy=1.):
+    def naivemove(self, dx, dy, sx=1., sy=1., angle=0.):
         output = self.__class__.__new__(self.__class__)
         output.style = dict(self.style)
         output.commands = []
         for command in self.commands:
             if isinstance(command, list):
-                output.commands.append([sx*command[0] + dx, sy*command[1] + dy, command[2]])
+                x = sx*(math.cos(angle)*command[0] - math.sin(angle)*command[1]) + dx
+                y = sy*(math.sin(angle)*command[0] + math.cos(angle)*command[1]) + dy
+                output.commands.append([x, y, command[2]])
             else:
                 output.commands.append(command)
         output.transformBack = self.transformBack

@@ -4,6 +4,7 @@ import sys
 import math
 import json
 import re
+import random
 try:
     import xml.etree.cElementTree as ElementTree
 except ImportError:
@@ -43,6 +44,7 @@ execfile("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples
 #     }
 
 maxLongitude = {
+    0: 200,
     1: 200,
     2: 200,
     3: 200,
@@ -137,17 +139,43 @@ document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-spa
 dungeonman = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
 for p in dungeonman:
     p.transformBack = backgroundPaths2[0].transformBack
-    # p.move(0.0, 1.05, 0.0)
 
-dungeonman2 = []
-for p in dungeonman:
-    p2 = p.naivemove(0., 0., 1., 1.)
-    p2.transform(hyperShadow_to_halfPlane)
-    p3 = p2.naivemove(0.25, -0.25, 1., 1.)
-    p3.transform(halfPlane_to_hyperShadow)
-    dungeonman2.append(p3)
+document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter1.svg")
+critter1 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+for p in critter1:
+    p.transformBack = backgroundPaths2[0].transformBack
 
-# dungeonman2 = []
+critterPositions = {}
+for latitude in xrange(-3, 3): # xrange(1, 27):
+    maxL = maxLongitude[abs(latitude)]
+    for longitude in xrange(-maxL, maxL):
+        x = 2**(latitude-1)*longitude
+        y = 2**latitude
+        x, y = halfPlane_to_hyperShadow(x, y)
+        if random.uniform(0.0, 5.0) < math.exp(-(x**2 + y**2)/2./10.**2):
+            angle = math.pi/2. * random.randint(0, 3)
+            critterPositions[latitude, longitude] = (critter1, angle)
+
+critterPositions[0, 0] = (dungeonman, 0.0)
+
+critters = []
+for (latitude, longitude), (critter, angle) in critterPositions.items():
+    for p in critter:
+        p2 = p.naivemove(0., 0., 1., 1., angle)
+        p2.transform(hyperShadow_to_halfPlane)
+        p3 = p2.naivemove(0.25, -0.25, 1., 1.)
+        p3 = p3.naivemove(0.0, 0.0, 2**latitude, 2**latitude)
+        p4 = p3.naivemove(2**(latitude-1)*longitude, 0.0, 1., 1.)
+        p4.transform(halfPlane_to_hyperShadow)
+        critters.append(p4)
+
+# for p in dungeonman:
+#     p2 = p.naivemove(0., 0., 1., 1.)
+#     p2.transform(hyperShadow_to_halfPlane)
+#     p3 = p2.naivemove(0.25, -0.25, 1., 1.)
+#     p3.transform(halfPlane_to_hyperShadow)
+#     critters.append(p3)
+
 # for p in dungeonman:
 #     p2 = p.naivemove(0., 0., 1., 1.)
 #     p2.transform(hyperShadow_to_halfPlane)
@@ -157,7 +185,7 @@ for p in dungeonman:
 #         for longitude in xrange(-3, 3):
 #             p4 = p3.naivemove(2**(latitude-1)*longitude, 0.0, 1., 1.)
 #             p4.transform(halfPlane_to_hyperShadow)
-#             dungeonman2.append(p4)
+#             critters.append(p4)
 
 # f = open("/tmp/test.pmml", "w")
 f = sys.stdout
@@ -167,7 +195,7 @@ for p in backgroundPaths2:
     f.write(p.svg())
     f.write("\n")
 
-for p in dungeonman2:
+for p in critters:
     f.write(p.svg())
     f.write("\n")
 
