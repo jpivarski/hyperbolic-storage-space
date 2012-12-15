@@ -176,8 +176,10 @@ function init() {
 
     if makeTestPage:
         print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
-    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": true, "initialZoom": 5.0, "minZoom": 0.95, "maxZoom": 10.0, "initialOffsetX": 0.001, "initialOffsetY": 0.0001, "initialRotation": 3.141592653589793});
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": true, "initialZoom": 3.0, "minZoom": 0.5, "maxZoom": 10.0, "initialOffsetX": -0.16329931618554516, "initialOffsetY": 0.12247448713915887, "initialRotation": 2.86, "backgroundColor": "#606060", "backgroundImage": "stars.jpg", "shellImage": "turtle.png", "shellImageScale": 1.6, "rimFillStyle": "#5d5d4e", "viewThreshold": 0.95});
 }
+
+// initialZoom 5.0
 
 </script>
 <body onload="init();">
