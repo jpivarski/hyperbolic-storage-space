@@ -144,7 +144,7 @@ if __name__ == "__main__":
         documentRoot = ElementTree.fromstring(sys.stdin.read())
     
     doubleJSON = False
-    makeTestPage = False
+    makeTestPage = True
 
     if makeTestPage:
         print """
@@ -176,7 +176,7 @@ function init() {
 
     if makeTestPage:
         print """hyperbolicMapService = new HyperbolicMapStatic({"drawables": drawables});
-    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "initialOffsetX": 0.39343765505449557, "initialOffsetY": -1.6944713725350748, "initialRotation": 1.800587227851628, "rotationMode": "compass"});
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": true, "initialZoom": 5.0, "minZoom": 0.95, "maxZoom": 10.0, "initialOffsetX": 0.001, "initialOffsetY": 0.0001, "initialRotation": 3.141592653589793});
 }
 
 </script>

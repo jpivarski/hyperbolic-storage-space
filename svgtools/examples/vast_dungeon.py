@@ -13,21 +13,14 @@ except ImportError:
 execfile("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/hypertrans.py")
 execfile("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/transformHalfPlane.py")
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/general_relativity.svg")
+document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/vast_dungeon.svg")
 backgroundPaths = loadSVG(document.getroot(), coordinateSystem="halfPlane")
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/jumper.svg")
-jumper1 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in jumper1:
+document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/dungeonman.svg")
+dungeonman = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+for p in dungeonman:
     p.transformBack = backgroundPaths[0].transformBack
-    p.move(0.0, 1.05, 0.0)
-
-jumper2 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in jumper2:
-    p.transformBack = backgroundPaths[0].transformBack
-    # p.move(0.0, 1.5, 0.0)
-    # p.move(0.0, 0.0, 0.1*math.pi)
-    p.move(0.0, 0.0, 0.25*math.pi)
+    # p.move(0.0, 1.05, 0.0)
 
 # f = open("/tmp/test.pmml", "w")
 f = sys.stdout
@@ -37,13 +30,9 @@ for p in backgroundPaths:
     f.write(p.svg())
     f.write("\n")
 
-for p in jumper1:
+for p in dungeonman:
     f.write(p.svg())
     f.write("\n")
-
-# for p in jumper2:
-#     f.write(p.svg())
-#     f.write("\n")
 
 f.write("</svg>\n")
 f.close()
