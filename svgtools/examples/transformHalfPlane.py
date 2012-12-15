@@ -3,6 +3,28 @@ class Path(object):
         self.commands = commands
         self.style = style
 
+    def transform(self, func):
+        for command in self.commands:
+            if isinstance(command, list):
+                try:
+                    x, y = func(*command[0:2])
+                    command[0] = x
+                    command[1] = y
+                except ZeroDivisionError:
+                    pass
+
+    def naivemove(self, dx, dy, sx=1., sy=1.):
+        output = self.__class__.__new__(self.__class__)
+        output.style = dict(self.style)
+        output.commands = []
+        for command in self.commands:
+            if isinstance(command, list):
+                output.commands.append([sx*command[0] + dx, sy*command[1] + dy, command[2]])
+            else:
+                output.commands.append(command)
+        output.transformBack = self.transformBack
+        return output
+
     def move(self, Br, Bi, angle):
         Br2 =  Br*cos(angle) + Bi*sin(angle)
         Bi2 = -Br*sin(angle) + Bi*cos(angle)
@@ -39,6 +61,19 @@ class Text(object):
         self.position2 = position2
         self.content = content
         self.style = style
+
+    def transform(self, func):
+        self.position = func(*self.position)
+        self.position2 = func(*self.position2)
+
+    def naivemove(self, dx, dy):
+        output = self.__class__.__new__(self.__class__)
+        output.position = (self.position[0] + dx, self.position[1] + dy)
+        output.position2 = (self.position2[0] + dx, self.position2[1] + dy)
+        output.content = self.content
+        output.style = dict(self.style)
+        output.transformBack = self.transformBack
+        return output
 
     def move(self, Br, Bi, angle):
         Br2 =  Br*cos(angle) + Bi*sin(angle)
@@ -88,7 +123,7 @@ def loadSVG(documentRoot, coordinateSystem="hyperShadow"):
                     x, y = float(d[i+1]), float(d[i+2])
                     if coordinateSystem == "halfPlane":
                         commands.append(list(halfPlane_to_hyperShadow(*transform(x, y))) + [d[i].upper()])
-                    elif coordinateSystem == "hyperShadow":
+                    elif coordinateSystem == "hyperShadow" or coordinateSystem is None:
                         commands.append(list(transform(x, y)) + [d[i].upper()])
                     elif coordinateSystem == "poincareDisk":
                         commands.append(list(poincareDisk_to_hyperShadow(*transform(x, y))) + [d[i].upper()])
