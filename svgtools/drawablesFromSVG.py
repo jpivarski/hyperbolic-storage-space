@@ -144,7 +144,7 @@ if __name__ == "__main__":
         documentRoot = ElementTree.fromstring(sys.stdin.read())
     
     doubleJSON = False
-    makeTestPage = True
+    makeTestPage = False
 
     if makeTestPage:
         print """

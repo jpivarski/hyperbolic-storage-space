@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -42,7 +42,7 @@
      inkscape:window-height="847"
      id="namedview3041"
      showgrid="true"
-     inkscape:zoom="0.5"
+     inkscape:zoom="0.044194174"
      inkscape:cx="222.54326"
      inkscape:cy="-148.8917"
      inkscape:current-layer="svg3039"
@@ -128,10 +128,10 @@
      id="path5002"
      inkscape:connector-curvature="0" />
   <rect
-     style="color:#000000;fill:none;stroke:#000000;stroke-width:9.56295204;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="color:#000000;fill:none;stroke:#000000;stroke-width:15.05000019;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      id="UnitRectangle"
-     width="2868.8855"
-     height="2868.8855"
+     width="4515"
+     height="4515"
      x="202.90578"
-     y="-2684.6011" />
+     y="-4330.7158" />
 </svg>
