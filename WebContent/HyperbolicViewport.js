@@ -842,6 +842,7 @@ HyperbolicViewport.prototype.draw = function() {
             }
 
             if (willDraw) {
+
                 // clip the filling to the polygon
                 var fillStyle = drawable["fillStyle"];
                 if (fillStyle == undefined) { fillStyle = styleClass.fillStyle; }
@@ -878,12 +879,11 @@ HyperbolicViewport.prototype.draw = function() {
                 }
 
                 // draw a line around it
-                this.context.save();
-
                 var strokeStyle = drawable["strokeStyle"];
                 if (strokeStyle == undefined) { strokeStyle = styleClass.strokeStyle; }
 
                 if (strokeStyle != "none") {
+                    this.context.save();
                     this.context.strokeStyle = strokeStyle;
 
                     var lineWidth = drawable["lineWidth"];

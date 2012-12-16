@@ -245,6 +245,16 @@ public class GeographicalTiles {
                     stream.write(",{\"d\": [[0.09960732068226799, -0.06207633335189696, \"L\"], [0.10713996552570747, -0.08957093291760135, \"L\"], [0.11635252693284068, -0.08715178113933933, \"L\"], [0.11377197109537047, -0.07796256446235664, \"L\"], [0.13216547680926663, -0.07314377933269027, \"L\"], [0.12704063889010062, -0.0549696964418738, \"L\"]], \"lineWidth\": 2.0, \"type\": \"polygon\", \"fillStyle\": \"#663300\"}".getBytes());
                     stream.write(",{\"d\": [[0.20199297698783625, -0.10419911203879464, \"L\"], [0.19900451982425715, -0.09497066572933788, \"L\"], [0.20838651637573324, -0.09243988179589493, \"L\"], [0.20542258673869465, -0.08327611753260637, \"L\"], [0.19606817896670994, -0.08578990968478648, \"L\"], [0.19034824370885287, -0.06756574180036728, \"L\"], [0.18106120672867804, -0.07003850705437746, \"L\"], [0.18672770284381215, -0.08829676682665137, \"L\"], [0.17740017399598068, -0.09079688266631543, \"L\"], [0.1802818277119852, -0.10001263532790633, \"L\"], [0.18963662196862988, -0.0974948518393034, \"L\"], [0.19259717324281964, -0.10674081899376814, \"L\"]], \"lineWidth\": 2.0, \"type\": \"polygon\", \"fillStyle\": \"#ffff00\"}".getBytes());
                 }
+
+                if (!(latitude == -1  &&  longitude == 0)) {
+                    double size = Math.pow(2, latitude);
+                    Point2D boxCenter = halfPlane_to_hyperShadow(new Point2D(size*(longitude+0.5), 1.2*size));
+                    Point2D box1up = halfPlane_to_hyperShadow(new Point2D(size*(longitude+0.5), 1.4*size));
+
+                    stream.write(String.format(",{\"type\": \"text\", \"fillStyle\": \"#000000\", \"textBaseline\": \"bottom\", \"d\": \"%d\", \"upx\": %.18e, \"upy\": %.18e, \"ax\": %.18e, \"ay\": %.18e}\n", -latitude - 1, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
+
+                    stream.write(String.format(",{\"type\": \"text\", \"fillStyle\": \"#000000\", \"textBaseline\": \"top\", \"d\": \"%d\", \"upx\": %.18e, \"upy\": %.18e, \"ax\": %.18e, \"ay\": %.18e}\n", -longitude, boxCenter.x, boxCenter.y, box1up.x, box1up.y).getBytes());
+                }
             }
         }
 
