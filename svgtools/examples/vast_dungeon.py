@@ -44,20 +44,20 @@ execfile("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples
 #     }
 
 maxLongitude = {
-    0: 200,
-    1: 200,
-    2: 200,
-    3: 200,
-    4: 200,
-    5: 200,
-    6: 200,
-    7: 200,
-    8: 200,
-    9: 200,
-    10: 200,
-    11: 200,
-    12: 200,
-    13: 200,
+    0: 500,
+    1: 500,
+    2: 500,
+    3: 500,
+    4: 500,
+    5: 500,
+    6: 500,
+    7: 500,
+    8: 500,
+    9: 500,
+    10: 500,
+    11: 490,
+    12: 347,
+    13: 245,
     14: 174,
     15: 123,
     16: 87,
@@ -80,7 +80,7 @@ backgroundPaths2 = []
 for p in backgroundPaths:
     backgroundPaths2.append(p)
 
-for longitude in xrange(-200, 200+1):
+for longitude in xrange(-500, 500+1):
     if longitude != 0:
         for p in backgroundPaths:
             backgroundPaths2.append(p.naivemove(0.5*longitude, 0.0))
@@ -138,64 +138,64 @@ dungeonman = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
 for p in dungeonman:
     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter1.svg")
-critter1 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter1:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter1.svg")
+# critter1 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter1:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter2.svg")
-critter2 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter2:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter2.svg")
+# critter2 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter2:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter3.svg")
-critter3 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter3:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter3.svg")
+# critter3 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter3:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter4.svg")
-critter4 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter4:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter4.svg")
+# critter4 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter4:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter5.svg")
-critter5 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter5:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter5.svg")
+# critter5 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter5:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter6.svg")
-critter6 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter6:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter6.svg")
+# critter6 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter6:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter7.svg")
-critter7 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter7:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter7.svg")
+# critter7 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter7:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
-document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter8.svg")
-critter8 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
-for p in critter8:
-    p.transformBack = backgroundPaths2[0].transformBack
+# document = ElementTree.parse("/home/pivarski/fun/projects/hyperbolic-storage-space/svgtools/examples/critter8.svg")
+# critter8 = loadSVG(document.getroot(), coordinateSystem="hyperShadow")
+# for p in critter8:
+#     p.transformBack = backgroundPaths2[0].transformBack
 
 critterPositions = {}
-for latitude in xrange(-26, 27):
-    maxL = maxLongitude[abs(latitude)]
-    for longitude in xrange(-maxL, maxL):
-        x = 2**(latitude-1)*longitude
-        y = 2**latitude
-        x, y = halfPlane_to_hyperShadow(x, y)
-        if math.sqrt(x**2 + y**2) > 20.0 and random.uniform(0.0, 500.0) < math.exp(-(x**2 + y**2)/2./100.**2):
-            critterPositions[latitude, longitude] = (critter8, math.pi)
-            sys.stderr.write("critter8 at %g\n" % math.sqrt(x**2 + y**2))
-        if random.uniform(0.0, 10.0) < math.exp(-(x**2 + y**2)/2./20.**2):
-            critter = random.sample([critter2, critter3, critter4, critter5, critter6, critter7], 1)[0]
-            critterPositions[latitude, longitude] = (critter, math.pi)
-            sys.stderr.write("critter at %g\n" % math.sqrt(x**2 + y**2))
-        if random.uniform(0.0, 5.0) < math.exp(-(x**2 + y**2)/2./10.**2):
-            angle = math.pi/2. * random.randint(0, 3)
-            critterPositions[latitude, longitude] = (critter1, angle)
-            sys.stderr.write("critter1 at %g\n" % math.sqrt(x**2 + y**2))
+# for latitude in xrange(-26, 27):
+#     maxL = maxLongitude[abs(latitude)]
+#     for longitude in xrange(-maxL, maxL):
+#         x = 2**(latitude-1)*longitude
+#         y = 2**latitude
+#         x, y = halfPlane_to_hyperShadow(x, y)
+#         if math.sqrt(x**2 + y**2) > 20.0 and random.uniform(0.0, 500.0) < math.exp(-(x**2 + y**2)/2./100.**2):
+#             critterPositions[latitude, longitude] = (critter8, math.pi)
+#             sys.stderr.write("critter8 at %g\n" % math.sqrt(x**2 + y**2))
+#         if random.uniform(0.0, 10.0) < math.exp(-(x**2 + y**2)/2./20.**2):
+#             critter = random.sample([critter2, critter3, critter4, critter5, critter6, critter7], 1)[0]
+#             critterPositions[latitude, longitude] = (critter, math.pi)
+#             sys.stderr.write("critter at %g\n" % math.sqrt(x**2 + y**2))
+#         if random.uniform(0.0, 5.0) < math.exp(-(x**2 + y**2)/2./10.**2):
+#             angle = math.pi/2. * random.randint(0, 3)
+#             critterPositions[latitude, longitude] = (critter1, angle)
+#             sys.stderr.write("critter1 at %g\n" % math.sqrt(x**2 + y**2))
 
 critterPositions[0, 0] = (dungeonman, 0.0)
 
