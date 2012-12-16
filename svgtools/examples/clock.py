@@ -17,12 +17,29 @@ var hyperbolicViewport;
 function HyperbolicMapClock(clockFace, clockHand) {
     this.clockFace = clockFace;
     this.clockHand = clockHand;
+    this.now = 300;
     this.styles = {"default": new HyperbolicStyleClass()};
 }
 
 HyperbolicMapClock.prototype.downloadDrawables = function(offsetx, offsety, radius, async, hyperbolicViewport) { }
 
 HyperbolicMapClock.prototype.beginDrawableLoop = function(offsetx, offsety, radius) {
+    var angle = -2.0*Math.PI/60./60. * (this.now + 1);
+    for (var i in this.clockHand) {
+        var drawable = this.clockHand[i];
+        if (drawable["type"] == "polygon") {
+            for (var di in drawable["d"]) {
+                var x = drawable["d"][di][0];
+                var y = drawable["d"][di][1];
+                var xt = 
+
+            }
+        }
+        else if (drawable["type"] == "text") {
+
+        }
+    }
+
     this.which = 0;
     this.i = 0;
 }
