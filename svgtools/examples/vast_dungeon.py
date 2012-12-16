@@ -80,7 +80,7 @@ backgroundPaths2 = []
 for p in backgroundPaths:
     backgroundPaths2.append(p)
 
-for longitude in xrange(-10, 10+1):
+for longitude in xrange(-200, 200+1):
     if longitude != 0:
         for p in backgroundPaths:
             backgroundPaths2.append(p.naivemove(0.5*longitude, 0.0))

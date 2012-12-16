@@ -20,6 +20,15 @@
     </init-param>
   </servlet>
   
+  <servlet>
+    <servlet-name>HyperbolicMapServletDungeon</servlet-name>
+    <servlet-class>org.hyperbolicstorage.HyperbolicMapServlet</servlet-class>
+    <init-param>
+      <param-name>dbPath</param-name>
+      <param-value>/var/www/babudb_dungeon</param-value>
+    </init-param>
+  </servlet>
+  
   <!-- <servlet> -->
   <!--   <servlet-name>HyperbolicMapLoader</servlet-name> -->
   <!--   <servlet-class>org.hyperbolicstorage.HyperbolicMapLoader</servlet-class> -->
@@ -37,6 +46,11 @@
   <servlet-mapping>
     <servlet-name>HyperbolicMapServletRelativity</servlet-name>
     <url-pattern>/get_relativity</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>HyperbolicMapServletDungeon</servlet-name>
+    <url-pattern>/get_dungeon</url-pattern>
   </servlet-mapping>
 
   <!-- <servlet-mapping> -->
