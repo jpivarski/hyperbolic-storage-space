@@ -15,6 +15,18 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletException;
 
 public class HyperbolicMapServletDungeon extends HttpServlet {
+    DatabaseInterface databaseInterface = null;
+
+    public void init() throws ServletException {
+        try {
+            databaseInterface = new DatabaseInterface(getInitParameter("dbPath"));
+        }
+        catch (IOException exception) {
+            // throw new ServletException("HyperbolicMapLoader: Failed to create database connection");
+            throw new ServletException(getInitParameter("dbPath"));
+        }
+    }
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         processRequest(request, response);
     }
@@ -49,6 +61,7 @@ public class HyperbolicMapServletDungeon extends HttpServlet {
         stream.write("[".getBytes());
         boolean comma = false;
         comma = GeographicalTiles.writeDungeon(stream, comma, offsetx, offsety, radius);
+        comma = GeographicalTiles.writeDrawables(stream, comma, offsetx, offsety, radius, databaseInterface);
         stream.write("]\n".getBytes());
 
 	response.setContentType("application/json;charset=UTF-8");

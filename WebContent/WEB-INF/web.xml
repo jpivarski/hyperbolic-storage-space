@@ -23,6 +23,10 @@
   <servlet>
     <servlet-name>HyperbolicMapServletDungeon</servlet-name>
     <servlet-class>org.hyperbolicstorage.HyperbolicMapServletDungeon</servlet-class>
+    <init-param>
+      <param-name>dbPath</param-name>
+      <param-value>/var/www/hyperbolicdb/dungeon</param-value>
+    </init-param>
   </servlet>
   
   <servlet>
