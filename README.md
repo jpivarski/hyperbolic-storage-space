@@ -1,0 +1,1 @@
+For a more conversational introduction to this package, see http://www.coffeeshopphysics.com/articles/FIXME-NOT-WRITTEN-YET
