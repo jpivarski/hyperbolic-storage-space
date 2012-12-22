@@ -1,4 +1,4 @@
-For a more conversational introduction, a live demonstration of the viewer, and background on hyperbolic spaces, see http://www.coffeeshopphysics.com/articles/FIXME-NOT-WRITTEN-YET
+For a live demonstration of this project, and a conversational background on the idea of hyperbolic spaces, see http://www.coffeeshopphysics.com/articles/2012-12/22_lost_in_hyperbolia/
 
 Package contents
 ================
@@ -32,3 +32,12 @@ The Python scripts use JPype to control Java code (byte-level manipulation of th
 Some early calculations were worked out in Sympy.
 
 The Javascript doesn't require any third-party libraries.  (It basically _is_ a library intended for other projects.)  It has been tested on Firefox, Chrome, and Safari, Linux, Mac, and iPad 2.  It looks the same on all these platforms, but the Firefox-Linux combination is very, very, very slow (whether the Linux machine is real or virtual).  The iPad 2 should be limited to small numbers of image elements (`escher.html` is too much for it, but `clock.html` works great).  The Javascript borrows liberally from HTML5 features, so the multitouch support ought to be cross-platform.
+
+Alternatives considered
+=======================
+
+Several design choices were considered but eventually rejected due to poor performance:
+
+   * *SVG vs. HTML5 canvas:* Since the graphics are vector-based, SVG seemed like an obvious choice at first.  In practice, though, transformations of the same images took about 10 times longer with SVG on several browsers, and I traced it to SVG calls with a profiler.  Perhaps reconfiguring the DOM is an expensive operation.  I never explicitly tested WebGL (I found out about it too late in the developement process), but I strongly suspect that most browser-operating system combinations use either WebGL or some hardware acceleration when HTML5 canvas routines are called, because one particular combination, Firefox on Linux, is many times slower for the same graphics.
+   * *infinite precision arithmetic:* since they involve exponentials (indirectly through sinh and cosh), hyperbolic transformations have problems with numerical precision.  I tried infinite precision libraries on both the Javascript side and the Java side, but the slow-down in performance was never offset by an improvement in precision.  The transformation involves square roots, so it can't be purely done with infinite-precision rationals.
+   * *server sends recentered graphics:* Currently, the server does not interpret the JSON graphical elements, it just passes them as raw bytes.  If the calculation could be done in Java with higher precision than is normally available to Javascript, then it could be valuable for the server to recenter its output and instruct the client to accept a new origin.  The thing that stopped me on this one is that I couldn't solve the mathematical problem of recentering, since the server does its work in `halfPlane` coordinates and the JSON items are in `hyperShadow`.  This would only be useful if there were a way to do the calculations in higher-than-double precision in Java (addition/subtraction, multiplication, division, and square roots).
