@@ -101,7 +101,7 @@ function init() {
     clockHand.push({"type": "text", "d": "hour", "textBaseline": "middle", "textAlign": "center", "ax": 0.000000000000000000e+00, "ay": 7.499999999999998890e-01, "upx": -7.985780575310143237e-02, "upy": 7.598504661183673736e-01, "fillStyle": "#990000"});    clockHand.push({"type": "text", "d": "minute", "textBaseline": "middle", "textAlign": "center", "ax": 0.000000000000000000e+00, "ay": 2.100000000000000977e+00, "upx": -4.282090448524650261e-02, "upy": 2.122820381035348980e+00, "fillStyle": "#990000"});    clockHand.push({"type": "text", "d": "second", "textBaseline": "middle", "textAlign": "center", "ax": 0.000000000000000000e+00, "ay": 1.799999999999964118e+01, "upx": -5.519827058329905729e-03, "upy": 1.817938308996017938e+01, "fillStyle": "#990000"});    clockHand.push({"type": "polygon", "d": [[-1.533899401036257180e-03, 3.187662620764168508e+01, "L"], [1.335751600398825043e-05, 3.784649229598714015e+01, "L"], [1.613504663159175340e-03, 3.188621305943601314e+01, "L"], [2.662978600275101945e-05, 3.338399286357154949e+01, "L"]], "strokeStyle": "none", "fillStyle": "#990000"});
 
     hyperbolicMapService = new HyperbolicMapClock("get_clock", clockHand);
-    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 640, 640, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "viewThreshold": 0.98});
+    hyperbolicViewport = new HyperbolicViewport(hyperbolicMapService, "hyperbolicViewport", 400, 400, {"allowZoom": false, "initialZoom": 0.95, "minZoom": 0.95, "maxZoom": 0.95, "viewThreshold": 0.98});
 
     hyperbolicViewport.updateTime = function() {
         this.draw();
